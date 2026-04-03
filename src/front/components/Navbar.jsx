@@ -1,17 +1,49 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import urlLogo from '../assets/img/logo.png'
+import { Search } from "./Search";
+import { LoginDropdown } from "./LoginComponent/LoginDropdown";
+import { ButtonMenu } from "./ButtonMenu";
+
+const elementosMenu = [
+	{ link: '/home', label: 'Home', icon: 'fa-home', clase: 'btn-success rounded-pill' },
+	{ link: '/', label: 'Hoteles', icon: 'fa-hotel', clase: 'btn-success rounded-pill' },
+	{ link: '/', label: 'Restaurantes', icon: 'fa-utensils', clase: 'btn-success rounded-pill' },
+	{ link: '/', label: 'Transportes', icon: 'fa-bus', clase: 'btn-success rounded-pill' },
+	{ link: '/', label: 'Entretenimiento', icon: 'fa-star', clase: 'btn-success rounded-pill' },
+]
 
 export const Navbar = () => {
+	const [mostrarMenu, setMostrarMenu] = useState(false)
 
 	return (
-		<nav className="navbar navbar-light bg-light">
+		<nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm">
 			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
+				<Link to={'/'} className="navbar-brand m-0">
+					<img src={urlLogo} alt="logo" width={90} className="img-fluid" />
 				</Link>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
-					</Link>
+
+				<div className="d-flex align-items center border-0 ms-auto order-lg-last">
+					<LoginDropdown />
+					<button
+						type="button"
+						className="navbar-toggler border-0 order-lg-last ms-2"
+						onClick={(() => setMostrarMenu(!mostrarMenu))}
+					>
+						<span className="navbar-toggler-icon"></span>
+					</button>
+				</div>
+
+				<div className={`collapse navbar-collapse ${mostrarMenu ? 'show' : ''}`} id="navbarContent">
+					<div className="flex-grow-1 mx-lg-5 my-lg-0">
+						<Search />
+					</div>
+
+					<div className="navbar-nav d-flex flex-row flex-wrap justify-content-center gap-3 mt-2 mt-lg-0 me-lg-5">
+						{elementosMenu.map((elemento, index) => (
+							<ButtonMenu label={elemento.label} icon={elemento.icon} clase={elemento.clase} key={index} />
+						))}
+					</div>
 				</div>
 			</div>
 		</nav>
