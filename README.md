@@ -1,3 +1,40 @@
+<img width="200" alt="logo" src="https://github.com/user-attachments/assets/aa498202-b035-4c4c-bafd-d65bfdd58198" />
+
+# Travel is for Everyone
+
+---
+
+### 🚀 The Project
+
+**WayFy** is a comprehensive web platform designed to transform the travel experience for people with reduced mobility. Our mission is to eliminate the uncertainty and barriers that often accompany the planning of accessible trips.
+
+### 💡 The Vision
+
+> "Imagine that to plan an accessible vacation, a person with a disability has to spend hours jumping between maps, outdated blogs, and hotel websites that promise accessibility but don't deliver. Often, photos are misleading, and 'accessibility' stops at the front door.
+>
+> That’s why we created **WayFy**: the platform that connects travelers with reduced mobility to truly validated, barrier-free accommodations. With WayFy, you don’t just book a room; **you secure your independence**.
+>
+> We are a complete platform designed to centralize that intelligence. We aren't just a search engine; we merge technology with **real-world experience validated by the community**. Users find everything from verified routes to certified lodgings, ensuring that accessibility isn't a surprise—it's a guarantee."
+
+---
+
+### ✨ Key Features
+
+* **Real Validation:** Say goodbye to surprises. Accommodations and routes verified by the community.
+* **Centralization:** Everything you need in one place: maps, hotels, and useful tips.
+* **Focus on Independence:** Specifically designed to ensure the user has total control over their experience.
+* **Active Community:** Collective intelligence at the service of universal accessibility.
+
+---
+
+### 🤝 Contributions
+
+We believe that accessibility is a collective effort. If you want to help make the world more inclusive, you are more than welcome to collaborate!
+
+---
+
+*WayFy — Breaking barriers, building destinations.*
+
 # WebApp boilerplate with React JS and Flask API
 
 Build web applications using React.js for the front end and python/flask for your backend API.
