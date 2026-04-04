@@ -2,11 +2,12 @@ import { useRef, useEffect, useState } from 'react'
 import useGlobalReducer from '../../hooks/useGlobalReducer'
 import Map, { GeolocateControl, Marker } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
+import './MapboxComponent.css'
+import urlMarcador from '../../assets/img/marcador.png'
 
 export const MapboxComponent = () => {
     const { store, dispatch } = useGlobalReducer()
     const { viewState, places } = store
-    const [marcadorTemporal, setMarcadorTemporal] = useState(null)
     const mapRef = useRef(null)
 
     const updateLocation = (newViewState) => {
@@ -43,7 +44,7 @@ export const MapboxComponent = () => {
     const handeleClickMap = (e) => {
         const { lng, lat } = e.lngLat;
 
-        setMarcadorTemporal({ longitude: lng, latitude: lat })
+        console.log(`Coordenadas:\n longitud: ${lng} \n latitud: ${lat}`)
     }
 
     return (
@@ -53,7 +54,7 @@ export const MapboxComponent = () => {
                 {...viewState}
                 onMove={handeleMove}
                 onClick={handeleClickMap}
-                style={{ width: '100%', height: '100%' }}
+                className='mapa'
                 mapStyle="mapbox://styles/mapbox/streets-v12"
                 mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
             >
@@ -71,19 +72,13 @@ export const MapboxComponent = () => {
                         anchor='bottom'
                         key={place.id}
                     >
-                        <div style={{ cursor: 'pointer', fontSize: '25px' }} onClick={() => console.log('Clic en:', place.name)}>♿</div>
+                        <div
+                            className='marcador'
+                            onClick={() => console.log('Clic en:', place.name)}
+                        >
+                        </div>
                     </Marker>
                 ))}
-
-                {marcadorTemporal && (
-                    <Marker
-                        longitude={marcadorTemporal.longitude}
-                        latitude={marcadorTemporal.latitude}
-                        anchor='bottom'
-                    >
-                        <div style={{ cursor: 'pointer', fontSize: '25px', color: 'red' }}>♿</div>
-                    </Marker>
-                )}
             </Map>
         </div>
     );
