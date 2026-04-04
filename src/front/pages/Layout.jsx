@@ -1,29 +1,18 @@
-import { Outlet } from "react-router-dom/dist"
 import ScrollToTop from "../components/ScrollToTop"
 import { Navbar } from "../components/Navbar"
 import { Footer } from "../components/Footer"
+import { MainComponent } from "../components/MainComponent"
+import { ToastContainer } from "react-toastify"
 
 
 export const Layout = () => {
     return (
         <ScrollToTop>
-            <div className="d-flex flex-column min-vh-100">
+            <div className="d-flex flex-column vh-100 overflow-hidden">
                 <Navbar />
-                <main className="container-fluid flex-grow-1 d-flex flex-column">
-                    <div className="row flex-grow-1">
-                        <section className="col-12 col-md-9 px-4 p-y3">
-                            <Outlet />
-                        </section>
-                        <aside className="col-12 col-md-3 bg-light border-start shadow-sm">
-                            <div className="p-3 sticky-top">
-                                <h5 className="text-primary">Panel Lateral</h5>
-                                <hr />
-                                <p>Información adicional aquí</p>
-                            </div>
-                        </aside>
-                    </div>
-                </main>
+                <MainComponent />
                 <Footer />
+                <ToastContainer />
             </div>
         </ScrollToTop>
     )
