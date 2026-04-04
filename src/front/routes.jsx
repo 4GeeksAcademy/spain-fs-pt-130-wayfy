@@ -8,7 +8,7 @@ import {
 import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
-import { Registro } from "./pages/Registro";
+import { Register } from "./pages/Register";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,8 +24,7 @@ export const router = createBrowserRouter(
       {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/registro" element={<Registro />} />
-
+      <Route path="/register" element={<Register />} />
     </Route>
   )
 );

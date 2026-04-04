@@ -1,4 +1,4 @@
-export const Registro = () => {
+export const Register = () => {
 
     return (
         <>
