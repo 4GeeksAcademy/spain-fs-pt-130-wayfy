@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Login } from "../../pages/Login"
 
 
 export const LoginDropdown = () => {
@@ -20,6 +21,7 @@ export const LoginDropdown = () => {
             >
                 <div className="login-dropdown-width p-4">
                     {/* <LoginComponent titulo="" /> */}
+                    <Login />
                 </div>
             </div>
         </div>

@@ -3,7 +3,6 @@ import useGlobalReducer from '../../hooks/useGlobalReducer'
 import Map, { GeolocateControl, Marker } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MapboxComponent.css'
-import urlMarcador from '../../assets/img/marcador.png'
 
 export const MapboxComponent = () => {
     const { store, dispatch } = useGlobalReducer()
