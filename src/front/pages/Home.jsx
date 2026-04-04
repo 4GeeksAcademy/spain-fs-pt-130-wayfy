@@ -1,6 +1,7 @@
 import { MapboxComponent } from "../components/MapboxComponent/MapboxComponent";
 
 
+
 export const Home = () => {
 	return (
 		<div className="container-fluid p-0" style={{ height: "calc(100vh - 140px)" }}>
