@@ -1,3 +1,40 @@
+<img width="200" alt="logo" src="https://github.com/user-attachments/assets/aa498202-b035-4c4c-bafd-d65bfdd58198" />
+
+## **Viajar es para todos**
+
+---
+
+### 🚀 El Proyecto
+
+**WayFy** es una plataforma web integral diseñada para transformar la experiencia de viaje de las personas con movilidad reducida. Nuestra misión es eliminar la incertidumbre y las barreras que suelen acompañar a la planificación de viajes accesibles.
+
+### 💡 Idea detallada
+
+> "Imagina que para planificar unas vacaciones accesibles, una persona con discapacidad tiene que pasar horas saltando entre mapas, blogs obsoletos y webs de hoteles que prometen accesibilidad, pero no la cumplen. Muchas veces, las fotos engañan y la 'accesibilidad' se queda en la puerta.
+>
+> Por eso creamos **WayFy**: la plataforma que conecta a viajeros con movilidad reducida con alojamientos realmente validados y sin barreras. Con WayFy, no solo reservas una habitación; **aseguras tu independencia**.
+>
+> Somos una plataforma completa diseñada para centralizar toda esa inteligencia. No somos solo un buscador; unimos la tecnología con la **experiencia real validada por la comunidad**. El usuario encuentra desde rutas verificadas hasta alojamientos certificados, asegurando que la accesibilidad no sea una sorpresa, sino una garantía."
+
+---
+
+### ✨ Características Principales
+
+* **Validación Real:** Adiós a las sorpresas. Alojamientos y rutas verificados por la comunidad.
+* **Centralización:** Todo lo que necesitas en un solo lugar: mapas, hoteles y consejos útiles.
+* **Enfoque en la Independencia:** Diseñado específicamente para garantizar que el usuario tenga el control total de su experiencia.
+* **Comunidad Activa:** Inteligencia colectiva al servicio de la accesibilidad universal.
+
+---
+
+### 🤝 Contribuciones
+
+Creemos que la accesibilidad es un esfuerzo colectivo. Si quieres ayudar a que el mundo sea más inclusivo, ¡eres bienvenido a colaborar!
+
+---
+
+*WayFy - Rompiendo barreras, construyendo destinos.*
+
 # Plantilla de WebApp con React JS y Flask API
 
 Construye aplicaciones web usando React.js para el front end y python/flask para tu API backend.
