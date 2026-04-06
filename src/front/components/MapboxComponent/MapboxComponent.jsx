@@ -119,19 +119,30 @@ export const MapboxComponent = () => {
 
                 {/* Marcador temporal naranja */}
                 {tempCoords && (
-                    <Marker longitude={tempCoords.longitude} latitude={tempCoords.latitude} color="orange" />
+                    <Marker
+                        longitude={tempCoords.longitude}
+                        latitude={tempCoords.latitude}
+                        color="orange"
+                    />
                 )}
 
                 {/* Marcador de Mi Ubicación */}
-                {userCoords && (
-                    <Marker longitude={userCoords.longitude} latitude={userCoords.latitude} anchor='center'>
-                        <div className="user-dot" />
-                    </Marker>
+                {!loading && userCoords && (
+                    <Marker
+                        longitude={userCoords.longitude}
+                        latitude={userCoords.latitude}
+                        anchor='center'
+                        color='red'
+                    />
                 )}
 
                 {/* Marcador de Búsqueda */}
                 {selectedLocation && (
-                    <Marker longitude={selectedLocation.longitude} latitude={selectedLocation.latitude} color='red' />
+                    <Marker
+                        longitude={selectedLocation.longitude}
+                        latitude={selectedLocation.latitude}
+                        color='red'
+                    />
                 )}
 
                 {/* Lugares guardados */}
