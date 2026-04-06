@@ -1,37 +1,56 @@
-import { useState } from "react"
-import useGlobalReducer from "../hooks/useGlobalReducer"
-import { getLocations } from '../services/mapbox.api'
+import { SearchBox } from '@mapbox/search-js-react';
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Search = () => {
-    const [buscar, setBuscar] = useState("")
-    const { dispatch } = useGlobalReducer()
+    const { store, dispatch } = useGlobalReducer();
+    const { viewState } = store;
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const handleRetrieve = (res) => {
+        if (res?.features?.length > 0) {
+            const feature = res.features[0];
+            const [longitude, latitude] = feature.geometry.coordinates;
 
-        if (!buscar.trim()) return
-        try {
-            await getLocations(buscar, dispatch)
+            const placeType = feature.properties.feature_type;
+            const newZoom = placeType === 'address' ? 18 : 14;
 
-        } catch (error) {
-            console.error("Error en la búsqueda:", error)
+            dispatch({
+                type: 'UPDATE_LOCATION',
+                payload: {
+                    longitude,
+                    latitude,
+                    zoom: newZoom,
+                }
+            });
+
+            dispatch({
+                type: 'SET_SELECTED_LOCATION',
+                payload: { longitude, latitude }
+            });
         }
-    }
+    };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className='input-group border rounded-pill overflow-hidden bg-transparent shadow-none'>
-                <span className="input-group-text bg-white border-0">
-                    <i className="fa-solid fa-search text-muted"></i>
-                </span>
-                <input
-                    type="text"
-                    className="form-control bg-transparent shadow-none border-0 ps-0"
-                    placeholder='¿Dónde quieres viajar?'
-                    value={buscar}
-                    onChange={(e) => setBuscar(e.target.value)}
-                />
-            </div>
-        </form>
-    )
-}
+        <div className="search-wrapper w-100 p-2">
+            <SearchBox
+                accessToken={import.meta.env.VITE_MAPBOX_TOKEN}
+                options={{
+                    language: 'es',
+                    proximity: [viewState.longitude, viewState.latitude]
+                }}
+                placeholder="¿A dónde quieres viajar?"
+                onRetrieve={handleRetrieve}
+                theme={{
+                    variables: {
+                        borderRadius: '50px',
+                        border: '2px solid #10b891',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                        fontFamily: 'inherit',
+                        padding: '10px 20px',
+                        unit: 16
+
+                    }
+                }}
+            />
+        </div>
+    );
+};
