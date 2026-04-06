@@ -45,6 +45,12 @@ export default function storeReducer(store, action = {}) {
                 selectedLocation: action.payload, // { longitude, latitude }
             };
 
+        case 'ADD_PLACE':
+            return {
+                ...store,
+                places: [...store.places, action.payload],
+            };
+
         default:
             throw Error('Unknown action.');
     }

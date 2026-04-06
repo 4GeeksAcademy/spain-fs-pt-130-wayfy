@@ -1,9 +1,12 @@
 import { SearchBox } from '@mapbox/search-js-react';
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Search = () => {
     const { store, dispatch } = useGlobalReducer();
     const { viewState } = store;
+    const navigate = useNavigate()
+    const location = useLocation()
 
     const handleRetrieve = (res) => {
         if (res?.features?.length > 0) {
@@ -26,6 +29,8 @@ export const Search = () => {
                 type: 'SET_SELECTED_LOCATION',
                 payload: { longitude, latitude }
             });
+
+            if (location.pathname !== '/') navigate('/')
         }
     };
 
