@@ -25,6 +25,7 @@ export const initialStore = () => {
                 latitude: 37.757597352694916,
             },
         ],
+        selectedLocation: null,
     };
 };
 
@@ -37,6 +38,11 @@ export default function storeReducer(store, action = {}) {
                     ...store.viewState,
                     ...action.payload,
                 },
+            };
+        case 'SET_SELECTED_LOCATION':
+            return {
+                ...store,
+                selectedLocation: action.payload, // { longitude, latitude }
             };
 
         default:
