@@ -10,7 +10,7 @@ export const MapboxComponent = () => {
     const [loading, setLoading] = useState(true)
     const [userCoords, setUserCoords] = useState(null)
 
-    // --- ESTADOS PARA LA MODAL Y NUEVO MARCADOR ---
+    // Estados para el modal
     const [showModal, setShowModal] = useState(false)
     const [tempCoords, setTempCoords] = useState(null) // Coordenadas del clic derecho
     const [placeName, setPlaceName] = useState("")
@@ -39,7 +39,7 @@ export const MapboxComponent = () => {
         } else { setLoading(false) }
     }, [selectedLocation]);
 
-    // --- MANEJO DEL CLIC DERECHO ---
+    // Clic derecho
     const handleContextMenu = (e) => {
         e.preventDefault();
         const { lng, lat } = e.lngLat;
@@ -60,7 +60,6 @@ export const MapboxComponent = () => {
             }
         });
 
-        // Limpiar y cerrar
         setShowModal(false);
         setPlaceName("");
         setTempCoords(null);
@@ -75,26 +74,25 @@ export const MapboxComponent = () => {
                 </div>
             )}
 
-            {/* Modal Sencilla (Bootstrap) */}
             {showModal && (
                 <div className="modal-overlay">
                     <div className="custom-modal p-4 shadow bg-white rounded">
                         <h5>Nuevo Marcador</h5>
-                        {/* Corregido: Usar tempCoords que es el estado que tiene la info */}
-                        <p className="small text-muted">
-                            Lat: {tempCoords?.latitude.toFixed(4)} Lng: {tempCoords?.longitude.toFixed(4)}
-                        </p>
+
+                        <p className='small text-muted m-0'>Lat: {tempCoords?.latitude}</p>
+                        <p className='small text-muted m-0'>Lng: {tempCoords?.longitude}</p>
+
                         <input
-                            className="form-control mb-3"
+                            className="form-control my-3"
                             placeholder="Nombre del lugar..."
-                            value={placeName} // Corregido: Usar placeName
-                            onChange={(e) => setPlaceName(e.target.value)} // Corregido: setPlaceName
+                            value={placeName}
+                            onChange={(e) => setPlaceName(e.target.value)}
                             autoFocus
                         />
                         <div className="d-flex justify-content-end gap-2">
                             <button className="btn btn-light" onClick={() => {
                                 setShowModal(false);
-                                setTempCoords(null); // Limpiar marcador naranja al cancelar
+                                setTempCoords(null);
                             }}>
                                 Cancelar
                             </button>
@@ -132,7 +130,7 @@ export const MapboxComponent = () => {
                         longitude={userCoords.longitude}
                         latitude={userCoords.latitude}
                         anchor='center'
-                        color='red'
+                        color='blue'
                     />
                 )}
 
