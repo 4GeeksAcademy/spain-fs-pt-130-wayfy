@@ -1,14 +1,18 @@
-// Import necessary components and functions from react-router-dom.
-
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-} from "react-router-dom";
-import { Layout } from "./pages/Layout";
-import { Home } from "./pages/Home";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
+} from 'react-router-dom';
+import { Layout } from './pages/Layout';
+import { Home } from './pages/Home';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
+import { Mapa } from './pages/Mapa';
+import { Hotels } from './pages/Hotels';
+import { Restaurants } from './pages/Restaurants';
+import { Transports } from './pages/Transports';
+import { Entertainment } from './pages/Entertainment';
+import { ForgotPassword } from './pages/ForgotPassword';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,12 +23,17 @@ export const router = createBrowserRouter(
     // Note: The child paths of the Layout element replace the Outlet component with the elements contained in the "element" attribute of these child paths.
 
     // Root Route: All navigation will start from here.
-    <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
-
+    <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>}>
       {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
       <Route path="/" element={<Home />} />
+      <Route path="/map" element={<Mapa />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-    </Route>
-  )
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/hotels" element={<Hotels />} />
+      <Route path="/restaurants" element={<Restaurants />} />
+      <Route path="/transports" element={<Transports />} />
+      <Route path="/entertainment" element={<Entertainment />} />
+    </Route>,
+  ),
 );
