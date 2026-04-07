@@ -9,18 +9,15 @@ export const Registro = () => {
                     Regístrate
                 </h5>
 
-
                 <div className="form-group mb-3 fw-bold">
                     <label className="form-label">Nombre</label>
                     <input type="text" className="form-control" placeholder="Ingresa tu nombre" />
                 </div>
 
-
                 <div className="form-group mb-3 fw-bold">
                     <label className="form-label">Email</label>
                     <input type="email" className="form-control" placeholder="Ingresa tu email" />
                 </div>
-
 
                 <div className="form-group mb-3 fw-bold">
                     <label className="form-label">Contraseña</label>

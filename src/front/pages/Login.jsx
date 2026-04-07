@@ -9,14 +9,12 @@ export const Login = () => {
                     Iniciar Sesión
                 </h5>
 
-                
                 <div className="form-group fw-bold">
                     <label className="form-label">Email</label>
                     <input type="email" className="form-control" aria-describedby="emailHelp" />
-                    <div id="Email" className="form-text"></div>
+                    <div className="form-text"></div>
                 </div>
 
-              
                 <div className="form-group fw-bold">
                     <label className="form-label">Contraseña</label>
                     <input type="password" className="form-control" />
@@ -33,7 +31,7 @@ export const Login = () => {
                     Iniciar Sesión
                 </button>
 
-                <div className="Registro text-center m-3">
+                <div className="Registro text-center mt-3">
                     <p>
                         ¿No tienes cuenta?{" "}
                         <a href="/register" className="text-primary text-decoration-none">
