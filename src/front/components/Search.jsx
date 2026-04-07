@@ -1,12 +1,12 @@
 import { SearchBox } from '@mapbox/search-js-react';
-import useGlobalReducer from "../hooks/useGlobalReducer";
+import useGlobalReducer from '../hooks/useGlobalReducer';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Search = () => {
     const { store, dispatch } = useGlobalReducer();
     const { viewState } = store;
-    const navigate = useNavigate()
-    const location = useLocation()
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const handleRetrieve = (res) => {
         if (res?.features?.length > 0) {
@@ -22,15 +22,15 @@ export const Search = () => {
                     longitude,
                     latitude,
                     zoom: newZoom,
-                }
+                },
             });
 
             dispatch({
                 type: 'SET_SELECTED_LOCATION',
-                payload: { longitude, latitude }
+                payload: { longitude, latitude },
             });
 
-            if (location.pathname !== '/') navigate('/')
+            if (location.pathname !== '/map') navigate('/map');
         }
     };
 
@@ -40,7 +40,7 @@ export const Search = () => {
                 accessToken={import.meta.env.VITE_MAPBOX_TOKEN}
                 options={{
                     language: 'es',
-                    proximity: [viewState.longitude, viewState.latitude]
+                    proximity: [viewState.longitude, viewState.latitude],
                 }}
                 placeholder="¿A dónde quieres viajar?"
                 onRetrieve={handleRetrieve}
@@ -51,9 +51,8 @@ export const Search = () => {
                         boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
                         fontFamily: 'inherit',
                         padding: '10px 20px',
-                        unit: 16
-
-                    }
+                        unit: 16,
+                    },
                 }}
             />
         </div>

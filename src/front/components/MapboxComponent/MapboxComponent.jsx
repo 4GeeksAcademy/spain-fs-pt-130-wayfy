@@ -1,25 +1,25 @@
-import { useRef, useEffect, useState } from 'react'
-import useGlobalReducer from '../../hooks/useGlobalReducer'
-import Map, { GeolocateControl, Marker } from 'react-map-gl'
+import { useRef, useEffect, useState } from 'react';
+import useGlobalReducer from '../../hooks/useGlobalReducer';
+import Map, { GeolocateControl, Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import './MapboxComponent.css'
+import './MapboxComponent.css';
 
 export const MapboxComponent = () => {
-    const { store, dispatch } = useGlobalReducer()
-    const { viewState, places, selectedLocation } = store
-    const [loading, setLoading] = useState(true)
-    const [userCoords, setUserCoords] = useState(null)
+    const { store, dispatch } = useGlobalReducer();
+    const { viewState, places, selectedLocation } = store;
+    const [loading, setLoading] = useState(true);
+    const [userCoords, setUserCoords] = useState(null);
 
     // Estados para el modal
-    const [showModal, setShowModal] = useState(false)
-    const [tempCoords, setTempCoords] = useState(null) // Coordenadas del clic derecho
-    const [placeName, setPlaceName] = useState("")
+    const [showModal, setShowModal] = useState(false);
+    const [tempCoords, setTempCoords] = useState(null); // Coordenadas del clic derecho
+    const [placeName, setPlaceName] = useState('');
 
-    const mapRef = useRef(null)
+    const mapRef = useRef(null);
 
     const updateLocation = (newViewState) => {
-        dispatch({ type: 'UPDATE_LOCATION', payload: newViewState })
-    }
+        dispatch({ type: 'UPDATE_LOCATION', payload: newViewState });
+    };
 
     useEffect(() => {
         if (selectedLocation) {
@@ -27,16 +27,26 @@ export const MapboxComponent = () => {
             return;
         }
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(posicion => {
-                const { longitude, latitude } = posicion.coords;
-                setUserCoords({ longitude, latitude })
-                updateLocation({ ...viewState, longitude, latitude, zoom: 14 })
-                setLoading(false)
-            },
-                error => { setLoading(false) },
-                { enableHighAccuracy: true }
-            )
-        } else { setLoading(false) }
+            navigator.geolocation.getCurrentPosition(
+                (posicion) => {
+                    const { longitude, latitude } = posicion.coords;
+                    setUserCoords({ longitude, latitude });
+                    updateLocation({
+                        ...viewState,
+                        longitude,
+                        latitude,
+                        zoom: 14,
+                    });
+                    setLoading(false);
+                },
+                (error) => {
+                    setLoading(false);
+                },
+                { enableHighAccuracy: true },
+            );
+        } else {
+            setLoading(false);
+        }
     }, [selectedLocation]);
 
     // Clic derecho
@@ -56,21 +66,26 @@ export const MapboxComponent = () => {
                 id: Date.now(),
                 name: placeName,
                 longitude: tempCoords.longitude,
-                latitude: tempCoords.latitude
-            }
+                latitude: tempCoords.latitude,
+            },
         });
 
         setShowModal(false);
-        setPlaceName("");
+        setPlaceName('');
         setTempCoords(null);
     };
 
     return (
-        <div className='w-100 h-100 position-relative'>
-            {loading && !selectedLocation && (
-                <div className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-white" style={{ zIndex: 99 }}>
+        <div className="w-100 h-100 position-relative">
+            {loading && !userCoords && !selectedLocation && (
+                <div
+                    className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-white"
+                    style={{ zIndex: 99 }}
+                >
                     <div className="spinner-border text-primary mb-3" />
-                    <p className="fw-bold text-secondary">Cargando ubicación actual...</p>
+                    <p className="fw-bold text-secondary">
+                        Buscando tu ubicación...
+                    </p>
                 </div>
             )}
 
@@ -79,8 +94,12 @@ export const MapboxComponent = () => {
                     <div className="custom-modal p-4 shadow bg-white rounded">
                         <h5>Nuevo Marcador</h5>
 
-                        <p className='small text-muted m-0'>Lat: {tempCoords?.latitude}</p>
-                        <p className='small text-muted m-0'>Lng: {tempCoords?.longitude}</p>
+                        <p className="small text-muted m-0">
+                            Lat: {tempCoords?.latitude}
+                        </p>
+                        <p className="small text-muted m-0">
+                            Lng: {tempCoords?.longitude}
+                        </p>
 
                         <input
                             className="form-control my-3"
@@ -90,13 +109,19 @@ export const MapboxComponent = () => {
                             autoFocus
                         />
                         <div className="d-flex justify-content-end gap-2">
-                            <button className="btn btn-light" onClick={() => {
-                                setShowModal(false);
-                                setTempCoords(null);
-                            }}>
+                            <button
+                                className="btn btn-light"
+                                onClick={() => {
+                                    setShowModal(false);
+                                    setTempCoords(null);
+                                }}
+                            >
                                 Cancelar
                             </button>
-                            <button className="btn btn-primary" onClick={handleSavePlace}>
+                            <button
+                                className="btn btn-primary"
+                                onClick={handleSavePlace}
+                            >
                                 Guardar
                             </button>
                         </div>
@@ -107,9 +132,9 @@ export const MapboxComponent = () => {
             <Map
                 ref={mapRef}
                 {...viewState}
-                onMove={evt => updateLocation(evt.viewState)}
+                onMove={(evt) => updateLocation(evt.viewState)}
                 onContextMenu={handleContextMenu}
-                className='mapa'
+                className="mapa"
                 mapStyle="mapbox://styles/mapbox/streets-v12"
                 mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
             >
@@ -129,8 +154,8 @@ export const MapboxComponent = () => {
                     <Marker
                         longitude={userCoords.longitude}
                         latitude={userCoords.latitude}
-                        anchor='center'
-                        color='blue'
+                        anchor="center"
+                        color="blue"
                     />
                 )}
 
@@ -139,22 +164,23 @@ export const MapboxComponent = () => {
                     <Marker
                         longitude={selectedLocation.longitude}
                         latitude={selectedLocation.latitude}
-                        color='red'
+                        color="red"
                     />
                 )}
 
                 {/* Lugares guardados */}
-                {places && places.map(place => (
-                    <Marker
-                        key={place.id}
-                        longitude={place.longitude}
-                        latitude={place.latitude}
-                        anchor='bottom'
-                    >
-                        <div className='marcador' title={place.name} />
-                    </Marker>
-                ))}
+                {places &&
+                    places.map((place) => (
+                        <Marker
+                            key={place.id}
+                            longitude={place.longitude}
+                            latitude={place.latitude}
+                            anchor="bottom"
+                        >
+                            <div className="marcador" title={place.name} />
+                        </Marker>
+                    ))}
             </Map>
         </div>
     );
-}
+};
