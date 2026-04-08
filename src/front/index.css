@@ -188,7 +188,7 @@
 }
 
 .bg-gray {
-    background-color: var(--wayfy-gray);
+    background-color: var(--wayfy-gray) !important;
 }
 
 /* Inputs y formularios */

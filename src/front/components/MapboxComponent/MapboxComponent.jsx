@@ -1,13 +1,20 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import useGlobalReducer from '../../hooks/useGlobalReducer';
-import Map, { GeolocateControl, Marker } from 'react-map-gl';
+import Map, {
+    FullscreenControl,
+    GeolocateControl,
+    Marker,
+    NavigationControl,
+    ScaleControl,
+} from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './MapboxComponent.css';
 
 export const MapboxComponent = () => {
     const { store, dispatch } = useGlobalReducer();
     const { viewState, places, selectedLocation } = store;
-    const [loading, setLoading] = useState(true);
+
+    // Coordenadas de posición actual
     const [userCoords, setUserCoords] = useState(null);
 
     // Estados para el modal
@@ -17,42 +24,63 @@ export const MapboxComponent = () => {
 
     const mapRef = useRef(null);
 
-    const updateLocation = (newViewState) => {
-        dispatch({ type: 'UPDATE_LOCATION', payload: newViewState });
-    };
+    const updateLocation = useCallback(
+        (newViewState) => {
+            dispatch({ type: 'UPDATE_LOCATION', payload: newViewState });
+        },
+        [dispatch],
+    );
 
     useEffect(() => {
-        if (selectedLocation) {
-            setLoading(false);
-            return;
-        }
+        if (selectedLocation) return;
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
-                (posicion) => {
-                    const { longitude, latitude } = posicion.coords;
+                (position) => {
+                    const { longitude, latitude } = position.coords;
                     setUserCoords({ longitude, latitude });
+
+                    mapRef.current?.flyTo({
+                        center: [longitude, latitude],
+                        zoom: 14,
+                        duration: 2000,
+                    });
+
                     updateLocation({
                         ...viewState,
                         longitude,
                         latitude,
                         zoom: 14,
                     });
-                    setLoading(false);
                 },
-                (error) => {
-                    setLoading(false);
+                (error) => console.error('Error obteniendo ubicación:', error),
+                {
+                    enableHighAccuracy: false,
+                    timeout: 5000,
                 },
-                { enableHighAccuracy: true },
             );
-        } else {
-            setLoading(false);
+        }
+    }, [selectedLocation]);
+
+    useEffect(() => {
+        if (selectedLocation && mapRef.current) {
+            const { longitude, latitude } = selectedLocation;
+
+            mapRef.current.flyTo({
+                center: [longitude, latitude],
+                zoom: 16,
+                essential: true,
+                duration: 2000,
+                curve: 1.5,
+            });
         }
     }, [selectedLocation]);
 
     // Clic derecho
-    const handleContextMenu = (e) => {
-        e.preventDefault();
-        const { lng, lat } = e.lngLat;
+    const handleContextMenu = (evt) => {
+        evt.originalEvent.preventDefault();
+        const { lng, lat } = evt.lngLat;
+
         setTempCoords({ longitude: lng, latitude: lat });
         setShowModal(true);
     };
@@ -77,18 +105,6 @@ export const MapboxComponent = () => {
 
     return (
         <div className="w-100 h-100 position-relative">
-            {loading && !userCoords && !selectedLocation && (
-                <div
-                    className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-white"
-                    style={{ zIndex: 99 }}
-                >
-                    <div className="spinner-border text-primary mb-3" />
-                    <p className="fw-bold text-secondary">
-                        Buscando tu ubicación...
-                    </p>
-                </div>
-            )}
-
             {showModal && (
                 <div className="modal-overlay">
                     <div className="custom-modal p-4 shadow bg-white rounded">
@@ -138,7 +154,14 @@ export const MapboxComponent = () => {
                 mapStyle="mapbox://styles/mapbox/streets-v12"
                 mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
             >
-                <GeolocateControl position="top-right" />
+                <GeolocateControl
+                    position="top-right"
+                    trackUserLocation={true}
+                    showUserHeading={true}
+                />
+                <NavigationControl position="top-right" />
+                <FullscreenControl />
+                <ScaleControl />
 
                 {/* Marcador temporal naranja */}
                 {tempCoords && (
@@ -150,7 +173,7 @@ export const MapboxComponent = () => {
                 )}
 
                 {/* Marcador de Mi Ubicación */}
-                {!loading && userCoords && (
+                {userCoords && (
                     <Marker
                         longitude={userCoords.longitude}
                         latitude={userCoords.latitude}
