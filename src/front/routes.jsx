@@ -13,6 +13,7 @@ import { Restaurants } from './pages/Restaurants';
 import { Transports } from './pages/Transports';
 import { Entertainment } from './pages/Entertainment';
 import { ForgotPassword } from './pages/ForgotPassword';
+import {Itinerary} from './pages/Itinerary';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +35,7 @@ export const router = createBrowserRouter(
       <Route path="/restaurants" element={<Restaurants />} />
       <Route path="/transports" element={<Transports />} />
       <Route path="/entertainment" element={<Entertainment />} />
+      <Route path="/itinerary" element={<Itinerary />} />
     </Route>,
   ),
 );
