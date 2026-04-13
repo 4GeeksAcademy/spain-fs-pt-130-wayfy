@@ -46,7 +46,7 @@ export const Search = () => {
                 onRetrieve={handleRetrieve}
                 theme={{
                     variables: {
-                        borderRadius: '50px',
+                        // borderRadius: '50px',
                         border: '2px solid #10b891',
                         boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
                         fontFamily: 'inherit',
