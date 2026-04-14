@@ -6,14 +6,21 @@ db = SQLAlchemy()
 
 class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
+    # Agregamos Nombre completo. String(120) es el límite de caracteres.
+    full_name: Mapped[str] = mapped_column(String(120), nullable=False)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(nullable=False)
-    is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
-
+    password: Mapped[str] = mapped_column(String(120), nullable=False)
+    # Aquí guardaremos el ID del perfil (ej: 'silla', 'mayor')
+    mobility_phase: Mapped[str] = mapped_column(String(80), nullable=False)
+    # Lo ponemos por defecto en True para que la cuenta funcione al crearla
+    is_active: Mapped[bool] = mapped_column(Boolean(), default=True, nullable=False)
 
     def serialize(self):
         return {
             "id": self.id,
             "email": self.email,
-            # do not serialize the password, its a security breach
+            "full_name": self.full_name,
+            "mobility_phase": self.mobility_phase,
+            "is_active": self.is_active
+            # IMPORTANTE: Nunca devolver el password aquí
         }
