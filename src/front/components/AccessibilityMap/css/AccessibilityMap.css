@@ -3,11 +3,11 @@
     height: 100%;
 }
 
-.marcador {
+.marker-wayfy {
     position: absolute;
     width: 32px;
     height: 32px;
-    background: url('../../assets/img/marcador.png') no-repeat center
+    background: url('../../../assets/img/marker-wayfy.png') no-repeat center
         center/cover;
     cursor: pointer;
     transform: translate(-50%, -50%);
@@ -29,4 +29,16 @@
 .custom-modal {
     width: 300px;
     z-index: 2001;
+}
+
+.legend {
+    bottom: 30px;
+    left: 12px;
+    width: 200px;
+}
+
+.legend-icon {
+    width: 10px;
+    height: 10px;
+    padding: 6px;
 }
