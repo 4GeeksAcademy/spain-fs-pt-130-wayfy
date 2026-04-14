@@ -1,0 +1,46 @@
+/* Evento contenido */
+.event-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Botón eliminar */
+.delete-btn {
+    opacity: 0;
+    cursor: pointer;
+    font-size: 12px;
+    color: white;
+    transition: opacity 0.3s ease;
+}
+
+/* Mostrar al hacer hover */
+.rbc-event:hover .delete-btn {
+    opacity: 1;
+}
+
+/* Toolbar */
+.rbc-toolbar {
+    background-color: var(--wayfy-blue);
+    color: white;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Botones */
+.rbc-toolbar button {
+    background-color: var(--wayfy-cyan);
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.rbc-toolbar button:hover {
+    background-color: var(--wayfy-green);
+}
+
+/* Grid */
+.rbc-time-content {
+    border-top: 2px solid var(--wayfy-blue);
+}
