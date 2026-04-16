@@ -14,6 +14,8 @@ export const fetchMapData = async (text) => {
         if (!response.ok) throw new Error('Error en el backend');
         const data = await response.json();
 
+        console.log(data);
+
         const geocode = async (query) => {
             if (!query) return null;
 
