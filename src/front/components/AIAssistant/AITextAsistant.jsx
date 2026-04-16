@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import useAIAssistant from '../../hooks/useAIAssistant';
+import useTooltip from '../../hooks/useTooltip';
 
 const MIN_LENGTH_QUERY = 5;
 
@@ -9,6 +10,11 @@ export const AITextAsistant = () => {
     const { processQuery, isProcessing } = useAIAssistant();
 
     const textareaRef = useRef(null);
+    const tooltipRef = useTooltip({
+        title: 'Escribir a la IA',
+        placement: 'top',
+        trigger: 'hover',
+    });
 
     useEffect(() => {
         const modalElement = document.getElementById('aiAssistantModal');
@@ -35,15 +41,22 @@ export const AITextAsistant = () => {
         if (modal) modal.hide();
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault()
+            handleSubmit(e)
+        }
+    }
+
     return (
         <>
             {/* Botón para abrir el modal */}
             <button
                 type="button"
+                ref={tooltipRef}
                 className="btn btn-text btn-primary border-3 border-white rounded-circle d-flex align-items-center justify-content-center border-bottom"
                 data-bs-toggle="modal"
                 data-bs-target="#aiAssistantModal"
-                title="Escribir a la IA"
             >
                 <i className="fa-solid fa-keyboard fa-xl"></i>
             </button>
@@ -97,6 +110,7 @@ export const AITextAsistant = () => {
                                             onChange={(e) =>
                                                 setQuery(e.target.value)
                                             }
+                                            onKeyDown={handleKeyDown}
                                             disabled={isProcessing}
                                             autoFocus
                                         />

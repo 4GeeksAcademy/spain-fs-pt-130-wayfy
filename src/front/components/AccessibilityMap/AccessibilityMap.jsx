@@ -98,7 +98,6 @@ export const AccessibilityMap = () => {
                 )}
 
                 {/* MARCADOR SELECCIONADO */}
-
                 {selectedLocation && (
                     <Marker
                         longitude={selectedLocation.longitude}

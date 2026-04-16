@@ -254,6 +254,11 @@ body {
     font-family: var(--bs-body-font-family);
 }
 
+body.modal-open {
+    overflow: hidden !important;
+    padding-right: 0 !important;
+}
+
 h1,
 h2,
 h3,
