@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-export const useFilteredGeoJSON = (
+const useFilteredGeoJSON = (
     geojson,
     activeFilters,
     activeCategories,
@@ -32,3 +32,5 @@ export const useFilteredGeoJSON = (
         };
     }, [geojson, activeFilters, activeCategories]);
 };
+
+export default useFilteredGeoJSON

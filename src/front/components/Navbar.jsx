@@ -74,11 +74,11 @@ export const Navbar = () => {
 					className={`collapse navbar-collapse ${mostrarMenu ? 'show' : ''}`}
 					id="navbarContent"
 				>
-					<div className="flex-grow-1 mx-lg-5 my-lg-0">
+					{/* <div className="flex-grow-1 mx-lg-5 my-lg-0">
 						<Search />
-					</div>
+					</div> */}
 
-					<div className="navbar-nav d-flex flex-row flex-wrap justify-content-center gap-3 mt-2 mt-lg-0 me-lg-5">
+					<div className="navbar-nav d-flex flex-row flex-wrap justify-content-center flex-grow-1 gap-3 mt-2 mt-lg-0 me-lg-5">
 						{elementosMenu.map((elemento, index) => (
 							<ButtonMenu
 								link={elemento.link}

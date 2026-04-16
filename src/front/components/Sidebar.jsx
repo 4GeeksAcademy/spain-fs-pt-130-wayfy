@@ -1,6 +1,7 @@
 import useGlobalReducer from '../hooks/useGlobalReducer';
 import { AccessibilityDetails } from './AccessibilityMap/AccessibilityDetails';
 import { FilterPanel } from './AccessibilityMap/FilterPanel';
+import { SearchMap } from './AccessibilityMap/SearchMap';
 
 export const Sidebar = ({ show, toggle }) => {
     const { store, dispatch } = useGlobalReducer();
@@ -25,7 +26,7 @@ export const Sidebar = ({ show, toggle }) => {
             type: 'REMOVE_PLACE',
             payload: placeId,
         });
-    }
+    };
 
     return (
         <section
@@ -41,7 +42,8 @@ export const Sidebar = ({ show, toggle }) => {
             <div
                 className={`sidebar-content ${show ? 'sidebar-content-show' : 'sidebar-content-hidden'} d-flex flex-column overflow-hidden`}
             >
-                <div className="flex-grow-1 overflow-auto p-3">
+                <SearchMap />
+                <div className="flex-grow-1 overflow-auto px-3">
                     {selectedFeature && (
                         <>
                             <AccessibilityDetails
@@ -69,7 +71,9 @@ export const Sidebar = ({ show, toggle }) => {
                                         <span>{place.name}</span>
                                         <button
                                             className="btn btn-sm btn-danger"
-                                            onClick={() => handleClickDelete(place.id)}
+                                            onClick={() =>
+                                                handleClickDelete(place.id)
+                                            }
                                         >
                                             <i className="fa-solid fa-trash-can"></i>
                                         </button>
