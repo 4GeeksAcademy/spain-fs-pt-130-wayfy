@@ -5,7 +5,7 @@ export const getLocations = async (buscar, dispatch, currentView) => {
 
         const params = new URLSearchParams({
             access_token: import.meta.env.VITE_MAPBOX_TOKEN,
-            types: 'address,poi,place',
+            types: 'poi,address,place',
             proximity: `${currentView.longitude},${currentView.latitude}`,
             autocomplete: 'true',
             language: 'es',
@@ -22,7 +22,6 @@ export const getLocations = async (buscar, dispatch, currentView) => {
         if (data?.features?.length > 0) {
             const [longitude, latitude] = data.features[0].center;
 
-            // Si el resultado es una dirección exacta (address), queremos más zoom
             const isAddress = data.features[0].place_type.includes('address');
 
             dispatch({
@@ -30,7 +29,7 @@ export const getLocations = async (buscar, dispatch, currentView) => {
                 payload: {
                     longitude,
                     latitude,
-                    zoom: isAddress ? 18 : 14, // Zoom más profundo para direcciones
+                    zoom: isAddress ? 18 : 14,
                 },
             });
 
