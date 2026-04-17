@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import useGlobalReducer from './useGlobalReducer';
 import useFilteredGeoJSON from './useFilteredGeoJSON';
-import { fetchWheelchairPlaces } from '../services/overpass.api';
+import { fetchWheelchairPlacesProgressive } from '../services/overpass.api';
 import { elementsToGeoJSON } from '../utils/toGeoJSON';
 
 const useAccessibilityMap = () => {
@@ -31,8 +31,25 @@ const useAccessibilityMap = () => {
         activeCategories,
     );
 
+    // ⭐ CAPAS DEL MAPA (cluster, halo, puntos)
     const layers = useMemo(
         () => ({
+            clusterHaloLayer: {
+                id: 'cluster-halo',
+                type: 'circle',
+                filter: ['has', 'point_count'],
+                paint: {
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        32,
+                        10, 42,
+                        50, 54
+                    ],
+                    'circle-color': 'rgba(0,0,0,0.12)',
+                },
+            },
+
             clusterLayer: {
                 id: 'clusters',
                 type: 'circle',
@@ -42,38 +59,40 @@ const useAccessibilityMap = () => {
                         'step',
                         ['get', 'point_count'],
                         '#10b891',
-                        10,
-                        '#38bdf8',
-                        50,
-                        '#ec8e8e',
+                        10, '#38bdf8',
+                        50, '#ec8e8e',
                     ],
                     'circle-radius': [
                         'step',
                         ['get', 'point_count'],
-                        20,
-                        10,
-                        30,
-                        50,
-                        40,
+                        24,
+                        10, 32,
+                        50, 44
                     ],
                     'circle-stroke-width': 2,
                     'circle-stroke-color': '#fff',
                 },
             },
+
             clusterCountLayer: {
                 id: 'cluster-count',
                 type: 'symbol',
                 filter: ['has', 'point_count'],
                 layout: {
                     'text-field': '{point_count_abbreviated}',
-                    'text-size': 13,
+                    'text-size': 14,
                     'text-font': [
                         'DIN Offc Pro Medium',
                         'Arial Unicode MS Bold',
                     ],
                 },
-                paint: { 'text-color': '#fff' },
+                paint: {
+                    'text-color': '#ffffff',
+                    'text-halo-color': 'rgba(0,0,0,0.35)',
+                    'text-halo-width': 2,
+                },
             },
+
             unclusteredLayer: {
                 id: 'unclustered-point',
                 type: 'circle',
@@ -83,12 +102,9 @@ const useAccessibilityMap = () => {
                     'circle-color': [
                         'match',
                         ['get', 'wheelchair'],
-                        'yes',
-                        '#10b891',
-                        'limited',
-                        '#ffc108',
-                        'no',
-                        '#db3545',
+                        'yes', '#10b891',
+                        'limited', '#ffc108',
+                        'no', '#db3545',
                         '#93a2b8',
                     ],
                     'circle-stroke-width': 2,
@@ -106,6 +122,7 @@ const useAccessibilityMap = () => {
         [dispatch],
     );
 
+    // ⭐ CARGA PROGRESIVA DE POIs
     const loadData = useCallback(async () => {
         const map = mapRef.current?.getMap();
         if (!map || !isPositionReady) return;
@@ -122,9 +139,14 @@ const useAccessibilityMap = () => {
         setLoading(true);
         setError(null);
 
+        let allElements = [];
+
         try {
-            const elements = await fetchWheelchairPlaces(bbox);
-            setGeojson(elementsToGeoJSON(elements));
+            await fetchWheelchairPlacesProgressive(bbox, (partial) => {
+                allElements = [...allElements, ...partial];
+                setGeojson(elementsToGeoJSON(allElements)); // 🔥 actualización progresiva
+            });
+
         } catch (err) {
             console.error(err);
             setError('Error al cargar datos de accesibilidad.');
@@ -133,6 +155,16 @@ const useAccessibilityMap = () => {
         }
     }, [isPositionReady]);
 
+    // ⭐ Actualización dinámica al cambiar filtros
+    useEffect(() => {
+        if (filteredGeoJSON && mapRef.current) {
+            const map = mapRef.current.getMap();
+            const src = map.getSource('wheelchair');
+            if (src) src.setData(filteredGeoJSON);
+        }
+    }, [filteredGeoJSON]);
+
+    // ⭐ Geolocalización inicial
     useEffect(() => {
         if (selectedLocation) {
             setIsPositionReady(true);
@@ -159,10 +191,7 @@ const useAccessibilityMap = () => {
                     });
                     setIsPositionReady(true);
                 },
-                (err) => {
-                    console.error('Error de geolocalización:', err);
-                    setIsPositionReady(true);
-                },
+                () => setIsPositionReady(true),
                 { enableHighAccuracy: true, timeout: 5000 },
             );
         } else {
@@ -176,6 +205,7 @@ const useAccessibilityMap = () => {
         }
     }, [isPositionReady, loadData]);
 
+    // ⭐ Animación suave al centrar en selectedLocation
     useEffect(() => {
         if (selectedLocation && mapRef.current) {
             mapRef.current.flyTo({
@@ -183,6 +213,7 @@ const useAccessibilityMap = () => {
                 zoom: 14,
                 essential: true,
                 duration: 2000,
+                easing: (t) => t * (2 - t),
             });
         }
     }, [selectedLocation]);
@@ -195,7 +226,6 @@ const useAccessibilityMap = () => {
         }
     }, [error]);
 
-
     const handleMove = useCallback(
         (evt) => updateLocation(evt.viewState),
         [updateLocation],
@@ -207,6 +237,7 @@ const useAccessibilityMap = () => {
         debounceRef.current = setTimeout(() => loadData(), 600);
     }, [loadData, isPositionReady]);
 
+    // ⭐ Click en clusters o puntos
     const handleClick = useCallback(
         (evt) => {
             const map = mapRef.current?.getMap();
@@ -215,8 +246,10 @@ const useAccessibilityMap = () => {
             const clusters = map.queryRenderedFeatures(evt.point, {
                 layers: ['clusters'],
             });
+
             if (clusters.length) {
                 const clusterId = clusters[0].properties.cluster_id;
+
                 map.getSource('wheelchair').getClusterExpansionZoom(
                     clusterId,
                     (err, zoom) => {
@@ -224,6 +257,8 @@ const useAccessibilityMap = () => {
                         map.easeTo({
                             center: clusters[0].geometry.coordinates,
                             zoom,
+                            duration: 1200,
+                            easing: (t) => t * (2 - t),
                         });
                     },
                 );
@@ -239,6 +274,28 @@ const useAccessibilityMap = () => {
         },
         [dispatch],
     );
+
+    // ⭐ Hover highlight
+    useEffect(() => {
+        const map = mapRef.current?.getMap();
+        if (!map) return;
+
+        const handleEnterPoint = () => {
+            map.setPaintProperty('unclustered-point', 'circle-stroke-color', '#000');
+        };
+
+        const handleLeavePoint = () => {
+            map.setPaintProperty('unclustered-point', 'circle-stroke-color', '#fff');
+        };
+
+        map.on('mouseenter', 'unclustered-point', handleEnterPoint);
+        map.on('mouseleave', 'unclustered-point', handleLeavePoint);
+
+        return () => {
+            map.off('mouseenter', 'unclustered-point', handleEnterPoint);
+            map.off('mouseleave', 'unclustered-point', handleLeavePoint);
+        };
+    }, [mapRef]);
 
     return {
         state: {

@@ -24,6 +24,7 @@ export const AccessibilityMap = () => {
         cursor,
         places,
         selectedLocation,
+        layers,
     } = state;
 
     return (
@@ -64,6 +65,13 @@ export const AccessibilityMap = () => {
                 mapStyle="mapbox://styles/mapbox/streets-v12"
                 mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
                 interactiveLayerIds={['clusters', 'unclustered-point']}
+
+                scrollZoom={{ speed: 0.3, smooth: true }}
+                dragPan={true}
+                dragRotate={false}
+                touchZoomRotate={{ around: 'center', rotate: false }}
+                keyboard={true}
+                doubleClickZoom={true}
             >
                 <GeolocateControl
                     position="top-left"
@@ -81,9 +89,10 @@ export const AccessibilityMap = () => {
                         clusterMaxZoom={14}
                         clusterRadius={50}
                     >
-                        <Layer {...state.layers.clusterLayer} />
-                        <Layer {...state.layers.clusterCountLayer} />
-                        <Layer {...state.layers.unclusteredLayer} />
+                        <Layer {...layers.clusterHaloLayer} />
+                        <Layer {...layers.clusterLayer} />
+                        <Layer {...layers.clusterCountLayer} />
+                        <Layer {...layers.unclusteredLayer} />
                     </Source>
                 )}
 
@@ -97,18 +106,14 @@ export const AccessibilityMap = () => {
                     </Marker>
                 )}
 
-                {/* MARCADOR SELECCIONADO */}
                 {selectedLocation && (
                     <Marker
                         longitude={selectedLocation.longitude}
                         latitude={selectedLocation.latitude}
                         anchor="bottom"
-                    >
-                        {/* <i className="fa-solid fa-location-dot text-danger fs-2"></i> */}
-                    </Marker>
+                    ></Marker>
                 )}
 
-                {/* MARCADORES GUARDADOS POR EL USUARIO */}
                 {places?.map((place) => (
                     <Marker
                         key={place.id}
@@ -123,6 +128,7 @@ export const AccessibilityMap = () => {
                     </Marker>
                 ))}
             </Map>
+
             <AIAssistant />
         </div>
     );
