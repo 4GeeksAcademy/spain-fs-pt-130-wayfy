@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useGlobalReducer from '../../hooks/useGlobalReducer';
 
 const PLACE_CATEGORIES = [
@@ -19,6 +19,30 @@ const PLACE_CATEGORIES = [
 export const FilterCategories = ({ typeView = 'grid' }) => {
     const { store, dispatch } = useGlobalReducer();
     const { activeCategories = [] } = store;
+
+    useEffect(() => {
+        if (typeView === 'list') {
+            dispatch({ type: 'SET_ACTIVE_CATEGORIES', payload: [] });
+        } else if (typeView === 'grid') {
+            dispatch({
+                type: 'SET_ACTIVE_CATEGORIES',
+                payload: [
+                    'gastronomia',
+                    'alojamiento',
+                    'transporte',
+                    'salud',
+                    'cultura_turismo',
+                    'recreacion',
+                    'deporte',
+                    'gobierno',
+                    'baños',
+                    'dinero',
+                    'tiendas',
+                    'otros',
+                ],
+            });
+        }
+    }, []);
 
     const toggle = (value) => {
         const newValues = activeCategories.includes(value)
@@ -44,14 +68,16 @@ export const FilterCategories = ({ typeView = 'grid' }) => {
         <section>
             <div className="d-flex justify-content-between align-items-center mb-2">
                 <h6 className="text-primary m-0">Categorías</h6>
-                <button
-                    onClick={handleSelectAll}
-                    className="btn btn-sm btn-light text-small fw-bold"
-                >
-                    {activeCategories.length === PLACE_CATEGORIES.length
-                        ? 'Seleccionar uno'
-                        : 'Seleccionar todos'}
-                </button>
+                {typeView === 'grid' && (
+                    <button
+                        onClick={handleSelectAll}
+                        className="btn btn-sm btn-light text-small fw-bold"
+                    >
+                        {activeCategories.length === PLACE_CATEGORIES.length
+                            ? 'Seleccionar uno'
+                            : 'Seleccionar todos'}
+                    </button>
+                )}
             </div>
 
             <div className="row g-1">
@@ -64,16 +90,14 @@ export const FilterCategories = ({ typeView = 'grid' }) => {
                         >
                             <button
                                 onClick={() => toggle(cat.value)}
-                                className={`btn btn-sm w-100 d-flex flex-column align-items-center py-2 border-2 rounded-2 ${
-                                    isActive
+                                className={`btn btn-sm w-100 d-flex flex-column align-items-center py-2 border-2 rounded-2 ${isActive
                                         ? 'btn-success border-success text-primary fw-bold shadow-sm'
                                         : 'btn-light border-light-subtle text-muted opacity-50'
-                                }`}
+                                    }`}
                             >
                                 <i
-                                    className={`fa-solid ${cat.faIcon} ${
-                                        isActive ? 'text-white' : 'text-muted'
-                                    } text-small mb-1`}
+                                    className={`fa-solid ${cat.faIcon} ${isActive ? 'text-white' : 'text-muted'
+                                        } text-small mb-1`}
                                 ></i>
                                 <span
                                     className={`${isActive ? 'text-white' : 'text-muted'} text-truncate text-small w-100 px-1`}
