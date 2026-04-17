@@ -17,7 +17,12 @@ const useAIAssistant = () => {
                 categories = null,
             } = options;
 
-            const coordinates = feature.center || feature.geometry?.coordinates;
+            // const coordinates = feature.center || feature.geometry?.coordinates;
+            const coordinates = [
+                parseFloat(feature.center?.[0] ?? feature.geometry?.coordinates?.[0]),
+                parseFloat(feature.center?.[1] ?? feature.geometry?.coordinates?.[1]),
+            ];
+
             if (!coordinates) return;
 
             dispatch({

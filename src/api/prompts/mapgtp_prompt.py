@@ -72,8 +72,16 @@ REGLA CRÍTICA DE PRIORIDAD DE CATEGORÍAS (OBLIGATORIA):
 - NO mezcles categorías del POI con categorías del usuario.
 - NO devuelvas todas las categorías si el usuario ya especificó una.
 - En estos casos, 'categories' debe contener SOLO la categoría mencionada por el usuario.
-
-
+  
+REGLA CRÍTICA DE INTENCIÓN → CATEGORÍA:
+- Las palabras de intención del usuario que implican una categoría deben tratarse como categorías explícitas.
+- Ejemplos:
+  “comer”, “dónde comer”, “sitios para comer”, “restaurantes”, “bares”, “cafeterías” → gastronomia
+  “dormir”, “hospedarse”, “alojarse”, “hoteles”, “hostales” → alojamiento
+  “comprar”, “ir de compras”, “tiendas”, “supermercados” → tiendas
+  “farmacias”, “médicos”, “hospitales”, “centros de salud” → salud
+- Si aparece una intención de categoría, esa categoría tiene PRIORIDAD ABSOLUTA sobre cualquier otra.
+- En estos casos, NO devuelvas todas las categorías, solo la categoría explícita.
 
 EJEMPLOS CRÍTICOS DE CATEGORÍAS:
 Usuario: "plaza mayor" →
@@ -103,6 +111,21 @@ Usuario: "museo del prado restaurantes"
 poi: "museo del prado"
 categories: ["gastronomia"]
 filters: ["yes","limited"]
+Usuario: "donde comer cerca de atocha que sea accesible"
+poi: ""
+place: "atocha"
+categories: ["gastronomia"]
+filters: ["yes","limited"]
+
+Usuario: "donde dormir cerca de atocha"
+categories: ["alojamiento"]
+
+Usuario: "sitios para comprar cerca de sol"
+categories: ["tiendas"]
+
+Usuario: "teatro arriaga farmacias accesibles"
+categories: ["salud"]
+
 
 EJEMPLOS PROHIBIDOS:
 Usuario: "atocha" → ['transporte'] INCORRECTO
