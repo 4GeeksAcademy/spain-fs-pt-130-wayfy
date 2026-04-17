@@ -13,7 +13,7 @@ import { Restaurants } from './pages/Restaurants';
 import { Transports } from './pages/Transports';
 import { Entertainment } from './pages/Entertainment';
 import { ForgotPassword } from './pages/ForgotPassword';
-import {Itinerary} from './pages/Itinerary';
+import { Itinerary } from './pages/Itinerary';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(

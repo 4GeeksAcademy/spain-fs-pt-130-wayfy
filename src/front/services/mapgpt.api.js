@@ -1,5 +1,7 @@
+// mapgpt.api.js
+
 export const fetchMapData = async (text) => {
-    if (!text || text.length < 3) return null;
+    if (!text || text.trim().length < 2) return null;
 
     try {
         const response = await fetch(
@@ -12,10 +14,36 @@ export const fetchMapData = async (text) => {
         );
 
         if (!response.ok) throw new Error('Error en el backend');
+
         const data = await response.json();
+        console.log('AI →', data);
 
-        console.log(data);
+        // Normalización defensiva
+        const poi = data.poi || '';
+        const address = data.address || '';
+        const place = data.place || '';
+        const filters = Array.isArray(data.filters)
+            ? data.filters
+            : ['yes', 'limited'];
+        const categories = Array.isArray(data.categories)
+            ? data.categories
+            : [
+                  'restauracion',
+                  'alojamiento',
+                  'transporte',
+                  'cultura',
+                  'ocio',
+                  'gobierno',
+                  'salud',
+                  'dinero',
+                  'deporte',
+                  'baños',
+                  'compras',
+              ];
 
+        // -----------------------------
+        // GEOCODING (POI → ADDRESS → PLACE)
+        // -----------------------------
         const geocode = async (query) => {
             if (!query) return null;
 
@@ -23,38 +51,52 @@ export const fetchMapData = async (text) => {
                 query,
             )}&limit=1`;
 
-            const res = await fetch(url, {
-                headers: { 'User-Agent': 'WayfyAI/1.0' },
-            });
+            try {
+                const res = await fetch(url, {
+                    headers: {
+                        'User-Agent': 'WayfyAI/1.0',
+                    },
+                });
 
-            const json = await res.json();
-            if (json.length === 0) return null;
+                const text = await res.text();
 
-            const lon = parseFloat(json[0].lon);
-            const lat = parseFloat(json[0].lat);
+                if (text.trim().startsWith('<')) return null;
 
-            return {
-                id: query,
-                center: [lon, lat],
-                geometry: {
-                    type: 'Point',
-                    coordinates: [lon, lat],
-                },
-                place_name: query,
-                text: query,
-            };
+                const json = JSON.parse(text);
+                if (!json.length) return null;
+
+                const lon = parseFloat(json[0].lon);
+                const lat = parseFloat(json[0].lat);
+
+                return {
+                    id: query,
+                    center: [lon, lat],
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [lon, lat],
+                    },
+                    place_name: query,
+                    text: query,
+                };
+            } catch (err) {
+                console.warn('Error geocodificando:', err);
+                return null;
+            }
         };
 
         const feature =
-            (await geocode(data.poi)) ||
-            (await geocode(data.address)) ||
-            (await geocode(data.place)) ||
+            (await geocode(poi)) ||
+            (await geocode(address)) ||
+            (await geocode(place)) ||
             null;
 
         return {
             feature,
-            filters: data.filters,
-            categories: data.categories,
+            poi,
+            address,
+            place,
+            filters,
+            categories,
             message: data.message,
         };
     } catch (error) {

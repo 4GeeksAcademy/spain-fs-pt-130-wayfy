@@ -7,7 +7,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from flask_cors import CORS
 from groq import Groq
-from api.prompts.mapgtp_prompt import MAPGPT_SYSTEM_PROMPT
+from api.prompts.mapgpt_prompt import MAPGPT_SYSTEM_PROMPT
 
 
 api = Blueprint('api', __name__)
@@ -19,6 +19,9 @@ client = Groq(api_key=os.getenv('GROQ_API_KEY'))
 def map_gpt():
     data = request.get_json()
     user_prompt = data.get('prompt')
+    
+    if not user_prompt or not user_prompt.strip():
+        return jsonify({'error': 'Prompt vacío'}), 400 
     
     try:
         completion = client.chat.completions.create(
