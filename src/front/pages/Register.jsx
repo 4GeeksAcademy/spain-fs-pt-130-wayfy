@@ -1,37 +1,34 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Register = () => {
-    // 1. Estados para los datos del usuario
+    const navigate = useNavigate();
+
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     
-    // 2. Estados para controlar el flujo del formulario (pasos y selección)
     const [step, setStep] = useState(1);
     const [selectedMobility, setSelectedMobility] = useState(null);
 
-    // Opciones del perfil de movilidad
     const mobilityOptions = [
-        { id: 'silla', label: 'Usuario de silla de ruedas', icon: '♿' },
-        { id: 'andador', label: 'Uso de andador/bastón', icon: '🦯' },
-        { id: 'movilidad', label: 'Movilidad reducida', icon: '🚶' },
+        { id: 'silla', label: 'Usuario de silla de ruedas', icon: 'fa-solid fa-wheelchair-move' },
+        { id: 'andador', label: 'Uso de andador/bastón', icon: 'fa-solid fa-person-walking-with-cane' },
+        { id: 'movilidad', label: 'Movilidad reducida', icon: 'fa-solid fa-person-walking' },
         { id: 'mayor', label: 'Adulto mayor', icon: '👴' },
-        { id: 'sin', label: 'Sin limitaciones', icon: '✓' },
+        { id: 'sin', label: 'Sin limitaciones', icon: 'fa-solid fa-check' },
     ];
 
-    // Función que conecta con el backend
     const handleRegister = async () => {
-        // Validación básica: Contraseñas iguales
         if (password !== confirmPassword) {
             alert("Las contraseñas no coinciden");
             return;
         }
 
-        // Llamada a la API (Endpoint que se creo en routes.py)
         try {
-            const response = await fetch(`${process.env.BACKEND_URL}/api/signup`, {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
+            const response = await fetch(`${backendUrl}/api/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -44,12 +41,14 @@ export const Register = () => {
 
             if (response.ok) {
                 alert("¡Registro exitoso! Ya puedes iniciar sesión.");
+                navigate("/login"); 
             } else {
                 const data = await response.json();
                 alert("Error: " + data.msg);
             }
         } catch (error) {
             console.error("Error en el registro", error);
+            alert("Error de conexión. Asegúrate de que el puerto 3001 sea PÚBLICO.");
         }
     };
 
@@ -69,7 +68,6 @@ export const Register = () => {
 
                         <form>
                             {step === 1 ? (
-                                /* PASO 1: DATOS BÁSICOS */
                                 <>
                                     <div className="mb-3">
                                         <label className="form-label fw-semibold">Nombre Completo</label>
@@ -82,30 +80,39 @@ export const Register = () => {
                                     <div className="row">
                                         <div className="col-md-6 mb-3">
                                             <label className="form-label fw-semibold">Contraseña</label>
-                                            <input type="password" d className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="******" />
+                                            <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="******" />
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <label className="form-label fw-semibold">Confirmar</label>
-                                            <input type="password" d className="form-control" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="******" />
+                                            <input type="password" className="form-control" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="******" />
                                         </div>
                                     </div>
-                                    <button type="button" className="btn btn-primary w-100 fw-bold py-2 mt-2" onClick={() => setStep(2)}>
-                                        Siguiente: Elegir Perfil
+                                    <button type="button" className="btn btn-success w-100 fw-bold py-2 mt-2" onClick={() => setStep(2)}>
+                                        Elegir Perfil <i className="fa-solid fa-circle-arrow-right ms-2"></i>
                                     </button>
                                 </>
                             ) : (
-                                /* PASO 2: SELECCIÓN DE MOVILIDAD */
                                 <>
                                     <div className="row g-2 mb-4">
                                         {mobilityOptions.map((opt) => (
                                             <div key={opt.id} className="col-4">
                                                 <div 
-                                                    className={`p-3 border rounded-4 text-center shadow-sm h-100 d-flex flex-column align-items-center justify-content-center transition-all ${selectedMobility === opt.id ? 'bg-primary text-white border-primary' : 'bg-white text-dark'}`}
+                                                    // ACTUALIZACIÓN LÓGICA DE ESTILOS:
+                                                    className={`p-3 border rounded-4 text-center shadow-sm h-100 d-flex flex-column align-items-center justify-content-center transition-all ${
+                                                        selectedMobility === opt.id 
+                                                        ? 'bg-success border-success text-white shadow'
+                                                        : 'bg-white border-light-subtle text-muted opacity-50'
+                                                    }`}
                                                     onClick={() => setSelectedMobility(opt.id)}
-                                                    style={{ cursor: 'pointer', transition: '0.3s' }}
+                                                    style={{ cursor: 'pointer', transition: '0.4s' }}
                                                 >
-                                                    <span className="fs-2 mb-1">{opt.icon}</span>
-                                                    <span className="fw-bold" style={{ fontSize: '0.7rem' }}>{opt.label}</span>
+                                                    <div style={{ visibility: selectedMobility === opt.id ? 'visible' : 'hidden', height: '40px' }}>
+                                                        <span className="fs-2 mb-1">
+                                                            {opt.icon.includes("fa-") ? <i className={opt.icon}></i> : opt.icon}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <span className="fw-bold mt-1" style={{ fontSize: '0.7rem' }}>{opt.label}</span>
                                                 </div>
                                             </div>
                                         ))}
