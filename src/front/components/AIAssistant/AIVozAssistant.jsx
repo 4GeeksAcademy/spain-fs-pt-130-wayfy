@@ -20,10 +20,10 @@ export const AIVozAssistant = () => {
         >
             <i
                 className={`fa-solid fa-xl ${isProcessing
-                        ? 'fa-spinner fa-spin'
-                        : isListening
-                            ? 'fa-microphone-lines fa-pulse'
-                            : 'fa-microphone-lines'
+                    ? 'fa-spinner fa-spin'
+                    : isListening
+                        ? 'fa-microphone-lines fa-pulse'
+                        : 'fa-microphone-lines'
                     }`}
             ></i>
         </button>
