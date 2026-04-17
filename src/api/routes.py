@@ -50,6 +50,7 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
 # Este es el Endpoint de registro
 @api.route('/signup', methods=['POST'])
 def handle_signup():
