@@ -38,7 +38,7 @@ REGLA CRÍTICA DE EXTRACCIÓN:
 
 ---------------------------------------------------------
 CATEGORÍAS DISPONIBLES (usa solo estos nombres):
-['gastronomia','alojamiento','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas','otros']
+['gastronomia','alojamiento','transporte','salud','cultura_turismo','recreacion','deporte','gobierno','baños','dinero','tiendas','otros']
 
 REGLA CRÍTICA DE CATEGORÍAS:
 - El campo 'categories' debe ser SIEMPRE un array.
@@ -52,14 +52,26 @@ REGLA CRÍTICA DE CATEGORÍAS:
   - “parque del retiro” NO debe asignarse a recreacion.
 - Solo usa categorías si el usuario las menciona explícitamente.
 - Nunca inventes categorías que no estén en la lista oficial.
+- NO uses palabras como “teatro”, “museo”, “estadio”, “parque”, “plaza”, “estación”, etc. para asignar categorías.
+- NO devuelvas 'otros' cuando el usuario no menciona categoría.
 
 REGLA CRÍTICA ANTI-INFERENCIA DE CATEGORÍAS:
+- Si el usuario menciona un POI y también menciona una categoría (ej: “teatro arriaga farmacias accesibles”),
+  la categoría mencionada por el usuario tiene PRIORIDAD ABSOLUTA.
 - Si el usuario NO menciona ninguna categoría, NO devuelvas subconjuntos.
 - NO devuelvas categorías parciales.
 - NO mezcles categorías sueltas con 'otros'.
 - NO intentes adivinar categorías basadas en el tipo de lugar.
 - En ausencia de categorías explícitas, SIEMPRE devuelve EXACTAMENTE este array:
   ['gastronomia','alojamiento','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
+
+REGLA CRÍTICA DE PRIORIDAD DE CATEGORÍAS (OBLIGATORIA):
+- Si el usuario menciona una categoría explícita (ej: “hoteles”, “farmacias”, “restaurantes”),
+  esa categoría tiene PRIORIDAD ABSOLUTA sobre cualquier otra.
+- El POI o PLACE NUNCA debe influir en la categoría cuando el usuario menciona una categoría explícita.
+- NO mezcles categorías del POI con categorías del usuario.
+- NO devuelvas todas las categorías si el usuario ya especificó una.
+- En estos casos, 'categories' debe contener SOLO la categoría mencionada por el usuario.
   
 REGLA CRÍTICA DE INTENCIÓN → CATEGORÍA:
 - Las palabras de intención del usuario que implican una categoría deben tratarse como categorías explícitas.
@@ -81,6 +93,24 @@ categories: ['gastronomia','alojamiento','transporte','cultura_turismo','recreac
 Usuario: "calle alcala 10 madrid" →
 categories: ['gastronomia','alojamiento','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
 
+Usuario: "teatro arriaga farmacias accesibles" →
+poi: "teatro arriaga"
+categories: ["salud"]
+
+Usuario: "hoteles accesibles cerca de atocha"
+poi: "atocha"
+categories: ["alojamiento"]
+filters: ["yes","limited"]
+
+Usuario: "teatro arriaga farmacias accesibles"
+poi: "teatro arriaga"
+categories: ["salud"]
+filters: ["yes","limited"]
+
+Usuario: "museo del prado restaurantes"
+poi: "museo del prado"
+categories: ["gastronomia"]
+filters: ["yes","limited"]
 Usuario: "donde comer cerca de atocha que sea accesible"
 poi: ""
 place: "atocha"
@@ -103,6 +133,7 @@ Usuario: "atocha" → ['transporte','tiendas'] INCORRECTO
 Usuario: "atocha" → ['alojamiento','transporte','tiendas','otros'] INCORRECTO
 Usuario: "plaza mayor" → ['cultura_turismo'] INCORRECTO
 Usuario: "plaza mayor" → ['recreacion','otros'] INCORRECTO
+Usuario: "teatro arriaga farmacias accesibles" → ['cultura_turismo'] INCORRECTO
 
 
 ---------------------------------------------------------
