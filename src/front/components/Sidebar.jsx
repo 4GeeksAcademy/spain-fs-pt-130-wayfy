@@ -1,38 +1,87 @@
-export const Sidebar = ({ show, toggle, places }) => {
+import useGlobalReducer from '../hooks/useGlobalReducer';
+import { AccessibilityDetails } from './AccessibilityMap/AccessibilityDetails';
+import { FilterPanel } from './AccessibilityMap/FilterPanel';
+import { SearchMap } from './AccessibilityMap/SearchMap';
+
+export const Sidebar = ({ show, toggle }) => {
+    const { store, dispatch } = useGlobalReducer();
+    const { places, activeFilters, selectedFeature } = store;
+
+    const handleFilterChange = (newFilters) => {
+        dispatch({
+            type: 'SET_FILTERS',
+            payload: newFilters,
+        });
+    };
+
+    const handleCloseDetails = () => {
+        dispatch({
+            type: 'SET_SELECTED_FEATURE',
+            payload: null,
+        });
+    };
+
+    const handleClickDelete = (placeId) => {
+        dispatch({
+            type: 'REMOVE_PLACE',
+            payload: placeId,
+        });
+    };
+
     return (
         <section
-            className="bg-white border-start shadow-sm d-flex flex-column position-relative z-1"
-            style={{
-                width: show ? '400px' : '0',
-                transition: 'width 0.3s ease-in-out',
-            }}
+            className={`sidebar ${show ? 'sidebar-show' : 'sidebar-hidden'} bg-white border-start shadow-sm d-flex flex-column position-relative z-1`}
         >
             <button
-                className="btn btn-sm btn-primary rounded-start-pill position-absolute shadow-sm d-flex align-items-center justify-content-center top-50 translate-middle-y"
-                style={{ left: '-25px' }}
+                className="btn btn-sm btn-primary rounded-start-pill position-absolute shadow-sm d-flex align-items-center justify-content-center sidebar-btn-left"
                 onClick={toggle}
             >
                 {show ? '❯' : '❮'}
             </button>
 
             <div
-                className="h-100 d-flex flex-column"
-                style={{
-                    width: '400px',
-                    visibility: show ? 'visible' : 'hidden',
-                }}
+                className={`sidebar-content ${show ? 'sidebar-content-show' : 'sidebar-content-hidden'} d-flex flex-column overflow-hidden`}
             >
-                <div className="p-3 border-bottom bg-light">
-                    <h5 className="m-0 text-primary">Información</h5>
-                </div>
-                <div className="flex-grow-1 overflow-auto p-3">
-                    <h6>Marcadores</h6>
-                    <hr />
-                    {places.map((place) => (
-                        <div key={place.id} className="card mb-2 p-2 shadow-sm">
-                            {place.name}
-                        </div>
-                    ))}
+                <SearchMap />
+                <div className="flex-grow-1 overflow-auto px-3">
+                    {selectedFeature && (
+                        <>
+                            <AccessibilityDetails
+                                feature={selectedFeature}
+                                onClose={handleCloseDetails}
+                            />
+                            <hr />
+                        </>
+                    )}
+
+                    <FilterPanel
+                        active={activeFilters}
+                        onChange={handleFilterChange}
+                    />
+
+                    {places.length > 0 && (
+                        <>
+                            <h6>Marcadores</h6>
+                            {places.map((place) => (
+                                <div
+                                    key={place.id}
+                                    className="card mb-2 p-2 shadow-sm"
+                                >
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <span>{place.name}</span>
+                                        <button
+                                            className="btn btn-sm btn-danger"
+                                            onClick={() =>
+                                                handleClickDelete(place.id)
+                                            }
+                                        >
+                                            <i className="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    )}
                 </div>
             </div>
         </section>

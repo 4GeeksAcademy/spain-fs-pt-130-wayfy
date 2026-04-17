@@ -254,6 +254,11 @@ body {
   font-family: var(--bs-body-font-family);
 }
 
+body.modal-open {
+    overflow: hidden !important;
+    padding-right: 0 !important;
+}
+
 h1,
 h2,
 h3,
@@ -285,6 +290,14 @@ header,
   z-index: 1100;
 }
 
+.text-small {
+    font-size: 0.8rem;
+}
+/* LOGIN */
+.login-dropdown-width {
+    min-width: 320px;
+}
+
 /* Tooltips al frente de todo */
 .tooltip,
 .bs-tooltip-auto {
@@ -294,4 +307,35 @@ header,
 /* Menú desplegable del Navbar */
 .dropdown-menu {
   z-index: 1200;
+}
+
+/* SIDEBAR */
+.sidebar {
+    transition: width 0.3s ease-in-out;
+    height: calc(100vh - 140px);
+}
+
+.sidebar-show {
+    width: 400px;
+}
+
+.sidebar-hidden {
+    width: 0;
+}
+
+.sidebar-content {
+    width: 400px;
+    height: 100%;
+}
+
+.sidebar-content-show {
+    visibility: visible;
+}
+
+.siebar-content-hidden {
+    visibility: hidden;
+}
+
+.sidebar-btn-left {
+    left: -25px;
 }

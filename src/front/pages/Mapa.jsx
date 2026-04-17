@@ -1,4 +1,5 @@
-import { MapboxComponent } from '../components/MapboxComponent/MapboxComponent';
+import { AccessibilityMap } from "../components/AccessibilityMap/AccessibilityMap";
+
 
 export const Mapa = () => {
     return (
@@ -8,7 +9,7 @@ export const Mapa = () => {
         >
             <div className="row g-0 h-100">
                 <div className="col-12 h-100">
-                    <MapboxComponent />
+                    <AccessibilityMap />
                 </div>
             </div>
         </div>
