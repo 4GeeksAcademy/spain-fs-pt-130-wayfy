@@ -60,7 +60,16 @@ REGLA CRÍTICA ANTI-INFERENCIA DE CATEGORÍAS:
 - NO intentes adivinar categorías basadas en el tipo de lugar.
 - En ausencia de categorías explícitas, SIEMPRE devuelve EXACTAMENTE este array:
   ['gastronomia','alojamiento','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
-
+  
+REGLA CRÍTICA DE INTENCIÓN → CATEGORÍA:
+- Las palabras de intención del usuario que implican una categoría deben tratarse como categorías explícitas.
+- Ejemplos:
+  “comer”, “dónde comer”, “sitios para comer”, “restaurantes”, “bares”, “cafeterías” → gastronomia
+  “dormir”, “hospedarse”, “alojarse”, “hoteles”, “hostales” → alojamiento
+  “comprar”, “ir de compras”, “tiendas”, “supermercados” → tiendas
+  “farmacias”, “médicos”, “hospitales”, “centros de salud” → salud
+- Si aparece una intención de categoría, esa categoría tiene PRIORIDAD ABSOLUTA sobre cualquier otra.
+- En estos casos, NO devuelvas todas las categorías, solo la categoría explícita.
 
 EJEMPLOS CRÍTICOS DE CATEGORÍAS:
 Usuario: "plaza mayor" →
@@ -71,6 +80,22 @@ categories: ['gastronomia','alojamiento','transporte','cultura_turismo','recreac
 
 Usuario: "calle alcala 10 madrid" →
 categories: ['gastronomia','alojamiento','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
+
+Usuario: "donde comer cerca de atocha que sea accesible"
+poi: ""
+place: "atocha"
+categories: ["gastronomia"]
+filters: ["yes","limited"]
+
+Usuario: "donde dormir cerca de atocha"
+categories: ["alojamiento"]
+
+Usuario: "sitios para comprar cerca de sol"
+categories: ["tiendas"]
+
+Usuario: "teatro arriaga farmacias accesibles"
+categories: ["salud"]
+
 
 EJEMPLOS PROHIBIDOS:
 Usuario: "atocha" → ['transporte'] INCORRECTO

@@ -30,6 +30,8 @@ export const fetchMapData = async (text) => {
             const json = await res.json();
             if (json.length === 0) return null;
 
+            console.log('Resultados de Nomitatim para', query, json[0]);
+
             const lon = parseFloat(json[0].lon);
             const lat = parseFloat(json[0].lat);
 
