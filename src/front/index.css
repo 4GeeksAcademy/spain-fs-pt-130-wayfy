@@ -1,257 +1,257 @@
 @font-face {
-    font-family: 'WayFy';
-    src: url('./assets/fonts/ProtestRiot-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: "WayFy";
+  src: url("./assets/fonts/ProtestRiot-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-    /* Definición de tipos de letra */
-    --wayfy-font-display: 'WayFy', sans-serif;
-    --wayfy-font-body: 'Atkinson Hyperlegible', sans-serif;
+  /* Definición de tipos de letra */
+  --wayfy-font-display: "WayFy", sans-serif;
+  --wayfy-font-body: "Atkinson Hyperlegible", sans-serif;
 
-    /* Definición de paleta de colores */
-    --wayfy-blue: #1e3aba;
-    --wayfy-blue-hover: #162a8a;
-    --wayfy-blue-active: #11206b;
+  /* Definición de paleta de colores */
+  --wayfy-blue: #1e3aba;
+  --wayfy-blue-hover: #162a8a;
+  --wayfy-blue-active: #11206b;
 
-    --wayfy-green: #10b891;
-    --wayfy-green-hover: #0d9668;
-    --wayfy-green-active: #096345;
+  --wayfy-green: #10b891;
+  --wayfy-green-hover: #0d9668;
+  --wayfy-green-active: #096345;
 
-    --wayfy-cyan: #38bdf8;
-    --wayfy-cyan-hover: #0ea5e9;
-    --wayfy-cyan-active: #0284c7;
+  --wayfy-cyan: #38bdf8;
+  --wayfy-cyan-hover: #0ea5e9;
+  --wayfy-cyan-active: #0284c7;
 
-    --wayfy-gray: #94a3b8;
-    --wayfy-gray-hover: #64748b;
-    --wayfy-gray-active: #475569;
+  --wayfy-gray: #94a3b8;
+  --wayfy-gray-hover: #64748b;
+  --wayfy-gray-active: #475569;
 
-    --wayfy-white: #ffffff;
+  --wayfy-white: #ffffff;
 
-    /* Modificación tipografía por defecto de bootstrap */
-    --bs-body-font-family: var(--wayfy-font-body);
-    --bs-display-font-family: var(--wayfy-font-display);
+  /* Modificación tipografía por defecto de bootstrap */
+  --bs-body-font-family: var(--wayfy-font-body);
+  --bs-display-font-family: var(--wayfy-font-display);
 
-    /* Modificación de colores por defecto de bootstrap */
-    --bs-primary: var(--wayfy-blue);
-    --bs-primary-rgb: 30, 58, 186;
+  /* Modificación de colores por defecto de bootstrap */
+  --bs-primary: var(--wayfy-blue);
+  --bs-primary-rgb: 30, 58, 186;
 
-    --bs-secondary: var(--wayfy-gray);
-    --bs-secondary-rgb: 148, 163, 184;
+  --bs-secondary: var(--wayfy-gray);
+  --bs-secondary-rgb: 148, 163, 184;
 
-    --bs-success: var(--wayfy-green);
-    --bs-success-rgb: 16, 185, 129;
+  --bs-success: var(--wayfy-green);
+  --bs-success-rgb: 16, 185, 129;
 
-    --bs-info: var(--wayfy-cyan);
-    --bs-info-rgb: 56, 189, 248;
+  --bs-info: var(--wayfy-cyan);
+  --bs-info-rgb: 56, 189, 248;
 
-    --bs-body-color: #1e293b;
-    --bs-link-color: var(--wayfy-blue);
-    --bs-link-hover-color: var(--wayfy-blue-hover);
+  --bs-body-color: #1e293b;
+  --bs-link-color: var(--wayfy-blue);
+  --bs-link-hover-color: var(--wayfy-blue-hover);
 
-    --bs-focus-ring-color: color-mix(
-        in srgb,
-        var(--wayfy-green),
-        transparent 90%
-    );
-    --bs-border-color: var(--wayfy-gray);
+  --bs-focus-ring-color: color-mix(
+    in srgb,
+    var(--wayfy-green),
+    transparent 90%
+  );
+  --bs-border-color: var(--wayfy-gray);
 }
 
 /* Configuración de colores de botones de bootstrap */
 .btn-primary {
-    --bs-btn-bg: var(--wayfy-blue);
-    --bs-btn-border-color: var(--wayfy-blue);
-    --bs-btn-hover-bg: var(--wayfy-blue-hover);
-    --bs-btn-hover-border-color: var(--wayfy-blue-hover);
-    --bs-btn-active-bg: var(--wayfy-blue-active);
-    --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
+  --bs-btn-bg: var(--wayfy-blue);
+  --bs-btn-border-color: var(--wayfy-blue);
+  --bs-btn-hover-bg: var(--wayfy-blue-hover);
+  --bs-btn-hover-border-color: var(--wayfy-blue-hover);
+  --bs-btn-active-bg: var(--wayfy-blue-active);
+  --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
 }
 
 .btn-outline-primary {
-    --bs-btn-color: var(--wayfy-blue);
-    --bs-btn-border-color: var(--wayfy-blue);
-    --bs-btn-hover-bg: var(--wayfy-blue);
-    --bs-btn-hover-border-color: var(--wayfy-blue);
-    --bs-btn-active-bg: var(--wayfy-blue-active);
-    --bs-btn-active-border-color: var(--wayfy-blue-active);
+  --bs-btn-color: var(--wayfy-blue);
+  --bs-btn-border-color: var(--wayfy-blue);
+  --bs-btn-hover-bg: var(--wayfy-blue);
+  --bs-btn-hover-border-color: var(--wayfy-blue);
+  --bs-btn-active-bg: var(--wayfy-blue-active);
+  --bs-btn-active-border-color: var(--wayfy-blue-active);
 }
 
 .btn-success {
-    --bs-btn-bg: var(--wayfy-green);
-    --bs-btn-border-color: var(--wayfy-green);
-    --bs-btn-hover-bg: var(--wayfy-green-hover);
-    --bs-btn-hover-border-color: var(--wayfy-green-hover);
-    --bs-btn-active-bg: var(--wayfy-green-active);
-    --bs-btn-focus-shadow-rgb: var(--bs-success-rgb);
+  --bs-btn-bg: var(--wayfy-green);
+  --bs-btn-border-color: var(--wayfy-green);
+  --bs-btn-hover-bg: var(--wayfy-green-hover);
+  --bs-btn-hover-border-color: var(--wayfy-green-hover);
+  --bs-btn-active-bg: var(--wayfy-green-active);
+  --bs-btn-focus-shadow-rgb: var(--bs-success-rgb);
 }
 
 .btn-outline-success {
-    --bs-btn-color: var(--wayfy-green);
-    --bs-btn-border-color: var(--wayfy-green);
-    --bs-btn-hover-bg: var(--wayfy-green);
-    --bs-btn-hover-border-color: var(--wayfy-green);
-    --bs-btn-active-bg: var(--wayfy-green-active);
-    --bs-btn-active-border-color: var(--wayfy-green-active);
+  --bs-btn-color: var(--wayfy-green);
+  --bs-btn-border-color: var(--wayfy-green);
+  --bs-btn-hover-bg: var(--wayfy-green);
+  --bs-btn-hover-border-color: var(--wayfy-green);
+  --bs-btn-active-bg: var(--wayfy-green-active);
+  --bs-btn-active-border-color: var(--wayfy-green-active);
 }
 
 .btn-info {
-    --bs-btn-bg: var(--wayfy-cyan);
-    --bs-btn-border-color: var(--wayfy-cyan);
-    --bs-btn-hover-bg: var(--wayfy-cyan-hover);
-    --bs-btn-hover-border-color: var(--wayfy-cyan-hover);
-    --bs-btn-active-bg: var(--wayfy-cyan-active);
-    --bs-btn-focus-shadow-rgb: var(--bs-info-rgb);
+  --bs-btn-bg: var(--wayfy-cyan);
+  --bs-btn-border-color: var(--wayfy-cyan);
+  --bs-btn-hover-bg: var(--wayfy-cyan-hover);
+  --bs-btn-hover-border-color: var(--wayfy-cyan-hover);
+  --bs-btn-active-bg: var(--wayfy-cyan-active);
+  --bs-btn-focus-shadow-rgb: var(--bs-info-rgb);
 }
 
 .btn-outline-info {
-    --bs-btn-color: var(--wayfy-cyan);
-    --bs-btn-border-color: var(--wayfy-cyan);
-    --bs-btn-hover-bg: var(--wayfy-cyan);
-    --bs-btn-hover-border-color: var(--wayfy-cyan);
-    --bs-btn-active-bg: var(--wayfy-cyan-active);
-    --bs-btn-active-border-color: var(--wayfy-cyan-active);
+  --bs-btn-color: var(--wayfy-cyan);
+  --bs-btn-border-color: var(--wayfy-cyan);
+  --bs-btn-hover-bg: var(--wayfy-cyan);
+  --bs-btn-hover-border-color: var(--wayfy-cyan);
+  --bs-btn-active-bg: var(--wayfy-cyan-active);
+  --bs-btn-active-border-color: var(--wayfy-cyan-active);
 }
 
 .btn-secondary {
-    --bs-btn-bg: var(--wayfy-gray);
-    --bs-btn-border-color: var(--wayfy-gray);
-    --bs-btn-hover-bg: var(--wayfy-gray-hover);
-    --bs-btn-hover-border-color: var(--wayfy-gray-hover);
-    --bs-btn-active-bg: var(--wayfy-gray-active);
-    --bs-btn-focus-shadow-rgb: var(--bs-info-rgb);
+  --bs-btn-bg: var(--wayfy-gray);
+  --bs-btn-border-color: var(--wayfy-gray);
+  --bs-btn-hover-bg: var(--wayfy-gray-hover);
+  --bs-btn-hover-border-color: var(--wayfy-gray-hover);
+  --bs-btn-active-bg: var(--wayfy-gray-active);
+  --bs-btn-focus-shadow-rgb: var(--bs-info-rgb);
 }
 
 .btn-outline-secondary {
-    --bs-btn-color: var(--wayfy-gray);
-    --bs-btn-border-color: var(--wayfy-gray);
-    --bs-btn-hover-bg: var(--wayfy-gray);
-    --bs-btn-hover-border-color: var(--wayfy-gray);
-    --bs-btn-active-bg: var(--wayfy-gray-active);
-    --bs-btn-active-border-color: var(--wayfy-gray-active);
+  --bs-btn-color: var(--wayfy-gray);
+  --bs-btn-border-color: var(--wayfy-gray);
+  --bs-btn-hover-bg: var(--wayfy-gray);
+  --bs-btn-hover-border-color: var(--wayfy-gray);
+  --bs-btn-active-bg: var(--wayfy-gray-active);
+  --bs-btn-active-border-color: var(--wayfy-gray-active);
 }
 
 /* Efecto hover */
 .btn:hover {
-    /* transform: translateY(-1px); */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  /* transform: translateY(-1px); */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Activo */
 .btn:active {
-    transform: translateY(0px);
+  transform: translateY(0px);
 }
 
 /* Texto */
 .text-primary {
-    color: var(--wayfy-blue) !important;
+  color: var(--wayfy-blue) !important;
 }
 
 .text-success {
-    color: var(--wayfy-green) !important;
+  color: var(--wayfy-green) !important;
 }
 
 .text-secondary {
-    color: var(--wayfy-gray) !important;
+  color: var(--wayfy-gray) !important;
 }
 
 .text-info {
-    color: var(--wayfy-cyan) !important;
+  color: var(--wayfy-cyan) !important;
 }
 
 .text-gray {
-    color: var(--wayfy-gray-active);
+  color: var(--wayfy-gray-active);
 }
 
 /* Fondo */
 .bg-primary {
-    background-color: var(--wayfy-blue) !important;
+  background-color: var(--wayfy-blue) !important;
 }
 
 .bg-success {
-    background-color: var(--wayfy-green) !important;
+  background-color: var(--wayfy-green) !important;
 }
 
 .bg-secondary {
-    background-color: var(--wayfy-gray) !important;
+  background-color: var(--wayfy-gray) !important;
 }
 
 .bg-info {
-    background-color: var(--wayfy-cyan) !important;
+  background-color: var(--wayfy-cyan) !important;
 }
 
 .bg-gray {
-    background-color: var(--wayfy-gray) !important;
+  background-color: var(--wayfy-gray) !important;
 }
 
 /* Inputs y formularios */
 .form-control,
 .form-select {
-    border-color: var(--wayfy-green);
-    color: var(--bs-body-color);
-    transition:
-        border-color 0.2s ease-in,
-        box-shadow 0.2s ease-in-out;
+  border-color: var(--wayfy-green);
+  color: var(--bs-body-color);
+  transition:
+    border-color 0.2s ease-in,
+    box-shadow 0.2s ease-in-out;
 }
 
 .form-control::placeholder {
-    color: var(--wayfy-gray);
-    opacity: 0.7;
+  color: var(--wayfy-gray);
+  opacity: 0.7;
 }
 
 .form-control:focus,
 .form-select:focus {
-    border-color: var(--wayfy-green);
-    background-color: var(--wayfy-white);
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+  border-color: var(--wayfy-green);
+  background-color: var(--wayfy-white);
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
 }
 
 .input-group {
-    border-radius: 0.375rem;
-    transition: box-shadow 0.2s ease-in-out;
+  border-radius: 0.375rem;
+  transition: box-shadow 0.2s ease-in-out;
 }
 
 .input-group:focus-within {
-    border-radius: 0.375rem;
-    box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+  border-radius: 0.375rem;
+  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
 }
 
 .input-group:focus-within .form-control,
 .input-group:focus-within .input-group-text {
-    border-color: var(--wayfy-green);
+  border-color: var(--wayfy-green);
 }
 
 .form-check-input {
-    cursor: pointer;
-    border-color: var(--wayfy-gray);
+  cursor: pointer;
+  border-color: var(--wayfy-gray);
 }
 
 .form-check-input:checked {
-    background-color: var(--wayfy-green);
-    border-color: var(--wayfy-green);
+  background-color: var(--wayfy-green);
+  border-color: var(--wayfy-green);
 }
 
 .form-check-input:focus {
-    border-color: var(--wayfy-green);
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+  border-color: var(--wayfy-green);
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
 }
 
 html {
-    overflow-y: scroll;
+  overflow-y: scroll;
 }
 
 body {
-    background: color-mix(in srgb, var(--wayfy-green), transparent 85%);
-    font-family: var(--bs-body-font-family);
+  background: color-mix(in srgb, var(--wayfy-green), transparent 85%);
+  font-family: var(--bs-body-font-family);
 }
 
 body.modal-open {
@@ -266,23 +266,28 @@ h4,
 h5,
 h6,
 .navbar-brand {
-    font-family: var(--bs-display-font-family);
+  font-family: var(--bs-display-font-family);
 }
 
 p,
 span,
 input,
 .btn {
-    font-family: var(--wayfy-font-body);
-    font-size: 1rem;
-    line-height: 1.5;
-    letter-spacing: 0.01em;
+  font-family: var(--wayfy-font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+/* LOGIN */
+.login-dropdown-width {
+  min-width: 320px;
 }
 
 header,
 .navbar {
-    position: relative;
-    z-index: 1100;
+  position: relative;
+  z-index: 1100;
 }
 
 .text-small {
@@ -296,12 +301,12 @@ header,
 /* Tooltips al frente de todo */
 .tooltip,
 .bs-tooltip-auto {
-    z-index: 1300;
+  z-index: 1300;
 }
 
 /* Menú desplegable del Navbar */
 .dropdown-menu {
-    z-index: 1200;
+  z-index: 1200;
 }
 
 /* SIDEBAR */
