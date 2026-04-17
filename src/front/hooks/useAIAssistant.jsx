@@ -4,47 +4,31 @@ import { fetchMapData } from '../services/mapgpt.api';
 
 const useAIAssistant = () => {
     const { store, dispatch } = useGlobalReducer();
-    const { viewState } = store;
     const [isListening, setIsListening] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const recognitionRef = useRef(null);
 
     const updateMapState = useCallback(
-        (feature, options = {}) => {
-            const {
-                zoom = null,
-                filters = ['yes', 'limited'],
-                categories = null,
-            } = options;
+        (feature, filters, categories) => {
+            if (!feature) return;
 
-            // const coordinates = feature.center || feature.geometry?.coordinates;
-            const coordinates = [
-                parseFloat(feature.center?.[0] ?? feature.geometry?.coordinates?.[0]),
-                parseFloat(feature.center?.[1] ?? feature.geometry?.coordinates?.[1]),
-            ];
+            const lon = parseFloat(feature.center?.[0] ?? feature.geometry?.coordinates?.[0]);
+            const lat = parseFloat(feature.center?.[1] ?? feature.geometry?.coordinates?.[1]);
 
-            if (!coordinates) return;
+            if (!lon || !lat) return;
 
             dispatch({
                 type: 'SET_SELECTED_LOCATION',
                 payload: {
                     id: feature.id,
-                    longitude: coordinates[0],
-                    latitude: coordinates[1],
-                    zoom:
-                        zoom ||
-                        (feature.place_type?.includes('address') ? 18 : 14),
+                    longitude: lon,
+                    latitude: lat,
+                    zoom: 15
                 },
             });
 
             dispatch({ type: 'SET_ACTIVE_FILTERS', payload: filters });
-
-            if (categories) {
-                dispatch({
-                    type: 'SET_ACTIVE_CATEGORIES',
-                    payload: categories,
-                });
-            }
+            dispatch({ type: 'SET_ACTIVE_CATEGORIES', payload: categories });
         },
         [dispatch],
     );
@@ -55,18 +39,23 @@ const useAIAssistant = () => {
 
             setIsProcessing(true);
             try {
-                const currentViewCoords = viewState
-                    ? `${viewState.longitude},${viewState.latitude}`
-                    : null;
+                const result = await fetchMapData(text);
 
-                const result = await fetchMapData(text, currentViewCoords);
+                // Guardar texto original y ubicación textual
+                dispatch({
+                    type: 'SET_AI_QUERY_INFO',
+                    payload: {
+                        message: result.message,
+                        poi: result.poi,
+                        address: result.address,
+                        place: result.place
+                    }
+                });
 
-                if (result && result.feature) {
-                    updateMapState(result.feature, {
-                        filters: result.filters,
-                        categories: result.categories,
-                    });
+                if (result?.feature) {
+                    updateMapState(result.feature, result.filters, result.categories);
                 }
+
                 return result;
             } catch (error) {
                 console.error('Error en processQuery:', error);
@@ -75,7 +64,7 @@ const useAIAssistant = () => {
                 setIsProcessing(false);
             }
         },
-        [updateMapState],
+        [updateMapState, dispatch],
     );
 
     const toggleListening = useCallback(() => {
@@ -97,7 +86,7 @@ const useAIAssistant = () => {
 
             recognition.onstart = () => setIsListening(true);
             recognition.onend = () => setIsListening(false);
-            recognition.onerror = () => setIsListening(false); // Manejo de error básico
+            recognition.onerror = () => setIsListening(false);
 
             recognition.onresult = async (e) => {
                 const transcript = e.results[0][0].transcript;
@@ -111,9 +100,7 @@ const useAIAssistant = () => {
 
     useEffect(() => {
         return () => {
-            if (recognitionRef.current) {
-                recognitionRef.current.stop();
-            }
+            recognitionRef.current?.stop();
         };
     }, []);
 

@@ -38,14 +38,14 @@ REGLA CRÍTICA DE EXTRACCIÓN:
 
 ---------------------------------------------------------
 CATEGORÍAS DISPONIBLES (usa solo estos nombres):
-['gastronomia','alojamiento','transporte','salud','cultura_turismo','recreacion','deporte','gobierno','baños','dinero','tiendas','otros']
+['alojamiento','gastronomia','transporte','salud','cultura_turismo','recreacion','deporte','gobierno','baños','dinero','tiendas','otros']
 
 REGLA CRÍTICA DE CATEGORÍAS:
 - El campo 'categories' debe ser SIEMPRE un array.
 - Si el usuario menciona explícitamente una categoría (ej: “restaurantes”, “farmacias”, “hoteles”), asígnala a la categoría correspondiente.
 - Si el usuario menciona varias categorías, devuélvelas todas.
 - Si el usuario NO menciona ninguna categoría, devuelve SIEMPRE todas las categorías disponibles menos 'otros':
-  ['gastronomia','alojamiento','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas'].
+  ['alojamiento','gastronomia','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas'].
 - Nunca infieras categorías por el tipo de lugar. Ejemplos prohibidos:
   - “plaza mayor” NO debe asignarse a recreacion.
   - “atocha” NO debe asignarse a transporte.
@@ -63,7 +63,7 @@ REGLA CRÍTICA ANTI-INFERENCIA DE CATEGORÍAS:
 - NO mezcles categorías sueltas con 'otros'.
 - NO intentes adivinar categorías basadas en el tipo de lugar.
 - En ausencia de categorías explícitas, SIEMPRE devuelve EXACTAMENTE este array:
-  ['gastronomia','alojamiento','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
+  ['alojamiento','gastronomia','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
 
 REGLA CRÍTICA DE PRIORIDAD DE CATEGORÍAS (OBLIGATORIA):
 - Si el usuario menciona una categoría explícita (ej: “hoteles”, “farmacias”, “restaurantes”),
@@ -85,13 +85,13 @@ REGLA CRÍTICA DE INTENCIÓN → CATEGORÍA:
 
 EJEMPLOS CRÍTICOS DE CATEGORÍAS:
 Usuario: "plaza mayor" →
-categories: ['gastronomia','alojamiento','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
+categories: ['alojamiento','gastronomia','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
 
 Usuario: "atocha" →
-categories: ['gastronomia','alojamiento','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
+categories: ['alojamiento','gastronomia','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
 
 Usuario: "calle alcala 10 madrid" →
-categories: ['gastronomia','alojamiento','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
+categories: ['alojamiento','gastronomia','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
 
 Usuario: "teatro arriaga farmacias accesibles" →
 poi: "teatro arriaga"
