@@ -1,8 +1,9 @@
 import { SearchBox } from '@mapbox/search-js-react';
-import useGlobalReducer from '../hooks/useGlobalReducer';
+import useGlobalReducer from '../../hooks/useGlobalReducer';
 import { useLocation, useNavigate } from 'react-router-dom';
+import './css/AccessibilityMap.css';
 
-export const Search = () => {
+export const SearchMap = () => {
     const { store, dispatch } = useGlobalReducer();
     const { viewState } = store;
     const navigate = useNavigate();
@@ -35,7 +36,7 @@ export const Search = () => {
     };
 
     return (
-        <div className="search-wrapper w-100 p-2">
+        <div className="px-3 py-2">
             <SearchBox
                 accessToken={import.meta.env.VITE_MAPBOX_TOKEN}
                 options={{
@@ -47,7 +48,7 @@ export const Search = () => {
                 theme={{
                     variables: {
                         // borderRadius: '50px',
-                        border: '2px solid #10b891',
+                        border: '3px solid #10b891',
                         boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
                         fontFamily: 'inherit',
                         padding: '10px 20px',

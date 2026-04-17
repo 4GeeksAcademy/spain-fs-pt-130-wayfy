@@ -1,0 +1,44 @@
+.mapa {
+    width: 100%;
+    height: 100%;
+}
+
+.marker-wayfy {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background: url('../../../assets/img/marker-wayfy.png') no-repeat center
+        center/cover;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Por encima del mapa */
+}
+
+.custom-modal {
+    width: 300px;
+    z-index: 2001;
+}
+
+.legend {
+    bottom: 30px;
+    left: 12px;
+    width: 200px;
+}
+
+.legend-icon {
+    width: 10px;
+    height: 10px;
+    padding: 6px;
+}
