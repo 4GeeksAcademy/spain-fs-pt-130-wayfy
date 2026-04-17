@@ -28,11 +28,7 @@ const useAIAssistant = () => {
                     latitude: coordinates[1],
                     zoom:
                         zoom ||
-                        (
-                            feature.place_type?.includes('address') ? 18 :
-                                feature.place_type?.includes('poi') ? 17 :
-                                    feature.place_type?.includes('neighborhood') ? 14 : 12
-                        ),
+                        (feature.place_type?.includes('address') ? 18 : 14),
                 },
             });
 

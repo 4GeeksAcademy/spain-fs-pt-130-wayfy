@@ -2,12 +2,12 @@ const OVERPASS_ENDPOINTS = [
     'https://overpass-api.de/api/interpreter',
     'https://overpass.kumi.systems/api/interpreter',
     'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
-    'https://lz4.overpass-api.de/api/interpreter',
-    'https://overpass.openstreetmap.fr/api/interpreter',
-    'https://overpass.osm.ch/api/interpreter',
+    // 'https://overpass.osm.ch/api/interpreter',
+    // 'https://overpass.atownsend.org.uk/api/',
+    // 'https://overpass.openstreetmap.fr/api/interpreter',
 ];
 
-export const queryOverpass = async (query) => {
+async function queryOverpass(query) {
     const body = new URLSearchParams({ data: query }).toString();
 
     for (const endpoint of OVERPASS_ENDPOINTS) {
@@ -38,39 +38,19 @@ export const queryOverpass = async (query) => {
     }
 
     throw new Error('Todos los endpoints de Overpass fallaron.');
-};
+}
 
-export const fetchWheelchairPlacesProgressive = async (bbox, onPartialData) => {
+export async function fetchWheelchairPlaces(bbox) {
     const [south, west, north, east] = bbox;
 
-    // NODOS rápidos
-    const q1 = `
-        [out:json][timeout:25];
-        node["wheelchair"](${south},${west},${north},${east});
-        out body;
-    `;
-    const nodes = await queryOverpass(q1);
-    onPartialData(nodes);
+    const query = `
+    [out:json][timeout:25];
+    (
+      node["wheelchair"](${south},${west},${north},${east});
+      way["wheelchair"](${south},${west},${north},${east});
+    );
+    out center;
+  `;
 
-    // WAYS más pesados
-    const q2 = `
-        [out:json][timeout:25];
-        way["wheelchair"](${south},${west},${north},${east});
-        out body;
-        >;
-        out skel qt;
-    `;
-    const ways = await queryOverpass(q2);
-    onPartialData(ways);
-
-    // RELATIONS pesa mucho
-    const q3 = `
-        [out:json][timeout:25];
-        relation["wheelchair"](${south},${west},${north},${east});
-        out body;
-        >;
-        out skel qt;
-    `;
-    const relations = await queryOverpass(q3);
-    onPartialData(relations);
-};
+    return queryOverpass(query);
+}
