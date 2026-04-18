@@ -10,37 +10,31 @@ const elementosMenu = [
 		link: '/',
 		label: 'Home',
 		icon: 'fa-home',
-		clase: 'btn-success rounded-pill',
 	},
 	{
 		link: '/map',
 		label: 'Mapa',
 		icon: 'fa-location-dot',
-		clase: 'btn-success rounded-pill',
 	},
 	{
 		link: '/hotels',
 		label: 'Hoteles',
 		icon: 'fa-hotel',
-		clase: 'btn-success rounded-pill',
 	},
 	{
 		link: '/restaurants',
 		label: 'Restaurantes',
 		icon: 'fa-utensils',
-		clase: 'btn-success rounded-pill',
 	},
 	{
 		link: '/transports',
 		label: 'Transportes',
 		icon: 'fa-bus',
-		clase: 'btn-success rounded-pill',
 	},
 	{
 		link: '/entertainment',
 		label: 'Entretenimiento',
 		icon: 'fa-star',
-		clase: 'btn-success rounded-pill',
 	},
 ];
 
@@ -84,7 +78,6 @@ export const Navbar = () => {
 								link={elemento.link}
 								label={elemento.label}
 								icon={elemento.icon}
-								clase={elemento.clase}
 								key={index}
 							/>
 						))}
