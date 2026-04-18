@@ -1,22 +1,24 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import useTooltip from '../hooks/useTooltip';
 
-export const ButtonMenu = ({ link, label, icon, clase }) => {
+export const ButtonMenu = ({ link, label, icon }) => {
     const tooltipRef = useTooltip({
         title: label,
         placement: 'bottom',
         trigger: 'hover',
     });
+
     return (
         <div className="text-center">
-            <Link
+            <NavLink
                 to={link}
-                className={`btn ${clase}`}
                 ref={tooltipRef}
-                data-bs-togge="tooltip"
+                className={({ isActive }) =>
+                    `btn ${isActive ? 'btn-primary' : 'btn-success'} rounded-circle`
+                }
             >
                 <i className={`fa-solid ${icon}`}></i>
-            </Link>
+            </NavLink>
         </div>
     );
 };
