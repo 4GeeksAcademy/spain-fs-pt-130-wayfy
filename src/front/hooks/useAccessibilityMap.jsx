@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import useGlobalReducer from './useGlobalReducer';
 import useFilteredGeoJSON from './useFilteredGeoJSON';
-import { fetchWheelchairPlaces } from '../services/overpass.api';
+import { fetchWheelchairPlacesProgressive } from '../services/overpass.api';
 import { elementsToGeoJSON } from '../utils/toGeoJSON';
 
 const useAccessibilityMap = () => {
@@ -16,6 +16,7 @@ const useAccessibilityMap = () => {
 
     const [userCoords, setUserCoords] = useState(null);
     const [geojson, setGeojson] = useState(null);
+    const [partialElements, setPartialElements] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [cursor, setCursor] = useState('grab');
@@ -110,6 +111,7 @@ const useAccessibilityMap = () => {
         const map = mapRef.current?.getMap();
         if (!map || !isPositionReady) return;
 
+        // Zoom mínimo recomendado
         if (map.getZoom() < 14) {
             setGeojson(null);
             setError('Acércate más para ver lugares accesibles.');
@@ -121,10 +123,19 @@ const useAccessibilityMap = () => {
 
         setLoading(true);
         setError(null);
+        setPartialElements([]);
 
         try {
-            const elements = await fetchWheelchairPlaces(bbox);
-            setGeojson(elementsToGeoJSON(elements));
+            await fetchWheelchairPlacesProgressive(bbox, (chunk) => {
+                setPartialElements((prev) => {
+                    const merged = [...prev, ...chunk];
+
+                    const geo = elementsToGeoJSON(merged);
+                    setGeojson(geo);
+
+                    return merged;
+                });
+            });
         } catch (err) {
             console.error(err);
             setError('Error al cargar datos de accesibilidad.');
@@ -133,6 +144,7 @@ const useAccessibilityMap = () => {
         }
     }, [isPositionReady]);
 
+    // Geolocalización inicial
     useEffect(() => {
         if (selectedLocation) {
             setIsPositionReady(true);
@@ -170,12 +182,14 @@ const useAccessibilityMap = () => {
         }
     }, []);
 
+    // Cargar datos al estar listo
     useEffect(() => {
         if (isPositionReady && mapRef.current) {
             loadData();
         }
     }, [isPositionReady, loadData]);
 
+    // FlyTo al seleccionar ubicación
     useEffect(() => {
         if (selectedLocation && mapRef.current) {
             mapRef.current.flyTo({
@@ -187,6 +201,7 @@ const useAccessibilityMap = () => {
         }
     }, [selectedLocation]);
 
+    // Ocultar errores después de 2s
     useEffect(() => {
         const zoomErrorMessage = 'Acércate más para ver lugares accesibles.';
         if (error && error !== zoomErrorMessage) {
@@ -194,7 +209,6 @@ const useAccessibilityMap = () => {
             return () => clearTimeout(timer);
         }
     }, [error]);
-
 
     const handleMove = useCallback(
         (evt) => updateLocation(evt.viewState),
@@ -204,7 +218,7 @@ const useAccessibilityMap = () => {
     const handleMoveEnd = useCallback(() => {
         if (!isPositionReady) return;
         clearTimeout(debounceRef.current);
-        debounceRef.current = setTimeout(() => loadData(), 600);
+        debounceRef.current = setTimeout(() => loadData(), 300);
     }, [loadData, isPositionReady]);
 
     const handleClick = useCallback(
