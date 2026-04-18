@@ -1,5 +1,5 @@
 /* ============================================================
-   MODO ALTO CONTRASTE — ESTILO WAYFY (como el mockup)
+   MODO ALTO CONTRASTE
    ============================================================ */
 .high-contrast {
     /* Fondos */
@@ -68,10 +68,6 @@
     --search-border: var(--wayfy-accent);
 }
 
-/* ============================================================
-   AJUSTES ESPECÍFICOS PARA EL LOOK DEL MOCKUP
-   ============================================================ */
-
 /* Eliminar sombras */
 .high-contrast .card,
 .high-contrast .btn,
@@ -131,7 +127,7 @@
 }
 
 /* ============================================================
-   MENÚ — MODO ALTO CONTRASTE (ESTILO WAYFY)
+   MENÚ
    ============================================================ */
 
 /* Botón NO activo */
@@ -195,7 +191,7 @@
 }
 
 /* ============================================================
-   MODAL — TEXTAREA EN MODO ALTO CONTRASTE
+   TEXTAREA EN MODO ALTO CONTRASTE
    ============================================================ */
 
 .high-contrast .modal-content {

@@ -70,7 +70,7 @@
     --bs-border-color: var(--wayfy-gray);
 
     /* ============================================================
-     TOKENS WAYFY — MODO NORMAL (LIGHT)
+     MODO NORMAL (LIGHT)
      ============================================================ */
 
     /* Fondos */
@@ -173,7 +173,7 @@ body {
 }
 
 /* ============================================================
-   BOTONES WAYFY
+   BOTONES
    ============================================================ */
 .btn-primary {
     --bs-btn-bg: var(--wayfy-blue);
@@ -475,6 +475,8 @@ input,
 
 html,
 body,
+div,
+img,
 .card,
 .navbar,
 .form-control,
