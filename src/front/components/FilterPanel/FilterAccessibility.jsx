@@ -50,7 +50,7 @@ export const FilterAccessibility = () => {
                             onClick={() => toggle(f.value)}
                             className={`btn btn-sm flex-fill d-flex flex-column align-items-center py-2 border-2 rounded-2 
                                 ${isActive
-                                    ? `btn-${f.color} text-white fw-bold shadow-sm`
+                                    ? `btn-${f.color} fw-bold shadow-sm`
                                     : 'btn-light border-light-subtle text-muted fw-bold opacity-50'
                                 }`}
                         >

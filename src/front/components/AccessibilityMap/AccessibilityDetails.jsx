@@ -86,9 +86,9 @@ export const AccessibilityDetails = ({ feature, onClose }) => {
     return (
         <>
             {/* CABECERA */}
-            <div className="card bg-light p-3 mb-3 position-relative">
+            <div className="card p-3 mb-3 position-relative">
                 <button
-                    className="btn btn d-flex ms-auto p-0 bg-transparent text-secondary position-absolute end-0 top-0 mt-2 me-2"
+                    className="btn btn d-flex ms-auto p-0  text-secondary position-absolute end-0 top-0 mt-2 me-2"
                     onClick={onClose}
                 >
                     <i className="fa-solid fa-circle-xmark fs-5"></i>
@@ -96,7 +96,7 @@ export const AccessibilityDetails = ({ feature, onClose }) => {
 
                 <div className="d-flex align-items-center gap-3">
                     <div
-                        className={`bg-${wheelchair.color} rounded-circle shadow-sm d-flex align-items-center justify-content-center text-white flex-shrink-0`}
+                        className={`bg-${wheelchair.color} rounded-circle shadow-sm d-flex align-items-center justify-content-center text-white shrink-0`}
                         style={{
                             width: '50px',
                             height: '50px',
@@ -106,7 +106,7 @@ export const AccessibilityDetails = ({ feature, onClose }) => {
                         <i className={`fa-solid ${wheelchair.icon}`}></i>
                     </div>
                     <div>
-                        <h5 className="fw-bold m-0 text-dark lh-sm">
+                        <h5 className="fw-bold m-0 lh-sm">
                             {p.name || 'Lugar sin nombre'}
                         </h5>
                         <div
@@ -152,7 +152,7 @@ export const AccessibilityDetails = ({ feature, onClose }) => {
                         href={osmUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-dark text-small text-decoration-none fw-bold"
+                        className="text-small text-decoration-none fw-bold"
                     >
                         Ver en OpenStreetMap{' '}
                         <i

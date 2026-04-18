@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import useGlobalReducer from '../../hooks/useGlobalReducer';
+import { useTheme } from '../../context/ThemeContext';
 
 const PLACE_CATEGORIES = [
     { value: 'alojamiento', label: 'Alojamientos', faIcon: 'fa-bed' },
@@ -19,6 +20,7 @@ const PLACE_CATEGORIES = [
 export const FilterCategories = ({ typeView = 'grid' }) => {
     const { store, dispatch } = useGlobalReducer();
     const { activeCategories = [] } = store;
+    const { theme } = useTheme()
 
     useEffect(() => {
         if (typeView === 'list') {
@@ -91,8 +93,8 @@ export const FilterCategories = ({ typeView = 'grid' }) => {
                             <button
                                 onClick={() => toggle(cat.value)}
                                 className={`btn btn-sm w-100 d-flex flex-column align-items-center py-2 border-2 rounded-2 ${isActive
-                                        ? 'btn-success border-success text-primary fw-bold shadow-sm'
-                                        : 'btn-light border-light-subtle text-muted opacity-50'
+                                    ? 'btn-success border-success text-primary fw-bold shadow-sm'
+                                    : 'btn-light border-light-subtle text-muted opacity-50'
                                     }`}
                             >
                                 <i
@@ -100,7 +102,7 @@ export const FilterCategories = ({ typeView = 'grid' }) => {
                                         } text-small mb-1`}
                                 ></i>
                                 <span
-                                    className={`${isActive ? 'text-white' : 'text-muted'} text-truncate text-small w-100 px-1`}
+                                    className={`${isActive ? theme === 'light' ? 'text-white' : 'text-dark' : 'text-muted'} text-truncate text-small w-100 px-1`}
                                 >
                                     {cat.label}
                                 </span>

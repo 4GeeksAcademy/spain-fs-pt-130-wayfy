@@ -1,9 +1,12 @@
+import urlLogoLight from '../assets/img/logo.png';
+import urlLogoAC from '../assets/img/logo-ac.png'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import urlLogo from '../assets/img/logo.png';
 import { Search } from './Search';
 import { LoginDropdown } from './LoginDropdown';
 import { ButtonMenu } from './ButtonMenu';
+import ThemeSelector from './ThemeSelector';
+import { useTheme } from '../context/ThemeContext';
 
 const elementosMenu = [
 	{
@@ -40,6 +43,9 @@ const elementosMenu = [
 
 export const Navbar = () => {
 	const [mostrarMenu, setMostrarMenu] = useState(false);
+	const { theme } = useTheme()
+
+	const urlLogo = theme === 'light' ? urlLogoLight : urlLogoAC
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm">
@@ -55,6 +61,7 @@ export const Navbar = () => {
 
 				<div className="d-flex align-items center border-0 ms-auto order-lg-last gap-2">
 					<LoginDropdown />
+					<ThemeSelector />
 					<button
 						type="button"
 						className="navbar-toggler border-0 order-lg-last ms-2"

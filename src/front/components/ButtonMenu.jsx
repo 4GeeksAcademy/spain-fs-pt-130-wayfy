@@ -14,8 +14,9 @@ export const ButtonMenu = ({ link, label, icon }) => {
                 to={link}
                 ref={tooltipRef}
                 className={({ isActive }) =>
-                    `btn ${isActive ? 'btn-primary' : 'btn-success'} rounded-circle`
+                    `btn menu-btn ${isActive ? 'btn-primary active' : 'btn-success'} btn-circle`
                 }
+
             >
                 <i className={`fa-solid ${icon}`}></i>
             </NavLink>

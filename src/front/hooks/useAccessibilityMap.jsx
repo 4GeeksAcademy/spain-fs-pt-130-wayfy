@@ -67,7 +67,7 @@ const useAccessibilityMap = () => {
                 filter: ['has', 'point_count'],
                 layout: {
                     'text-field': '{point_count_abbreviated}',
-                    'text-size': 13,
+                    'text-size': 16,
                     'text-font': [
                         'DIN Offc Pro Medium',
                         'Arial Unicode MS Bold',
