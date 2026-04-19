@@ -10,28 +10,28 @@ export const ThemeProvider = ({ children }) => {
         return AVAILABLE_THEMES.includes(saved) ? saved : "light";
     });
 
-    /* Aplicar clase al <html> cuando cambia el tema */
+    /* Aplica clase al <html> cuando cambia el tema */
     useEffect(() => {
         const html = document.documentElement;
 
-        // Eliminar todas las clases de tema
+        // Elimina todas las clases de tema
         AVAILABLE_THEMES.forEach(t => html.classList.remove(t));
 
-        // Añadir la clase del tema actual
+        // Añade la clase del tema actual
         html.classList.add(theme);
 
-        // Guardar en localStorage
+        // Guarda en localStorage
         localStorage.setItem("theme", theme);
     }, [theme]);
 
-    /* Cambiar tema manualmente */
+    /* Cambia tema manualmente */
     const changeTheme = (newTheme) => {
         if (AVAILABLE_THEMES.includes(newTheme)) {
             setTheme(newTheme);
         }
     };
 
-    /* Alternar entre light y high-contrast (opcional) */
+    /* Alternar entre light y high-contrast */
     const toggleHighContrast = () => {
         setTheme(prev => (prev === "high-contrast" ? "light" : "high-contrast"));
     };

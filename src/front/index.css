@@ -439,7 +439,7 @@ input,
     width: 60px;
     height: 35px;
     background: transparent;
-    border: 2px solid var(--wayfy-blue);
+    border: 2px solid var(--wayfy-green);
     border-radius: 50px;
     padding: 0;
     cursor: pointer;
@@ -466,7 +466,7 @@ input,
 
 /* Hover */
 .theme-switch:hover {
-    border-color: var(--wayfy-blue-hover);
+    border-color: var(--wayfy-green-hover);
 }
 
 /* ============================================================
@@ -481,7 +481,6 @@ img,
 .navbar,
 .form-control,
 .btn,
-.sidebar,
 .alert,
 .modal-content {
     transition: all 0.5s ease-in-out;
