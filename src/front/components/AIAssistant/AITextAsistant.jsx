@@ -74,7 +74,7 @@ export const AITextAsistant = () => {
                 >
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content border-0 shadow">
-                            <div className="modal-header bg-light text-primary">
+                            <div className="modal-header text-primary">
                                 <h5
                                     className="modal-title"
                                     id="aiAssistantModalLabel"

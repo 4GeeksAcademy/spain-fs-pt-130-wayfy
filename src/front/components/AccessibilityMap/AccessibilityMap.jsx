@@ -7,7 +7,7 @@ import Map, {
     Layer,
 } from 'react-map-gl';
 import useAccessibilityMap from '../../hooks/useAccessibilityMap';
-import { Legend } from './Legend';
+// import { Legend } from './Legend';
 import { AIAssistant } from '../AIAssistant/AIAssistant';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -50,7 +50,7 @@ export const AccessibilityMap = () => {
                 </div>
             )}
 
-            <Legend />
+            {/* <Legend /> */}
 
             <Map
                 ref={mapRef}
