@@ -7,15 +7,24 @@ export const MainComponent = () => {
     const { store } = useGlobalReducer();
     const { places } = store;
     const [showSidebar, setShowSidebar] = useState(true);
-    const handleToggleSidebar = () => setShowSidebar(!showSidebar);
     const location = useLocation();
 
+    const handleToggleSidebar = () => setShowSidebar(!showSidebar);
+
     useEffect(() => {
+        const interval = setInterval(() => {
+            window.dispatchEvent(new Event('resize'));
+        }, 10); // Cada 10ms refresca el tamaño del mapa
+
         const timer = setTimeout(() => {
+            clearInterval(interval);
             window.dispatchEvent(new Event('resize'));
         }, 300);
 
-        return () => clearTimeout(timer);
+        return () => {
+            clearInterval(interval);
+            clearTimeout(timer);
+        };
     }, [showSidebar]);
 
     return (
