@@ -8,7 +8,7 @@ export const Mapa = () => {
                 height: 'calc(100vh - 140px)',
             }}
         >
-            <div className="flex-grow-1 h-100 w-100">
+            <div className="flex-grow-1 w-100">
                 <AccessibilityMap />
             </div>
         </div>
