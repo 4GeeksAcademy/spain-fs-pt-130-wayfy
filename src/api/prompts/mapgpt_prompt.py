@@ -37,6 +37,31 @@ REGLA CRÍTICA DE EXTRACCIÓN:
 - Si el usuario menciona varias ubicaciones, usa SOLO la más específica según el orden de prioridad.
 
 ---------------------------------------------------------
+REGLA CRÍTICA DE PLACE:
+Un PLACE es cualquier ciudad, pueblo, barrio, zona, región o país mencionado por el usuario.
+
+Ejemplos de PLACE:
+- Ciudades: “Madrid”, “Nueva York”, “Bilbao”, “Barcelona”
+- Barrios: “Malasaña”, “Chamberí”, “Manhattan”, “Brooklyn”
+- Zonas: “centro de Sevilla”, “zona norte de Málaga”
+- Regiones: “Andalucía”, “Cataluña”, “País Vasco”
+- Países: “España”, “Francia”, “Estados Unidos”
+
+Reglas:
+- Si el usuario menciona un lugar geográfico que NO es POI ni ADDRESS → debe clasificarse SIEMPRE como PLACE.
+- Devuelve el PLACE EXACTAMENTE como lo escribió el usuario.
+- NO completes, NO corrijas, NO infieras.
+- Si el usuario solo menciona un PLACE → debes devolver todas las categorías por defecto menos otros.
+
+EJEMPLO CRÍTICO
+Usuario: "nueva york"
+poi: ""
+address: ""
+place: "nueva york"
+categories: ['alojamiento','gastronomia','transporte','cultura_turismo','recreacion','gobierno','salud','dinero','deporte','baños','tiendas']
+filters: ["yes","limited"]
+
+---------------------------------------------------------
 CATEGORÍAS DISPONIBLES (usa solo estos nombres):
 ['alojamiento','gastronomia','transporte','salud','cultura_turismo','recreacion','deporte','gobierno','baños','dinero','tiendas','otros']
 
