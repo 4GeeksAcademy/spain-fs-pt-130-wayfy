@@ -7,6 +7,7 @@ import { router } from "./routes";  // Import the router configuration
 import { StoreProvider } from './hooks/useGlobalReducer';  // Import the StoreProvider for global state management
 import { BackendURL } from './components/BackendURL';
 import { ThemeProvider } from './context/ThemeContext';
+import { HotkeysProvider } from '@tanstack/react-hotkeys';
 
 
 const Main = () => {
@@ -19,17 +20,17 @@ const Main = () => {
     return (
         <React.StrictMode>
             {/* Provide global state to all components */}
-            <StoreProvider>
-                {/* Set up routing for the application */}
-                <RouterProvider router={router}></RouterProvider>
-            </StoreProvider>
+            <HotkeysProvider>
+                <ThemeProvider>
+                    <StoreProvider>
+                        {/* Set up routing for the application */}
+                        <RouterProvider router={router}></RouterProvider>
+                    </StoreProvider>
+                </ThemeProvider>
+            </HotkeysProvider>
         </React.StrictMode>
     );
 }
 
 // Render the Main component into the root DOM element.
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <ThemeProvider>
-        <Main />
-    </ThemeProvider>
-)
+ReactDOM.createRoot(document.getElementById('root')).render(<Main />)
