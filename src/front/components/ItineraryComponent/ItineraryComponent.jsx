@@ -71,14 +71,29 @@ export const ItineraryComponent = () => {
 
         setEvents(prev => [...prev, newEvent]);
 
+        const modalElement = document.getElementById("itineraryModal");
+        const modalInstance = window.bootstrap.Modal.getInstance(modalElement);
+
+        if (modalInstance) modalInstance.hide()
+
+        // if (modalInstance) {
+        //     modalInstance.hide();
+
+        //     const backdrop = document.querySelector('.modal-backdrop');
+        //     if (backdrop) {
+        //         backdrop.remove();
+        //     }
+        //     document.body.classList.remove('modal-open');
+        //     document.body.style.overflow = '';
+        //     document.body.style.paddingRight = '';
+        // }
+
+
         setText("");
         setStartTime("");
         setEndTime("");
 
 
-        const modal = document.getElementById("itineraryModal");
-        const modalInstance = window.bootstrap.Modal.getInstance(modal);
-        if (modalInstance) modalInstance.hide();
     };
 
     const handleDelete = (id) => {
