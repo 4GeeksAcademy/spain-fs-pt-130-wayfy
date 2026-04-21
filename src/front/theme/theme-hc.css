@@ -80,7 +80,7 @@
 .high-contrast .form-control,
 .high-contrast .navbar,
 .high-contrast .alert {
-    border-width: 2px !important;
+    border-width: 1px !important;
 }
 
 /* Botones estilo mockup */
