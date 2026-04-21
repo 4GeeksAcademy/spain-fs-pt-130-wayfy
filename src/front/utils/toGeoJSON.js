@@ -6,7 +6,7 @@ export const elementsToGeoJSON = (elements) => {
 
             let category = 'otros';
 
-            // GASTRONOMIA
+            // CATEGORIZACIÓN (igual que la tuya)
             if (
                 tag.amenity === 'restaurant' ||
                 tag.amenity === 'cafe' ||
@@ -17,9 +17,7 @@ export const elementsToGeoJSON = (elements) => {
                 tag.amenity === 'food_court'
             ) {
                 category = 'gastronomia';
-            }
-            // ALOJAMIENTO
-            else if (
+            } else if (
                 tag.tourism === 'hotel' ||
                 tag.tourism === 'hostel' ||
                 tag.tourism === 'apartment' ||
@@ -28,9 +26,7 @@ export const elementsToGeoJSON = (elements) => {
                 tag.tourism === 'camp_site'
             ) {
                 category = 'alojamiento';
-            }
-            // TRANSPORTE
-            else if (
+            } else if (
                 tag.highway === 'bus_stop' ||
                 tag.amenity === 'bus_station' ||
                 tag.public_transport ||
@@ -41,9 +37,7 @@ export const elementsToGeoJSON = (elements) => {
                 tag.amenity === 'bicycle_parking'
             ) {
                 category = 'transporte';
-            }
-            // TURISMO (Categoría Agrupada)
-            else if (
+            } else if (
                 tag.tourism === 'museum' ||
                 tag.tourism === 'art_gallery' ||
                 tag.amenity === 'arts_centre' ||
@@ -60,9 +54,7 @@ export const elementsToGeoJSON = (elements) => {
                 tag.historic
             ) {
                 category = 'cultura_turismo';
-            }
-            // OCIO
-            else if (
+            } else if (
                 tag.leisure === 'park' ||
                 tag.leisure === 'playground' ||
                 tag.leisure === 'garden' ||
@@ -71,9 +63,7 @@ export const elementsToGeoJSON = (elements) => {
                 tag.leisure === 'common'
             ) {
                 category = 'recreacion';
-            }
-            // GOBIERNO / SERVICIOS PÚBLICOS
-            else if (
+            } else if (
                 tag.amenity === 'townhall' ||
                 tag.amenity === 'courthouse' ||
                 tag.amenity === 'embassy' ||
@@ -83,9 +73,7 @@ export const elementsToGeoJSON = (elements) => {
                 tag.amenity === 'fire_station'
             ) {
                 category = 'gobierno';
-            }
-            // SALUD
-            else if (
+            } else if (
                 tag.amenity === 'hospital' ||
                 tag.amenity === 'clinic' ||
                 tag.amenity === 'pharmacy' ||
@@ -95,17 +83,13 @@ export const elementsToGeoJSON = (elements) => {
                 tag.amenity === 'social_facility'
             ) {
                 category = 'salud';
-            }
-            // DINERO
-            else if (
+            } else if (
                 tag.amenity === 'bank' ||
                 tag.amenity === 'atm' ||
                 tag.amenity === 'bureau_de_change'
             ) {
                 category = 'dinero';
-            }
-            // DEPORTE
-            else if (
+            } else if (
                 tag.sport ||
                 tag.leisure === 'sports_centre' ||
                 tag.leisure === 'stadium' ||
@@ -114,13 +98,9 @@ export const elementsToGeoJSON = (elements) => {
                 tag.leisure === 'fitness_centre'
             ) {
                 category = 'deporte';
-            }
-            // BAÑOS
-            else if (tag.amenity === 'toilets') {
+            } else if (tag.amenity === 'toilets') {
                 category = 'baños';
-            }
-            // TIENDAS
-            else if (tag.shop) {
+            } else if (tag.shop) {
                 category = 'tiendas';
             }
 
@@ -135,21 +115,15 @@ export const elementsToGeoJSON = (elements) => {
                 },
                 properties: {
                     id: element.id,
-                    category: category,
+                    category,
                     name:
                         tag.name ??
                         tag['name:es'] ??
                         tag.brand ??
                         'Lugar sin nombre',
 
-                    // Accesibilidad
                     wheelchair: tag.wheelchair ?? 'unknown',
-                    wheelchair_desc:
-                        tag['wheelchair:description'] ??
-                        tag['wheelchair:description:es'] ??
-                        null,
 
-                    // Contacto y Horarios
                     contact: {
                         phone: tag.phone ?? tag['contact:phone'] ?? null,
                         website: tag.website ?? tag['contact:website'] ?? null,
@@ -168,9 +142,10 @@ export const elementsToGeoJSON = (elements) => {
                         tag.office ??
                         tag.healthcare ??
                         'punto de interés',
+
                     osm_type: element.type,
 
-                    all_tags: tag,
+                    all_tags: { ...tag },
                 },
             };
         });

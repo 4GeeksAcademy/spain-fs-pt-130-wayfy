@@ -21,14 +21,15 @@ const Main = () => {
             {/* Provide global state to all components */}
             <StoreProvider>
                 {/* Set up routing for the application */}
-                <ThemeProvider>
-                    <RouterProvider router={router}>
-                    </RouterProvider>
-                </ThemeProvider>
+                <RouterProvider router={router}></RouterProvider>
             </StoreProvider>
         </React.StrictMode>
     );
 }
 
 // Render the Main component into the root DOM element.
-ReactDOM.createRoot(document.getElementById('root')).render(<Main />)
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <ThemeProvider>
+        <Main />
+    </ThemeProvider>
+)

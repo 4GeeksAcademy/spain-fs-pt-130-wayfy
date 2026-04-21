@@ -81,6 +81,7 @@ export const AccessibilityMap = () => {
                         clusterMaxZoom={14}
                         clusterRadius={50}
                     >
+                        <Layer {...state.layers.clusterPulseLayer} />
                         <Layer {...state.layers.clusterLayer} />
                         <Layer {...state.layers.clusterCountLayer} />
                         <Layer {...state.layers.unclusteredLayer} />
