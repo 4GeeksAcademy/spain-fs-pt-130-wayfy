@@ -34,7 +34,7 @@ export const ItineraryComponent = () => {
     }, [events]);
 
 
-    const filteredPlaces = (store.places || []).filter(place =>
+    const filteredPlaces = store.places.filter(place =>
         place.name.toLowerCase().includes(text.toLowerCase())
     );
 
@@ -72,14 +72,26 @@ export const ItineraryComponent = () => {
 
         setEvents(prev => [...prev, newEvent]);
 
+        const modalElement = document.getElementById("itineraryModal");
+        const modalInstance = window.bootstrap.Modal.getInstance(modalElement);
+
+        if (modalInstance) {
+            modalInstance.hide();
+
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        }
+
         setText("");
         setStartTime("");
         setEndTime("");
 
 
-        const modal = document.getElementById("itineraryModal");
-        const modalInstance = window.bootstrap.Modal.getInstance(modal);
-        if (modalInstance) modalInstance.hide();
     };
 
     const handleDelete = (id) => {
@@ -147,15 +159,12 @@ export const ItineraryComponent = () => {
                                                 />
 
                                                 {text && (
-                                                    <ul className="list-group position-absolute w-100 shadow z-3">
+                                                    <ul className="list-group position-absolute w-100 shadow">
                                                         {filteredPlaces.map(place => (
                                                             <li
                                                                 key={place.id}
                                                                 className="list-group-item list-group-item-action"
-                                                                onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                    setText(place.name);
-                                                                }}
+                                                                onClick={() => setText(place.name)}
                                                             >
                                                                 📍 {place.name}
                                                             </li>
