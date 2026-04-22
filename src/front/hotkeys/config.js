@@ -39,6 +39,16 @@ export const HOTKEYS = {
         name: 'Ir a Entrenenimiento',
         group: 'Navegación',
     },
+    GO_USER: {
+        combo: 'Alt+U',
+        name: 'Ir a Usuario',
+        group: 'Navegación',
+    },
+    GO_CONFIG: {
+        combo: 'Alt+G',
+        name: 'Ir a Configuración',
+        group: 'Navegación',
+    },
     TOGGLE_CONTRAST: {
         combo: 'Alt+C',
         name: 'Cambiar tema (light / high-contrast)',

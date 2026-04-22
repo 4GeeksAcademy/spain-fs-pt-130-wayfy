@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom';
+import { HOTKEYS } from '../hotkeys/config'
+import useGlobalReducer from '../hooks/useGlobalReducer';
 
 export const LoginDropdown = () => {
+    const { store } = useGlobalReducer()
+    const { showShortcut } = store
+    const { GO_USER } = HOTKEYS
+
     return (
         <div className="dropdown">
             <button
+                id='btnLoginDropdown'
                 type="button"
-                className="btn btn-lg btn-outline-secondary btn-circle border-2 rounded-circle d-inline-flex align-items-center justify-content-center p-2 lh-1"
+                className="btn btn-outline-primary btn-circle border-2 rounded-circle d-inline-flex align-items-center justify-content-center p-2 lh-1"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 data-bs-display="static"
@@ -13,18 +20,22 @@ export const LoginDropdown = () => {
                 <i className="fa-solid fa-user"></i>
             </button>
 
-            <ul className="dropdown-menu dropdown-menu-end rounded-5 shadow bg-s border-2 m-0 mt-2 p-3">
-                <li>
-                    <div className="d-flex gap-2">
-                        <Link to="/login" className="btn btn-success w-50">
-                            Acceder
-                        </Link>
-                        <Link to="/register" className="btn btn-primary w-50">
-                            Registro
-                        </Link>
-                    </div>
-                </li>
-            </ul>
+            {showShortcut && (
+                <span className="badge badge-shortcut bg-dark">
+                    {GO_USER.combo}
+                </span>
+            )}
+
+            <div className="dropdown-menu dropdown-menu-end p-3 settings-dropdown mt-2 shadow" style={{ width: '250px' }}>
+                <div className="d-flex gap-2">
+                    <Link to="/login" className="btn btn-outline-primary w-100">
+                        Acceder
+                    </Link>
+                    <Link to="/register" className="btn btn-success w-100">
+                        Registro
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 };

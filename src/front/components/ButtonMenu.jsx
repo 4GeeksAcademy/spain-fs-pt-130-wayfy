@@ -24,7 +24,7 @@ export const ButtonMenu = ({ link, label, icon, shortCut }) => {
             >
                 <i className={`fa-solid ${icon}`}></i>
             </NavLink>
-            {/* <div className="badge-shortcut"> */}
+
             {showShortcut && (
                 <span className="badge badge-shortcut bg-dark">
                     {shortCut}
