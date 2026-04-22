@@ -6,6 +6,7 @@ import "moment/locale/es";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 import { createPortal } from "react-dom";
+import { FilterCategories } from "../FilterPanel/FilterCategories";
 
 moment.locale("es");
 const localizer = momentLocalizer(moment);
@@ -33,7 +34,7 @@ export const ItineraryComponent = () => {
     }, [events]);
 
 
-    const filteredPlaces = store.places.filter(place =>
+    const filteredPlaces = (store.places || []).filter(place =>
         place.name.toLowerCase().includes(text.toLowerCase())
     );
 
@@ -71,26 +72,14 @@ export const ItineraryComponent = () => {
 
         setEvents(prev => [...prev, newEvent]);
 
-        const modalElement = document.getElementById("itineraryModal");
-        const modalInstance = window.bootstrap.Modal.getInstance(modalElement);
-
-        if (modalInstance) {
-            modalInstance.hide();
-
-            const backdrop = document.querySelector('.modal-backdrop');
-            if (backdrop) {
-                backdrop.remove();
-            }
-            document.body.classList.remove('modal-open');
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-        }
-
         setText("");
         setStartTime("");
         setEndTime("");
 
 
+        const modal = document.getElementById("itineraryModal");
+        const modalInstance = window.bootstrap.Modal.getInstance(modal);
+        if (modalInstance) modalInstance.hide();
     };
 
     const handleDelete = (id) => {
@@ -116,119 +105,129 @@ export const ItineraryComponent = () => {
 
     return (
         <div className="container mt-4">
+            <div className="d-flex gap-2">
+                <div className="col-1">
+                    <FilterCategories typeView="list" />
+                </div>
 
-
-            <div className="text-center mb-3">
-                <button
-                    className="btn btn-success rounded-circle"
-                    data-bs-toggle="modal"
-                    data-bs-target="#itineraryModal"
-                >
-                    <i className="fa-solid fa-plus"></i>
-                </button>
-            </div>
-
-            {createPortal(
-                <div className="modal fade" id="itineraryModal" tabIndex="-1">
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-
-                            <div className="modal-header">
-                                <h5 className="modal-title">Agregar actividad</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-
-                            <div className="modal-body">
-
-                                <form onSubmit={handleAdd}>
-
-
-                                    <div className="mb-3 position-relative">
-
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Actividad"
-                                            value={text}
-                                            onChange={(e) => setText(e.target.value)}
-                                        />
-
-                                        {text && (
-                                            <ul className="list-group position-absolute w-100 shadow">
-                                                {filteredPlaces.map(place => (
-                                                    <li
-                                                        key={place.id}
-                                                        className="list-group-item list-group-item-action"
-                                                        onClick={() => setText(place.name)}
-                                                    >
-                                                        📍 {place.name}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </div>
-
-
-                                    <div className="row mb-3">
-                                        <div className="col">
-                                            <input
-                                                type="time"
-                                                className="form-control"
-                                                value={startTime}
-                                                onChange={(e) => setStartTime(e.target.value)}
-                                            />
-                                        </div>
-
-                                        <div className="col">
-                                            <input
-                                                type="time"
-                                                className="form-control"
-                                                value={endTime}
-                                                onChange={(e) => setEndTime(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-
-
-                                    <div className="d-grid">
-                                        <button type="submit" className="btn btn-success">
-                                            Agregar actividad
-                                        </button>
-                                    </div>
-
-                                </form>
-
-                            </div>
-                        </div>
+                <div className="col-11">
+                    <div className="text-center mb-3">
+                        <button
+                            className="btn btn-success rounded-circle"
+                            data-bs-toggle="modal"
+                            data-bs-target="#itineraryModal"
+                        >
+                            <i className="fa-solid fa-plus"></i>
+                        </button>
                     </div>
-                </div>,
-                document.body
-            )}
+
+                    {createPortal(
+                        <div className="modal fade" id="itineraryModal" tabIndex="-1">
+                            <div className="modal-dialog modal-dialog-centered">
+                                <div className="modal-content">
+
+                                    <div className="modal-header">
+                                        <h5 className="modal-title">Agregar actividad</h5>
+                                        <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <div className="modal-body">
+
+                                        <form onSubmit={handleAdd}>
 
 
-            <div style={{ height: "500px" }}>
-                <Calendar
-                    localizer={localizer}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    date={FIXED_DATE}
-                    defaultView="week"
-                    views={["day", "week"]}
-                    min={new Date(2026, 3, 17, 6, 0)}
-                    max={new Date(2026, 3, 17, 22, 0)}
-                    step={30}
-                    timeslots={2}
-                    messages={{
-                        today: "Hoy",
-                        previous: "Anterior",
-                        next: "Siguiente",
-                        week: "Semana",
-                        day: "Día"
-                    }}
-                    components={{ event: EventComponent }}
-                />
+                                            <div className="mb-3 position-relative">
+
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    placeholder="Actividad"
+                                                    value={text}
+                                                    onChange={(e) => setText(e.target.value)}
+                                                />
+
+                                                {text && (
+                                                    <ul className="list-group position-absolute w-100 shadow z-3">
+                                                        {filteredPlaces.map(place => (
+                                                            <li
+                                                                key={place.id}
+                                                                className="list-group-item list-group-item-action"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    setText(place.name);
+                                                                }}
+                                                            >
+                                                                📍 {place.name}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                            </div>
+
+
+                                            <div className="row mb-3">
+                                                <div className="col">
+                                                    <input
+                                                        type="time"
+                                                        className="form-control"
+                                                        value={startTime}
+                                                        onChange={(e) => setStartTime(e.target.value)}
+                                                    />
+                                                </div>
+
+                                                <div className="col">
+                                                    <input
+                                                        type="time"
+                                                        className="form-control"
+                                                        value={endTime}
+                                                        onChange={(e) => setEndTime(e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+
+
+                                            <div className="d-grid">
+                                                <button type="submit" className="btn btn-success">
+                                                    Agregar actividad
+                                                </button>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>,
+                        document.body
+                    )}
+
+
+                    <div>
+                        <Calendar
+                            localizer={localizer}
+                            events={events}
+                            startAccessor="start"
+                            endAccessor="end"
+                            date={FIXED_DATE}
+                            defaultView="week"
+                            views={["day", "week"]}
+                            min={new Date(2026, 3, 17, 6, 0)}
+                            max={new Date(2026, 3, 17, 22, 0)}
+                            step={30}
+                            timeslots={2}
+                            messages={{
+                                today: "Hoy",
+                                previous: "Anterior",
+                                next: "Siguiente",
+                                week: "Semana",
+                                day: "Día"
+                            }}
+                            components={{ event: EventComponent }}
+                        />
+                    </div>
+                </div>
             </div>
+
 
         </div>
     );
