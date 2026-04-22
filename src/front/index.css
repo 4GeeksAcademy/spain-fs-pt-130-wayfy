@@ -1,198 +1,3 @@
-@font-face {
-  font-family: "WayFy";
-  src: url("./assets/fonts/ProtestRiot-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  /* Definición de tipos de letra */
-  --wayfy-font-display: "WayFy", sans-serif;
-  --wayfy-font-body: "Atkinson Hyperlegible", sans-serif;
-
-  /* Definición de paleta de colores */
-  --wayfy-blue: #1e3aba;
-  --wayfy-blue-hover: #162a8a;
-  --wayfy-blue-active: #11206b;
-
-  --wayfy-green: #10b891;
-  --wayfy-green-hover: #0d9668;
-  --wayfy-green-active: #096345;
-
-  --wayfy-cyan: #38bdf8;
-  --wayfy-cyan-hover: #0ea5e9;
-  --wayfy-cyan-active: #0284c7;
-
-  --wayfy-gray: #94a3b8;
-  --wayfy-gray-hover: #64748b;
-  --wayfy-gray-active: #475569;
-
-  --wayfy-white: #ffffff;
-
-  /* Modificación tipografía por defecto de bootstrap */
-  --bs-body-font-family: var(--wayfy-font-body);
-  --bs-display-font-family: var(--wayfy-font-display);
-
-  /* Modificación de colores por defecto de bootstrap */
-  --bs-primary: var(--wayfy-blue);
-  --bs-primary-rgb: 30, 58, 186;
-
-  --bs-secondary: var(--wayfy-gray);
-  --bs-secondary-rgb: 148, 163, 184;
-
-  --bs-success: var(--wayfy-green);
-  --bs-success-rgb: 16, 185, 129;
-
-  --bs-info: var(--wayfy-cyan);
-  --bs-info-rgb: 56, 189, 248;
-
-  --bs-body-color: #1e293b;
-  --bs-link-color: var(--wayfy-blue);
-  --bs-link-hover-color: var(--wayfy-blue-hover);
-
-  --bs-focus-ring-color: color-mix(
-    in srgb,
-    var(--wayfy-green),
-    transparent 90%
-  );
-  --bs-border-color: var(--wayfy-gray);
-}
-
-/* Configuración de colores de botones de bootstrap */
-.btn-primary {
-  --bs-btn-bg: var(--wayfy-blue);
-  --bs-btn-border-color: var(--wayfy-blue);
-  --bs-btn-hover-bg: var(--wayfy-blue-hover);
-  --bs-btn-hover-border-color: var(--wayfy-blue-hover);
-  --bs-btn-active-bg: var(--wayfy-blue-active);
-  --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
-}
-
-.btn-outline-primary {
-  --bs-btn-color: var(--wayfy-blue);
-  --bs-btn-border-color: var(--wayfy-blue);
-  --bs-btn-hover-bg: var(--wayfy-blue);
-  --bs-btn-hover-border-color: var(--wayfy-blue);
-  --bs-btn-active-bg: var(--wayfy-blue-active);
-  --bs-btn-active-border-color: var(--wayfy-blue-active);
-}
-
-.btn-success {
-  --bs-btn-bg: var(--wayfy-green);
-  --bs-btn-border-color: var(--wayfy-green);
-  --bs-btn-hover-bg: var(--wayfy-green-hover);
-  --bs-btn-hover-border-color: var(--wayfy-green-hover);
-  --bs-btn-active-bg: var(--wayfy-green-active);
-  --bs-btn-focus-shadow-rgb: var(--bs-success-rgb);
-}
-
-.btn-outline-success {
-  --bs-btn-color: var(--wayfy-green);
-  --bs-btn-border-color: var(--wayfy-green);
-  --bs-btn-hover-bg: var(--wayfy-green);
-  --bs-btn-hover-border-color: var(--wayfy-green);
-  --bs-btn-active-bg: var(--wayfy-green-active);
-  --bs-btn-active-border-color: var(--wayfy-green-active);
-}
-
-.btn-info {
-  --bs-btn-bg: var(--wayfy-cyan);
-  --bs-btn-border-color: var(--wayfy-cyan);
-  --bs-btn-hover-bg: var(--wayfy-cyan-hover);
-  --bs-btn-hover-border-color: var(--wayfy-cyan-hover);
-  --bs-btn-active-bg: var(--wayfy-cyan-active);
-  --bs-btn-focus-shadow-rgb: var(--bs-info-rgb);
-}
-
-.btn-outline-info {
-  --bs-btn-color: var(--wayfy-cyan);
-  --bs-btn-border-color: var(--wayfy-cyan);
-  --bs-btn-hover-bg: var(--wayfy-cyan);
-  --bs-btn-hover-border-color: var(--wayfy-cyan);
-  --bs-btn-active-bg: var(--wayfy-cyan-active);
-  --bs-btn-active-border-color: var(--wayfy-cyan-active);
-}
-
-.btn-secondary {
-  --bs-btn-bg: var(--wayfy-gray);
-  --bs-btn-border-color: var(--wayfy-gray);
-  --bs-btn-hover-bg: var(--wayfy-gray-hover);
-  --bs-btn-hover-border-color: var(--wayfy-gray-hover);
-  --bs-btn-active-bg: var(--wayfy-gray-active);
-  --bs-btn-focus-shadow-rgb: var(--bs-info-rgb);
-}
-
-.btn-outline-secondary {
-  --bs-btn-color: var(--wayfy-gray);
-  --bs-btn-border-color: var(--wayfy-gray);
-  --bs-btn-hover-bg: var(--wayfy-gray);
-  --bs-btn-hover-border-color: var(--wayfy-gray);
-  --bs-btn-active-bg: var(--wayfy-gray-active);
-  --bs-btn-active-border-color: var(--wayfy-gray-active);
-}
-
-/* Efecto hover */
-.btn:hover {
-  /* transform: translateY(-1px); */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Activo */
-.btn:active {
-  transform: translateY(0px);
-}
-
-/* Texto */
-.text-primary {
-  color: var(--wayfy-blue) !important;
-}
-
-.text-success {
-  color: var(--wayfy-green) !important;
-}
-
-.text-secondary {
-  color: var(--wayfy-gray) !important;
-}
-
-.text-info {
-  color: var(--wayfy-cyan) !important;
-}
-
-.text-gray {
-  color: var(--wayfy-gray-active);
-}
-
-/* Fondo */
-.bg-primary {
-  background-color: var(--wayfy-blue) !important;
-}
-
-.bg-success {
-  background-color: var(--wayfy-green) !important;
-}
-
-.bg-secondary {
-  background-color: var(--wayfy-gray) !important;
-}
-
-.bg-info {
-  background-color: var(--wayfy-cyan) !important;
-}
-
-.bg-gray {
-  background-color: var(--wayfy-gray) !important;
-}
-
-/* Inputs y formularios */
-.form-control,
 .form-select {
   border-color: var(--wayfy-green);
   color: var(--bs-body-color);
@@ -255,8 +60,8 @@ body {
 }
 
 body.modal-open {
-    overflow: hidden !important;
-    padding-right: 0 !important;
+  overflow: hidden !important;
+  padding-right: 0 !important;
 }
 
 h1,
@@ -291,11 +96,7 @@ header,
 }
 
 .text-small {
-    font-size: 0.8rem;
-}
-/* LOGIN */
-.login-dropdown-width {
-    min-width: 320px;
+  font-size: 0.8rem;
 }
 
 /* Tooltips al frente de todo */
@@ -311,31 +112,35 @@ header,
 
 /* SIDEBAR */
 .sidebar {
-    transition: width 0.3s ease-in-out;
-    height: calc(100vh - 140px);
+  transition: width 0.3s ease-in-out;
+  height: calc(100vh - 140px);
 }
 
 .sidebar-show {
-    width: 400px;
+  width: 400px;
 }
 
 .sidebar-hidden {
-    width: 0;
+  width: 0;
 }
 
 .sidebar-content {
-    width: 400px;
-    height: 100%;
+  width: 400px;
+  height: 100%;
 }
 
 .sidebar-content-show {
-    visibility: visible;
+  visibility: visible;
 }
 
 .siebar-content-hidden {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .sidebar-btn-left {
-    left: -25px;
+  left: -25px;
+}
+
+.text-gray {
+  color: var(--wayfy-gray-active) !important;
 }
