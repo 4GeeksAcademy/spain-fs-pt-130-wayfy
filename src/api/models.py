@@ -28,13 +28,9 @@ class User(db.Model):
             # IMPORTANTE: Nunca devolver el password aquí
         }
 
-# estoy creando una tabla de base de datos llamada event donde voy a guardar mis actividades
-# d.b model : viene de SQL ALCHEMY , Y ES UN modelo que se convertirá en tabla.
-
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    # número.         identificador único
     title = db.Column(db.String(120), nullable=False)
     start = db.Column(db.String(50), nullable=False)
     end = db.Column(db.String(50), nullable=False)
