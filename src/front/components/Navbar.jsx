@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 import { Search } from './Search';
 import { LoginDropdown } from './LoginDropdown';
 import { ButtonMenu } from './ButtonMenu';
-import ThemeSelector from './ThemeSelector';
 import { useTheme } from '../context/ThemeContext';
 import { HOTKEYS } from '../hotkeys/config'
-import { ShortcutToggle } from './ShortcutsShow/ShortcutToggle';
+
 import useGlobalReducer from '../hooks/useGlobalReducer';
+import { SettingsDropdown } from './SettingsDropdown/SettingsDropdown';
 
 const { GO_HOME, GO_MAP, GO_HOTELS, GO_RESTAURANTS, GO_TRANSPORTS, GO_ENTERTAINMENT, GO_LOGIN, GO_REGISTER } = HOTKEYS
 
@@ -72,8 +72,8 @@ export const Navbar = () => {
 					/>
 				</Link>
 
-				<div className="d-flex align-items center border-0 ms-auto order-lg-last gap-2">
-					<div className="position-relative">
+				<div className="d-flex align-items-center border-0 ms-auto order-lg-last gap-2">
+					{/* <div className="position-relative">
 						<Link to='/login' className="btn btn-outline-primary">
 							Iniciar sesión
 						</Link>
@@ -94,12 +94,14 @@ export const Navbar = () => {
 								{GO_REGISTER.combo}
 							</span>
 						)}
-					</div>
+					</div> */}
 					{/* <LoginDropdown /> */}
 					{/* <div className="d-flex flex-column"> */}
-					<ThemeSelector />
-					<ShortcutToggle />
+					{/* <ThemeSelector />
+					<ShortcutToggle /> */}
 					{/* </div> */}
+					<LoginDropdown />
+					<SettingsDropdown />
 					<button
 						type="button"
 						className="navbar-toggler border-0 order-lg-last ms-2"
@@ -108,7 +110,6 @@ export const Navbar = () => {
 						<span className="navbar-toggler-icon"></span>
 					</button>
 				</div>
-
 				<div
 					className={`collapse navbar-collapse ${mostrarMenu ? 'show' : ''}`}
 					id="navbarContent"

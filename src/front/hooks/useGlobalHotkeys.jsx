@@ -9,6 +9,15 @@ export const useGlobalHotkeys = () => {
     const { toggleHighContrast } = useTheme()
     const { toggleShortcut } = useShortcut()
 
+    const openDropdown = (id) => {
+        const element = document.getElementById(id)
+
+        if (!element) return;
+
+        const dropdown = window.bootstrap.Dropdown.getOrCreateInstance(element)
+        dropdown.show()
+    }
+
     useHotkeys([
         {
             hotkey: HOTKEYS.GO_LOGIN.combo,
@@ -49,6 +58,16 @@ export const useGlobalHotkeys = () => {
             hotkey: HOTKEYS.GO_ENTERTAINMENT.combo,
             callback: () => navigate('/entertainment'),
             options: { meta: HOTKEYS.GO_ENTERTAINMENT }
+        },
+        {
+            hotkey: HOTKEYS.GO_USER.combo,
+            callback: () => openDropdown('btnLoginDropdown'),
+            options: { meta: HOTKEYS.GO_USER }
+        },
+        {
+            hotkey: HOTKEYS.GO_CONFIG.combo,
+            callback: () => openDropdown('btnSettings'),
+            options: { meta: HOTKEYS.GO_CONFIG }
         },
         {
             hotkey: HOTKEYS.TOGGLE_CONTRAST.combo,
