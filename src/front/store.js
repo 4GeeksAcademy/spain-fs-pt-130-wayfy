@@ -1,4 +1,6 @@
 export const initialStore = () => {
+    const savedTheme = localStorage.getItem('theme');
+    const savedShortcut = localStorage.getItem('showShortcut');
     return {
         viewState: {
             longitude: -3.7038,
@@ -25,7 +27,8 @@ export const initialStore = () => {
             'otros',
         ],
         selectedFeature: null,
-        showShortcut: true,
+        theme: savedTheme || 'light',
+        showShortcut: savedShortcut !== null ? savedShortcut === 'true' : false,
     };
 };
 
@@ -69,11 +72,23 @@ export default function storeReducer(store, action = {}) {
         case 'SET_SELECTED_FEATURE':
             return { ...store, selectedFeature: action.payload };
 
-        case 'TOGGLE_SHORTCUTS':
+        case 'SET_THEME': {
+            const newTheme = action.payload;
+            localStorage.setItem('theme', newTheme);
             return {
                 ...store,
-                showShortcut: !store.showShortcut,
+                theme: newTheme,
             };
+        }
+
+        case 'TOGGLE_SHORTCUTS': {
+            const newValue = !store.showShortcut;
+            localStorage.setItem('showShortcut', newValue);
+            return {
+                ...store,
+                showShortcut: newValue,
+            };
+        }
         default:
             return store;
     }
