@@ -9,6 +9,16 @@ export const useGlobalHotkeys = () => {
 
     useHotkeys([
         {
+            hotkey: HOTKEYS.GO_LOGIN.combo,
+            callback: () => navigate('/login'),
+            options: { meta: HOTKEYS.GO_LOGIN }
+        },
+        {
+            hotkey: HOTKEYS.GO_REGISTER.combo,
+            callback: () => navigate('/register'),
+            options: { meta: HOTKEYS.GO_REGISTER }
+        },
+        {
             hotkey: HOTKEYS.GO_HOME.combo,
             callback: () => navigate('/'),
             options: { meta: HOTKEYS.GO_HOME }

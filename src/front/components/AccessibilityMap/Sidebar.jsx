@@ -1,7 +1,7 @@
-import useGlobalReducer from '../hooks/useGlobalReducer';
-import { AccessibilityDetails } from './AccessibilityMap/AccessibilityDetails';
-import { FilterPanel } from './FilterPanel/FilterPanel';
-import { SearchMap } from './AccessibilityMap/SearchMap';
+import useGlobalReducer from '../../hooks/useGlobalReducer';
+import { AccessibilityDetails } from './AccessibilityDetails';
+import { FilterPanel } from '../FilterPanel/FilterPanel';
+import { SearchMap } from './SearchMap';
 
 export const Sidebar = ({ show, toggle }) => {
     const { store, dispatch } = useGlobalReducer();

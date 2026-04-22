@@ -1,37 +1,52 @@
 export const HOTKEYS = {
+    GO_LOGIN: {
+        combo: 'Ctrl+Shift+L',
+        name: 'Login',
+        group: 'Sistema',
+    },
+    GO_REGISTER: {
+        combo: 'Ctrl+Shift+R',
+        name: 'Resister',
+        group: 'Sistema',
+    },
     GO_HOME: {
-        combo: 'Ctrl+Shift+I',
+        combo: 'Alt+1',
         name: 'Ir a Home',
         group: 'Navegación',
     },
     GO_MAP: {
-        combo: 'Ctrl+Shift+M',
+        combo: 'Alt+2',
         name: 'Ir a Mapa',
         group: 'Navegación',
     },
     GO_HOTELS: {
-        combo: 'Ctrl+Shift+H',
+        combo: 'Alt+3',
         name: 'Ir a Hoteles',
         group: 'Navegación',
     },
     GO_RESTAURANTS: {
-        combo: 'Ctrl+Shift+R',
+        combo: 'Alt+4',
         name: 'Ir a Restaurantes',
         group: 'Navegación',
     },
     GO_TRANSPORTS: {
-        combo: 'Ctrl+Alt+Shift+T',
+        combo: 'Alt+5',
         name: 'Ir a Transportes',
         group: 'Navegación',
     },
     GO_ENTERTAINMENT: {
-        combo: 'Ctrl+Shift+E',
+        combo: 'Alt+6',
         name: 'Ir a Entrenenimiento',
         group: 'Navegación',
     },
     TOGGLE_CONTRAST: {
-        combo: 'Ctrl+Shift+C',
+        combo: 'Alt+C',
         name: 'Cambiar tema (light / high-contrast)',
+        group: 'Tema',
+    },
+    TOGGLE_SHORTCUTS: {
+        combo: 'Alt+S',
+        name: 'Mostrar u ocultar atajos',
         group: 'Tema',
     },
 };

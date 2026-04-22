@@ -25,6 +25,7 @@ export const initialStore = () => {
             'otros',
         ],
         selectedFeature: null,
+        showShortcut: true,
     };
 };
 
@@ -67,6 +68,12 @@ export default function storeReducer(store, action = {}) {
 
         case 'SET_SELECTED_FEATURE':
             return { ...store, selectedFeature: action.payload };
+
+        case 'TOGGLE_SHORTCUTS':
+            return {
+                ...store,
+                showShortcut: !store.showShortcut,
+            };
         default:
             return store;
     }
