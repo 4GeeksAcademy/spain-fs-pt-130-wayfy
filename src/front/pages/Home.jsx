@@ -13,17 +13,17 @@ export const Home = () => {
 		<div className="w-100 bg-bg-transparent">
 			<main className="my-4">
 				<div className="container">
+					<div className="d-flex align-items-center gap-4">
+						<h1 className="display-3 fw-bold text-gray">
+							Tu viaje
+						</h1>
+						<h4 className="display-5 text-primary">
+							sin barreras
+						</h4>
+					</div>
 					<div className="row align-items-center g-5">
 						{/* Columna Izquierda: Texto */}
 						<div className="col-lg-6 text-center text-lg-start">
-							<div className="d-flex align-items-center gap-4">
-								<h1 className="display-3 fw-bold text-gray">
-									Tu viaje
-								</h1>
-								<h4 className="display-5 text-primary">
-									sin barreras
-								</h4>
-							</div>
 
 							<p className="lead text-secondary">
 								Centralizamos rutas y alojamiento validados por

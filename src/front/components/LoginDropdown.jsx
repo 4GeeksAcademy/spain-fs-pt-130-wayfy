@@ -5,7 +5,7 @@ import useGlobalReducer from '../hooks/useGlobalReducer';
 export const LoginDropdown = () => {
     const { store } = useGlobalReducer()
     const { showShortcut } = store
-    const { GO_USER } = HOTKEYS
+    const { GO_USER, GO_LOGIN, GO_REGISTER } = HOTKEYS
 
     return (
         <div className="dropdown">
@@ -28,12 +28,27 @@ export const LoginDropdown = () => {
 
             <div className="dropdown-menu dropdown-menu-end p-3 settings-dropdown mt-2 shadow" style={{ width: '250px' }}>
                 <div className="d-flex gap-2">
-                    <Link to="/login" className="btn btn-outline-primary w-100">
-                        Acceder
-                    </Link>
-                    <Link to="/register" className="btn btn-success w-100">
-                        Registro
-                    </Link>
+                    <div className='position-relative w-100'>
+                        <Link to="/login" className="btn btn-outline-primary w-100">
+                            Acceder
+                        </Link>
+
+                        {showShortcut && (
+                            <span className="badge badge-shortcut bg-dark">
+                                {GO_LOGIN.combo}
+                            </span>
+                        )}
+                    </div>
+                    <div className="position-relative w-100">
+                        <Link to="/register" className="btn btn-success w-100">
+                            Registro
+                        </Link>
+                        {showShortcut && (
+                            <span className="badge badge-shortcut bg-dark">
+                                {GO_REGISTER.combo}
+                            </span>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
