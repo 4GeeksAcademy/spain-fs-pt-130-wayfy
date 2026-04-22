@@ -416,6 +416,13 @@ input,
     left: -25px;
 }
 
+.badge-shortcut {
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 /* ============================================================
    SUPERFICIE DE TARJETAS (COMPATIBLE CON TODOS LOS TEMAS)
    ============================================================ */
