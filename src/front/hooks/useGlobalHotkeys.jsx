@@ -2,10 +2,12 @@ import { useHotkeys } from '@tanstack/react-hotkeys'
 import { HOTKEYS } from '../hotkeys/config'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
+import { useShortcut } from './useShortcut'
 
 export const useGlobalHotkeys = () => {
     const navigate = useNavigate()
     const { toggleHighContrast } = useTheme()
+    const { toggleShortcut } = useShortcut()
 
     useHotkeys([
         {
@@ -52,6 +54,11 @@ export const useGlobalHotkeys = () => {
             hotkey: HOTKEYS.TOGGLE_CONTRAST.combo,
             callback: () => toggleHighContrast(),
             options: { meta: HOTKEYS.TOGGLE_CONTRAST }
+        },
+        {
+            hotkey: HOTKEYS.TOGGLE_SHORTCUTS.combo,
+            callback: () => toggleShortcut(),
+            options: { meta: HOTKEYS.TOGGLE_SHORTCUTS }
         }
     ])
 }
