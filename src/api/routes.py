@@ -8,6 +8,7 @@ from api.models import db, User
 from flask_cors import CORS
 from groq import Groq
 from api.prompts.mapgpt_prompt import MAPGPT_SYSTEM_PROMPT
+from api.models import db, User, Event
 
 
 api = Blueprint('api', __name__)

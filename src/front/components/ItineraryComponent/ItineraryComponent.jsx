@@ -24,14 +24,18 @@ export const ItineraryComponent = () => {
 
 
     useEffect(() => {
-        const saved = localStorage.getItem("itinerary");
-        if (saved) setEvents(JSON.parse(saved));
+        fetch(import.meta.env.VITE_BACKEND_URL + "/events")
+            .then(res => res.json())
+            .then(data => {
+                const formatted = data.map(ev => ({
+                    ...ev,
+                    start: new Date(ev.start),
+                    end: new Date(ev.end)
+                }));
+                setEvents(formatted);
+            })
+            .catch(err => console.log(err));
     }, []);
-
-
-    useEffect(() => {
-        localStorage.setItem("itinerary", JSON.stringify(events));
-    }, [events]);
 
 
     const filteredPlaces = store.places.filter(place =>
@@ -46,56 +50,44 @@ export const ItineraryComponent = () => {
         const [startH, startM] = startTime.split(":");
         const [endH, endM] = endTime.split(":");
 
-        const start = new Date(2026, 3, 17, parseInt(startH), parseInt(startM));
-        const end = new Date(2026, 3, 17, parseInt(endH), parseInt(endM));
+        const start = new Date(2026, 3, 17, startH, startM);
+        const end = new Date(2026, 3, 17, endH, endM);
 
-        if (start >= end) {
-            alert("La hora de inicio debe ser menor");
-            return;
-        }
-
-        const overlap = events.some(event =>
-            (start < event.end) && (end > event.start)
-        );
-
-        if (overlap) {
-            alert("Ese horario ya está ocupado");
-            return;
-        }
-
-        const newEvent = {
-            id: Date.now(),
-            title: text,
-            start,
-            end
-        };
-
-        setEvents(prev => [...prev, newEvent]);
-
-        const modalElement = document.getElementById("itineraryModal");
-        const modalInstance = window.bootstrap.Modal.getInstance(modalElement);
-
-        if (modalInstance) {
-            modalInstance.hide();
-
-            const backdrop = document.querySelector('.modal-backdrop');
-            if (backdrop) {
-                backdrop.remove();
-            }
-            document.body.classList.remove('modal-open');
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-        }
+        fetch(import.meta.env.VITE_BACKEND_URL + "/events", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title: text,
+                start: start.toISOString(),
+                end: end.toISOString()
+            })
+        })
+            .then(res => res.json())
+            .then(newEvent => {
+                setEvents(prev => [
+                    ...prev,
+                    {
+                        ...newEvent,
+                        start: new Date(newEvent.start),
+                        end: new Date(newEvent.end)
+                    }
+                ]);
+            });
 
         setText("");
         setStartTime("");
         setEndTime("");
-
-
     };
 
     const handleDelete = (id) => {
-        setEvents(prev => prev.filter(event => event.id !== id));
+        fetch(import.meta.env.VITE_BACKEND_URL + "/events/" + id, {
+            method: "DELETE"
+        })
+            .then(() => {
+                setEvents(prev => prev.filter(event => event.id !== id));
+            });
     };
 
     const EventComponent = ({ event }) => (
