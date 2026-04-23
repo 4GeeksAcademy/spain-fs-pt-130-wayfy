@@ -67,7 +67,7 @@ const useAccessibilityMap = () => {
                 filter: ['has', 'point_count'],
                 layout: {
                     'text-field': '{point_count_abbreviated}',
-                    'text-size': 13,
+                    'text-size': 16,
                     'text-font': [
                         'DIN Offc Pro Medium',
                         'Arial Unicode MS Bold',
@@ -226,9 +226,17 @@ const useAccessibilityMap = () => {
             const map = mapRef.current?.getMap();
             if (!map) return;
 
+            const hasClusters = map.getLayer('clusters');
+            const hasUnclustered = map.getLayer('unclustered-point');
+
+            if (!hasClusters || !hasUnclustered) {
+                return;
+            }
+
             const clusters = map.queryRenderedFeatures(evt.point, {
                 layers: ['clusters'],
             });
+
             if (clusters.length) {
                 const clusterId = clusters[0].properties.cluster_id;
                 map.getSource('wheelchair').getClusterExpansionZoom(
@@ -247,12 +255,14 @@ const useAccessibilityMap = () => {
             const points = map.queryRenderedFeatures(evt.point, {
                 layers: ['unclustered-point'],
             });
+
             if (points.length) {
                 dispatch({ type: 'SET_SELECTED_FEATURE', payload: points[0] });
             }
         },
         [dispatch],
     );
+
 
     return {
         state: {

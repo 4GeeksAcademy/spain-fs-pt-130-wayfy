@@ -1,62 +1,334 @@
-.form-select {
-  border-color: var(--wayfy-green);
-  color: var(--bs-body-color);
-  transition:
-    border-color 0.2s ease-in,
-    box-shadow 0.2s ease-in-out;
+/* ============================================================
+   TIPOGRAFÍAS
+   ============================================================ */
+@font-face {
+    font-family: 'WayFy';
+    src: url('./assets/fonts/ProtestRiot-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   PALETA WAYFY + OVERRIDES BOOTSTRAP
+   ============================================================ */
+:root {
+    /* Tipografías */
+    --wayfy-font-display: 'WayFy', sans-serif;
+    --wayfy-font-body: 'Atkinson Hyperlegible', sans-serif;
+
+    /* Paleta WayFy */
+    --wayfy-blue: #1e3aba;
+    --wayfy-blue-hover: #162a8a;
+    --wayfy-blue-active: #11206b;
+
+    --wayfy-green: #10b891;
+    --wayfy-green-hover: #0d9668;
+    --wayfy-green-active: #096345;
+
+    --wayfy-cyan: #38bdf8;
+    --wayfy-cyan-hover: #0ea5e9;
+    --wayfy-cyan-active: #0284c7;
+
+    --wayfy-gray: #94a3b8;
+    --wayfy-gray-hover: #64748b;
+    --wayfy-gray-active: #475569;
+
+    --wayfy-white: #ffffff;
+
+    /* Bootstrap overrides */
+    --bs-body-font-family: var(--wayfy-font-body);
+    --bs-display-font-family: var(--wayfy-font-display);
+
+    --bs-primary: var(--wayfy-blue);
+    --bs-primary-rgb: 30, 58, 186;
+
+    --bs-secondary: var(--wayfy-gray);
+    --bs-secondary-rgb: 148, 163, 184;
+
+    --bs-success: var(--wayfy-green);
+    --bs-success-rgb: 16, 185, 129;
+
+    --bs-info: var(--wayfy-cyan);
+    --bs-info-rgb: 56, 189, 248;
+
+    --bs-body-color: #1e293b;
+    --bs-link-color: var(--wayfy-blue);
+    --bs-link-hover-color: var(--wayfy-blue-hover);
+
+    --bs-focus-ring-color: color-mix(
+        in srgb,
+        var(--wayfy-green),
+        transparent 90%
+    );
+    --bs-border-color: var(--wayfy-gray);
+
+    --bs-form-label-color: var(--wayfy)
+        /* ============================================================
+     MODO NORMAL (LIGHT)
+     ============================================================ */
+        /* Fondos */ --wayfy-bg: #ffffff;
+    --wayfy-bg-alt: #f8fafc;
+    --wayfy-surface: #ffffff;
+    --wayfy-surface-alt: #f1f5f9;
+
+    /* Textos */
+    --wayfy-text: #1e293b;
+    --wayfy-text-muted: #64748b;
+
+    /* Bordes */
+    --wayfy-border: #cbd5e1;
+    --wayfy-border-strong: #94a3b8;
+
+    /* Sombras */
+    --wayfy-shadow: rgba(0, 0, 0, 0.12);
+
+    /* Radios */
+    --wayfy-radius: 0.75rem;
+
+    /* Inputs */
+    --wayfy-input-bg: #ffffff;
+    --wayfy-input-border: var(--wayfy-gray);
+    --wayfy-input-focus: var(--wayfy-green);
+
+    /* Navbar */
+    --wayfy-navbar-bg: #ffffff;
+    --wayfy-navbar-text: var(--wayfy-text);
+    --wayfy-navbar-border: var(--wayfy-border);
+
+    /* Cards */
+    --wayfy-card-bg: #ffffff;
+    --wayfy-card-border: var(--wayfy-border);
+
+    /* Alerts */
+    --wayfy-alert-bg: #f8fafc;
+    --wayfy-alert-text: var(--wayfy-text);
+    --wayfy-alert-border: var(--wayfy-border);
+
+    --search-border: var(--bs-success);
+}
+
+/* ============================================================
+   APLICACIÓN GLOBAL A BOOTSTRAP
+   ============================================================ */
+
+body {
+    background: var(--wayfy-bg);
+    color: var(--wayfy-text);
+    font-family: var(--bs-body-font-family);
+}
+
+.text-muted {
+    color: var(--wayfy-text-muted) !important;
+}
+
+.border,
+.card,
+.form-control,
+.navbar,
+.alert {
+    border-color: var(--wayfy-border) !important;
+}
+
+/* Cards */
+.card {
+    background: var(--wayfy-card-bg);
+    border-radius: var(--wayfy-radius);
+    box-shadow: 0 2px 6px var(--wayfy-shadow);
+}
+
+/* Navbar */
+.navbar {
+    background: var(--wayfy-navbar-bg) !important;
+    color: var(--wayfy-navbar-text) !important;
+    border-bottom: 1px solid var(--wayfy-navbar-border);
+}
+
+/* Inputs */
+.form-control {
+    background: var(--wayfy-input-bg);
+    border-color: var(--wayfy-input-border);
+    color: var(--bs-body-color);
+}
+
+.form-control:focus {
+    border-color: var(--wayfy-input-focus);
+    background-color: var(--wayfy-white);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+/* Alerts */
+.alert {
+    background: var(--wayfy-alert-bg);
+    color: var(--wayfy-alert-text);
+    border-color: var(--wayfy-alert-border);
+}
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+.btn-primary {
+    --bs-btn-bg: var(--wayfy-blue);
+    --bs-btn-border-color: var(--wayfy-blue);
+    --bs-btn-hover-bg: var(--wayfy-blue-hover);
+    --bs-btn-hover-border-color: var(--wayfy-blue-hover);
+    --bs-btn-active-bg: var(--wayfy-blue-active);
+    --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--wayfy-blue);
+    --bs-btn-border-color: var(--wayfy-blue);
+    --bs-btn-hover-bg: var(--wayfy-blue);
+    --bs-btn-hover-border-color: var(--wayfy-blue);
+    --bs-btn-active-bg: var(--wayfy-blue-active);
+    --bs-btn-active-border-color: var(--wayfy-blue-active);
+}
+
+.btn-success {
+    --bs-btn-bg: var(--wayfy-green);
+    --bs-btn-border-color: var(--wayfy-green);
+    --bs-btn-hover-bg: var(--wayfy-green-hover);
+    --bs-btn-hover-border-color: var(--wayfy-green-hover);
+    --bs-btn-active-bg: var(--wayfy-green-active);
+    --bs-btn-focus-shadow-rgb: var(--bs-success-rgb);
+}
+
+.btn-outline-success {
+    --bs-btn-color: var(--wayfy-green);
+    --bs-btn-border-color: var(--wayfy-green);
+    --bs-btn-hover-bg: var(--wayfy-green);
+    --bs-btn-hover-border-color: var(--wayfy-green);
+    --bs-btn-active-bg: var(--wayfy-green-active);
+    --bs-btn-active-border-color: var(--wayfy-green-active);
+}
+
+.btn-info {
+    --bs-btn-bg: var(--wayfy-cyan);
+    --bs-btn-border-color: var(--wayfy-cyan);
+    --bs-btn-hover-bg: var(--wayfy-cyan-hover);
+    --bs-btn-hover-border-color: var(--wayfy-cyan-hover);
+    --bs-btn-active-bg: var(--wayfy-cyan-active);
+    --bs-btn-focus-shadow-rgb: var(--bs-info-rgb);
+}
+
+.btn-outline-info {
+    --bs-btn-color: var(--wayfy-cyan);
+    --bs-btn-border-color: var(--wayfy-cyan);
+    --bs-btn-hover-bg: var(--wayfy-cyan);
+    --bs-btn-hover-border-color: var(--wayfy-cyan);
+    --bs-btn-active-bg: var(--wayfy-cyan-active);
+    --bs-btn-active-border-color: var(--wayfy-cyan-active);
+}
+
+.btn-secondary {
+    --bs-btn-bg: var(--wayfy-gray);
+    --bs-btn-border-color: var(--wayfy-gray);
+    --bs-btn-hover-bg: var(--wayfy-gray-hover);
+    --bs-btn-hover-border-color: var(--wayfy-gray-hover);
+    --bs-btn-active-bg: var(--wayfy-gray-active);
+    --bs-btn-focus-shadow-rgb: var(--bs-info-rgb);
+}
+
+.btn-outline-secondary {
+    --bs-btn-color: var(--wayfy-gray);
+    --bs-btn-border-color: var(--wayfy-gray);
+    --bs-btn-hover-bg: var(--wayfy-gray);
+    --bs-btn-hover-border-color: var(--wayfy-gray);
+    --bs-btn-active-bg: var(--wayfy-gray-active);
+    --bs-btn-active-border-color: var(--wayfy-gray-active);
+}
+
+/* Hover */
+.btn:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Active */
+.btn:active {
+    transform: translateY(0px);
+}
+
+/* ============================================================
+   TEXTOS Y FONDOS
+   ============================================================ */
+.text-primary {
+    color: var(--wayfy-blue) !important;
+}
+.text-success {
+    color: var(--wayfy-green) !important;
+}
+.text-secondary {
+    color: var(--wayfy-gray) !important;
+}
+.text-info {
+    color: var(--wayfy-cyan) !important;
+}
+.text-gray {
+    color: var(--wayfy-gray-active) !important;
+}
+
+.bg-primary {
+    background-color: var(--wayfy-blue) !important;
+}
+.bg-success {
+    background-color: var(--wayfy-green) !important;
+}
+.bg-secondary {
+    background-color: var(--wayfy-gray) !important;
+}
+.bg-info {
+    background-color: var(--wayfy-cyan) !important;
+}
+.bg-gray {
+    background-color: var(--wayfy-gray) !important;
+}
+
+/* ============================================================
+   FORMULARIOS
+   ============================================================ */
 .form-control::placeholder {
-  color: var(--wayfy-gray);
-  opacity: 0.7;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: var(--wayfy-green);
-  background-color: var(--wayfy-white);
-  outline: 0;
-  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+    color: var(--wayfy-gray);
+    opacity: 0.7;
 }
 
 .input-group {
-  border-radius: 0.375rem;
-  transition: box-shadow 0.2s ease-in-out;
+    border-radius: 0.375rem;
+    transition: box-shadow 0.2s ease-in-out;
 }
 
 .input-group:focus-within {
-  border-radius: 0.375rem;
-  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
-}
-
-.input-group:focus-within .form-control,
-.input-group:focus-within .input-group-text {
-  border-color: var(--wayfy-green);
+    box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
 }
 
 .form-check-input {
-  cursor: pointer;
-  border-color: var(--wayfy-gray);
+    cursor: pointer;
+    border-color: var(--wayfy-gray);
 }
 
 .form-check-input:checked {
-  background-color: var(--wayfy-green);
-  border-color: var(--wayfy-green);
+    background-color: var(--wayfy-green);
+    border-color: var(--wayfy-green);
 }
 
 .form-check-input:focus {
-  border-color: var(--wayfy-green);
-  outline: 0;
-  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+    border-color: var(--wayfy-green);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
 }
 
+/* ============================================================
+   LAYOUT Y COMPONENTES
+   ============================================================ */
 html {
-  overflow-y: scroll;
-}
-
-body {
-  background: color-mix(in srgb, var(--wayfy-green), transparent 85%);
-  font-family: var(--bs-body-font-family);
+    overflow-y: scroll;
 }
 
 body.modal-open {
@@ -71,43 +343,55 @@ h4,
 h5,
 h6,
 .navbar-brand {
-  font-family: var(--bs-display-font-family);
+    font-family: var(--bs-display-font-family);
 }
 
 p,
 span,
 input,
 .btn {
-  font-family: var(--wayfy-font-body);
-  font-size: 1rem;
-  line-height: 1.5;
-  letter-spacing: 0.01em;
+    font-family: var(--wayfy-font-body);
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+}
+
+.text-small {
+    font-size: 0.8rem;
+}
+
+.btn-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    font-size: 1.2rem;
+}
+
+.btn-settings {
+    width: 25px;
+    height: 25px;
+    display: grid;
+    border-radius: 50%;
+    place-items: center;
+    padding: 0;
+    font-size: 0.8rem;
 }
 
 /* LOGIN */
 .login-dropdown-width {
-  min-width: 320px;
+    min-width: 320px;
 }
 
-header,
-.navbar {
-  position: relative;
-  z-index: 1100;
-}
-
-.text-small {
-  font-size: 0.8rem;
-}
-
-/* Tooltips al frente de todo */
+/* Z-index */
 .tooltip,
 .bs-tooltip-auto {
-  z-index: 1300;
+    z-index: 1300;
 }
-
-/* Menú desplegable del Navbar */
 .dropdown-menu {
-  z-index: 1200;
+    z-index: 1200;
 }
 
 /* SIDEBAR */
@@ -143,4 +427,61 @@ header,
 
 .text-gray {
   color: var(--wayfy-gray-active) !important;
+}
+
+.badge-shortcut {
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* ============================================================
+   SUPERFICIE DE TARJETAS (COMPATIBLE CON TODOS LOS TEMAS)
+   ============================================================ */
+.card-surface {
+    background: var(--wayfy-card-bg) !important;
+    border-color: var(--wayfy-card-border) !important;
+    color: var(--wayfy-text) !important;
+}
+
+.form-switch .form-check-input:checked {
+    background-color: var(--wayfy-green) !important;
+}
+
+.form-switch .form-check-input {
+    background-color: var(--wayfy-white) !important;
+}
+
+.form-check-input {
+    background-color: var(--wayfy-white);
+}
+
+.form-check-label {
+    color: var(--bs-form-label-color) !important;
+}
+
+.settings-dropdown {
+    background: var(--wayfy-white);
+}
+
+/* ============================================================
+   TRANSICIÓN SUAVE ENTRE TEMAS
+   ============================================================ */
+
+html,
+body,
+div,
+img,
+.card,
+.navbar,
+.form-control,
+.btn,
+.alert,
+.modal-content {
+    transition: all 0.5s ease-in-out;
+    /* background-color 0.35s ease,
+        color 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease; */
 }

@@ -1,7 +1,7 @@
-import useGlobalReducer from '../hooks/useGlobalReducer';
-import { AccessibilityDetails } from './AccessibilityMap/AccessibilityDetails';
-import { FilterPanel } from './FilterPanel/FilterPanel';
-import { SearchMap } from './AccessibilityMap/SearchMap';
+import useGlobalReducer from '../../hooks/useGlobalReducer';
+import { AccessibilityDetails } from './AccessibilityDetails';
+import { FilterPanel } from '../FilterPanel/FilterPanel';
+import { SearchMap } from './SearchMap';
 
 export const Sidebar = ({ show, toggle }) => {
     const { store, dispatch } = useGlobalReducer();
@@ -30,7 +30,7 @@ export const Sidebar = ({ show, toggle }) => {
 
     return (
         <section
-            className={`sidebar ${show ? 'sidebar-show' : 'sidebar-hidden'} bg-white border-start shadow-sm d-flex flex-column position-relative z-1`}
+            className={`sidebar ${show ? 'sidebar-show' : 'sidebar-hidden'} border-start shadow-sm d-flex flex-column position-relative z-1`}
         >
             <button
                 className="btn btn-sm btn-primary rounded-start-pill position-absolute shadow-sm d-flex align-items-center justify-content-center sidebar-btn-left"
@@ -43,7 +43,7 @@ export const Sidebar = ({ show, toggle }) => {
                 className={`sidebar-content ${show ? 'sidebar-content-show' : 'sidebar-content-hidden'} d-flex flex-column overflow-hidden`}
             >
                 <SearchMap />
-                <div className="flex-grow-1 overflow-auto px-3">
+                <div className="overflow-auto px-3">
                     {selectedFeature && (
                         <>
                             <AccessibilityDetails

@@ -1,22 +1,29 @@
-import imgMapaUrl from '../assets/img/portada.png';
+import imgLight from '../assets/img/portada.png';
+import imgHC from '../assets/img/portada-ac.png';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
 export const Home = () => {
+	const { theme } = useTheme()
+
+	const imgMapaUrl = theme === 'light' ? imgLight : imgHC
+
+
 	return (
 		<div className="w-100 bg-bg-transparent">
 			<main className="my-4">
 				<div className="container">
+					<div className="d-flex align-items-center gap-4">
+						<h1 className="display-3 fw-bold text-gray">
+							Tu viaje
+						</h1>
+						<h4 className="display-5 text-primary">
+							sin barreras
+						</h4>
+					</div>
 					<div className="row align-items-center g-5">
 						{/* Columna Izquierda: Texto */}
 						<div className="col-lg-6 text-center text-lg-start">
-							<div className="d-flex align-items-center gap-4">
-								<h1 className="display-3 fw-bold text-gray">
-									Tu viaje
-								</h1>
-								<h4 className="display-5 text-primary">
-									sin barreras
-								</h4>
-							</div>
 
 							<p className="lead text-secondary">
 								Centralizamos rutas y alojamiento validados por
@@ -26,7 +33,7 @@ export const Home = () => {
 							</p>
 
 							<div className="d-flex flex-column flex-md-row row-cols-1 row-cols-md-3 text-center gap-2 my-4">
-								<div className="d-flex flex-column align-items-center bg-light p-3 rounded-3 shadow-sm border">
+								<div className="d-flex flex-column align-items-center card-surface p-3 rounded-3 shadow-sm border">
 									<div className="fs-3">
 										<i className="fa-solid fa-shield-halved text-primary mb-3"></i>
 									</div>
@@ -41,7 +48,7 @@ export const Home = () => {
 									</div>
 								</div>
 
-								<div className="d-flex flex-column align-items-center bg-light p-3 rounded-3 shadow-sm border">
+								<div className="d-flex flex-column align-items-center card-surface p-3 rounded-3 shadow-sm border">
 									<div className="fs-3">
 										<i className="fa-solid fa-users text-primary mb-3"></i>
 									</div>
@@ -56,7 +63,7 @@ export const Home = () => {
 									</div>
 								</div>
 
-								<div className="d-flex flex-column align-items-center bg-white p-3 rounded-3 shadow-sm border">
+								<div className="d-flex flex-column align-items-center card-surface p-3 rounded-3 shadow-sm border">
 									<div className="fs-3">
 										<i className="fa-solid fa-wheelchair-move text-primary mb-3"></i>
 									</div>
@@ -82,7 +89,7 @@ export const Home = () => {
 
 						{/* Columna Derecha: Imagen */}
 						<div className="col-lg-6">
-							<div className="position-relative p-2 bg-white rounded-4 shadow border">
+							<div className="position-relative p-2 card-surface rounded-4 shadow border">
 								<img
 									src={imgMapaUrl}
 									alt="Mapa conceptual de rutas accesibles"

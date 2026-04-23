@@ -7,7 +7,7 @@ import Map, {
     Layer,
 } from 'react-map-gl';
 import useAccessibilityMap from '../../hooks/useAccessibilityMap';
-import { Legend } from './Legend';
+// import { Legend } from './Legend';
 import { AIAssistant } from '../AIAssistant/AIAssistant';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -50,7 +50,7 @@ export const AccessibilityMap = () => {
                 </div>
             )}
 
-            <Legend />
+            {/* <Legend /> */}
 
             <Map
                 ref={mapRef}
@@ -81,6 +81,7 @@ export const AccessibilityMap = () => {
                         clusterMaxZoom={14}
                         clusterRadius={50}
                     >
+                        {/* <Layer {...state.layers.clusterPulseLayer} /> */}
                         <Layer {...state.layers.clusterLayer} />
                         <Layer {...state.layers.clusterCountLayer} />
                         <Layer {...state.layers.unclusteredLayer} />

@@ -4,19 +4,17 @@ const OVERPASS_ENDPOINTS = [
     'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
 ];
 
-// Función segura para parsear JSON evitando HTML/XML
-const safeJson = async (response) => {
+async function safeJson(response) {
     const text = await response.text();
 
-    // Si Overpass devuelve HTML → error
-    if (!text || text.trim().startsWith('<')) {
+    if (!text || text.trimStart().startsWith('<')) {
         throw new Error('Overpass devolvió HTML/XML en vez de JSON');
     }
 
     return JSON.parse(text);
-};
+}
 
-async function queryOverpassProgressive(query) {
+async function queryOverpass(query) {
     const body = new URLSearchParams({ data: query }).toString();
 
     for (const endpoint of OVERPASS_ENDPOINTS) {
@@ -33,60 +31,95 @@ async function queryOverpassProgressive(query) {
 
             const json = await safeJson(response);
 
-            if (!json.elements) continue;
+            if (!json.elements || !Array.isArray(json.elements)) continue;
 
             return json.elements;
-        } catch (error) {
-            console.warn(`Fallo en ${endpoint}:`, error.message);
+        } catch (err) {
+            console.warn(`Fallo en ${endpoint}:`, err.message);
         }
     }
 
     throw new Error('Todos los endpoints de Overpass fallaron.');
 }
 
-export const fetchWheelchairPlacesProgressive = async (bbox, onPartialData) => {
+export async function fetchWheelchairPlacesProgressive(bbox, onPartialData) {
     const [south, west, north, east] = bbox;
 
-    // NODOS ligeros
     const q1 = `
-        [out:json][timeout:25];
-        node["wheelchair"](${south},${west},${north},${east});
-        out body;
+[out:json][timeout:25];
+(
+  node["wheelchair"](${south},${west},${north},${east});
+  way["wheelchair"](${south},${west},${north},${east});
+  relation["wheelchair"](${south},${west},${north},${east});
+);
+out body;
+>;
+out skel qt;
     `;
-    try {
-        const nodes = await queryOverpassProgressive(q1);
-        onPartialData(nodes);
-    } catch (err) {
-        console.warn('Error cargando nodos:', err.message);
-    }
 
-    // WAYS pesados
     const q2 = `
-        [out:json][timeout:25];
-        way["wheelchair"](${south},${west},${north},${east});
-        out body;
-        >;
-        out skel qt;
+[out:json][timeout:40];
+(
+  node["amenity"](${south},${west},${north},${east});
+  node["shop"](${south},${west},${north},${east});
+  node["tourism"](${south},${west},${north},${east});
+);
+(
+  ._;
+  node(w)["wheelchair"];
+  node(w)["wheelchair:description"];
+  node(w)["wheelchair:access"];
+  node(w)["entrance:wheelchair"];
+  node(w)["door:width"];
+  node(w)["door:automatic"];
+  node(w)["door:bell"];
+  node(w)["kerb"];
+  node(w)["incline"];
+  node(w)["tactile_paving"];
+  node(w)["toilets:wheelchair"];
+);
+out body;
+>;
+out skel qt;
     `;
+
+    const q3 = `
+[out:json][timeout:40];
+(
+  node["public_transport"](${south},${west},${north},${east});
+  node["building"]["building"!="yes"](${south},${west},${north},${east});
+);
+(
+  ._;
+  node(w)["wheelchair"];
+  node(w)["wheelchair:boarding"];
+  node(w)["step_free"];
+  node(w)["lift"];
+  node(w)["escalator"];
+);
+out body;
+>;
+out skel qt;
+    `;
+
     try {
-        const ways = await queryOverpassProgressive(q2);
-        onPartialData(ways);
+        const r1 = await queryOverpass(q1);
+        onPartialData(r1);
     } catch (err) {
-        console.warn('Error cargando ways:', err.message);
+        console.warn('Error en fase 1:', err.message);
     }
 
-    // RELATIONS - muy pesados
-    const q3 = `
-        [out:json][timeout:25];
-        relation["wheelchair"](${south},${west},${north},${east});
-        out body;
-        >;
-        out skel qt;
-    `;
     try {
-        const relations = await queryOverpassProgressive(q3);
-        onPartialData(relations);
+        const r2 = await queryOverpass(q2);
+        onPartialData(r2);
     } catch (err) {
-        console.warn('Error cargando relations:', err.message);
+        console.warn('Error en fase 2:', err.message);
     }
-};
+
+    try {
+        const r3 = await queryOverpass(q3);
+        onPartialData(r3);
+    } catch (err) {
+        console.warn('Error en fase 3:', err.message);
+    }
+}
