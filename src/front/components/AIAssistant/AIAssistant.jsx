@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAIAssistant from '../../hooks/useAIAssistant';
+import { HOTKEYS } from '../../hotkeys/config'
+import useGlobalReducer from '../../hooks/useGlobalReducer'
 
 // import { AITextAsistant } from './AITextAsistant';
 // import { AIVozAssistant } from './AIVozAssistant';
@@ -8,8 +10,22 @@ import useAIAssistant from '../../hooks/useAIAssistant';
 const MIN_LENGTH_QUERY = 3;
 
 export const AIAssistant = () => {
+    const { store } = useGlobalReducer();
+    const { showShortcut } = store
+    const { GO_VOICE, GO_WRITER } = HOTKEYS
     const [query, setQuery] = useState('');
-    const { processQuery, isProcessing, isListening, toggleListening } = useAIAssistant();
+    const { processQuery, isProcessing, isListening, toggleListening, inputRef } = useAIAssistant();
+
+    useEffect(() => {
+        const handler = () => {
+            if (inputRef.current) inputRef.current.focus()
+
+        }
+
+        window.addEventListener('focus-ai-input', handler)
+
+        return () => window.removeEventListener('focus-ai-input', handler)
+    }, [inputRef])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -51,24 +67,41 @@ export const AIAssistant = () => {
                         onSubmit={handleSubmit}
                         className="d-flex align-items-center gap-3 bg-dark text-white p-3 rounded-3"
                     >
-                        <input
-                            className="form-control bg-dark text-white border border-secondary rounded-3"
-                            placeholder="Pregunta a Wayfy..."
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            disabled={isProcessing || isListening}
-                        />
-                        <i
-                            onClick={() => !isProcessing && toggleListening()}
-                            className={`fa-solid fa-xl ${isListening
-                                ? 'fa-microphone-lines fa-pulse text-danger'
-                                : 'fa-microphone-lines text-white cursor-pointer'
-                                }`}
-                            style={{ cursor: 'pointer' }}
-                            disabled={isProcessing}
-                            title="Hablar con la IA"
-                        ></i>
+                        <div className="position-relative w-100">
+                            <input
+                                ref={inputRef}
+                                className="form-control bg-dark text-white border border-secondary rounded-3"
+                                placeholder="Pregunta a Wayfy..."
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                readOnly={isListening}
+                                disabled={isProcessing}
+                            />
+
+                            {showShortcut && (
+                                <span className="badge badge-shortcut bg-dark mt-1">
+                                    {GO_WRITER.combo}
+                                </span>
+                            )}
+                        </div>
+                        <div className="position-relative">
+                            <i
+                                onClick={() => !isProcessing && toggleListening()}
+                                className={`fa-solid fa-xl ${isListening
+                                    ? 'fa-microphone-lines fa-pulse text-danger'
+                                    : 'fa-microphone-lines text-white cursor-pointer'
+                                    }`}
+                                style={{ cursor: 'pointer' }}
+                                disabled={isProcessing}
+                                title="Hablar con la IA"
+                            ></i>
+                            {showShortcut && (
+                                <span className="badge badge-shortcut bg-dark">
+                                    {GO_VOICE.combo}
+                                </span>
+                            )}
+                        </div>
 
                     </form>
                 </div>

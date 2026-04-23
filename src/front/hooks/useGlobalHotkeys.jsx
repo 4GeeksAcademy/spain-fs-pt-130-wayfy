@@ -3,11 +3,13 @@ import { HOTKEYS } from '../hotkeys/config'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import { useShortcut } from './useShortcut'
+import useAIAssistant from './useAIAssistant'
 
 export const useGlobalHotkeys = () => {
     const navigate = useNavigate()
     const { toggleHighContrast } = useTheme()
     const { toggleShortcut } = useShortcut()
+    const { toggleListening } = useAIAssistant()
 
     const openDropdown = (id) => {
         const element = document.getElementById(id)
@@ -28,6 +30,16 @@ export const useGlobalHotkeys = () => {
             hotkey: HOTKEYS.GO_REGISTER.combo,
             callback: () => navigate('/register'),
             options: { meta: HOTKEYS.GO_REGISTER }
+        },
+        {
+            hotkey: HOTKEYS.GO_VOICE.combo,
+            callback: () => toggleListening(),
+            options: { meta: HOTKEYS.GO_VOICE }
+        },
+        {
+            hotkey: HOTKEYS.GO_WRITER.combo,
+            callback: () => window.dispatchEvent(new Event('focus-ai-input')),
+            options: { meta: HOTKEYS.GO_WRITER }
         },
         {
             hotkey: HOTKEYS.GO_HOME.combo,

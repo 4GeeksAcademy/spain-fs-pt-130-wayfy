@@ -29,6 +29,7 @@ export const initialStore = () => {
         selectedFeature: null,
         theme: savedTheme || 'light',
         showShortcut: savedShortcut !== null ? savedShortcut === 'true' : false,
+        isListening: false,
     };
 };
 
@@ -89,6 +90,9 @@ export default function storeReducer(store, action = {}) {
                 showShortcut: newValue,
             };
         }
+
+        case 'SET_LISTENING':
+            return { ...store, isListening: action.payload };
         default:
             return store;
     }

@@ -9,6 +9,16 @@ export const HOTKEYS = {
         name: 'Resister',
         group: 'Sistema',
     },
+    GO_VOICE: {
+        combo: 'Ctrl+Alt+V',
+        name: 'Hablar a la IA',
+        group: 'Sistema',
+    },
+    GO_WRITER: {
+        combo: 'Ctrl+Alt+W',
+        name: 'Escribir a la IA',
+        group: 'Sistema',
+    },
     GO_HOME: {
         combo: 'Alt+1',
         name: 'Ir a Home',
