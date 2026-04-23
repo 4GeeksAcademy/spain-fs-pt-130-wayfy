@@ -21,6 +21,7 @@ sqlalchemy = "*"
 python-dotenv = "*"
 flask-cors = "*"
 groq = "*"
+bcrypt = "*"
 
 [requires]
 python_version = "3.13"

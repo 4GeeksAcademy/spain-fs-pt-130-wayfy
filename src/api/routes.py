@@ -1,11 +1,13 @@
 import os
+import bcrypt
 import json
 from flask import Blueprint, request, jsonify
 from api.models import db, User
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token
 from api.prompts.mapgpt_prompt import MAPGPT_SYSTEM_PROMPT
-from groq import Groq  # --- IMPORTAMOS GROQ AQUÍ ---
+from groq import Groq
+
 
 api = Blueprint('api', __name__)
 CORS(api)
@@ -50,9 +52,12 @@ def handle_signup():
     if user_check:
         return jsonify({"msg": "El usuario ya existe"}), 400
 
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(body["password"].encode('utf-8'), salt)
+
     new_user = User(
         email=body["email"],
-        password=body["password"],
+        password=hashed_password('utf-8'),
         full_name=body.get("full_name"),
         mobility_phase=body.get("mobility_phase"),
         is_active=True

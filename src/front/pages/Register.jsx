@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../components/context/UserContext';
 
 export const Register = () => {
+  // Obtenemos la función 'login' de nuestro contexto global
+  const { login } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState("");
@@ -47,22 +50,18 @@ export const Register = () => {
         })
       });
 
-      //  Ahora manejamos la respuesta para guardar el token ---
       if (response.ok) {
-        const data = await response.json(); // Leemos la respuesta del servidor
+        const data = await response.json();
 
-        // Guardamos el token en localStorage para mantener la sesión iniciada
-        localStorage.setItem("token", data.token);
+        login(data.token);
 
         alert("¡Registro exitoso! Bienvenido.");
 
-        // Redirigimos a la página principal, saltándonos el login
         navigate("/");
       } else {
         const data = await response.json();
         alert("Error: " + data.msg);
       }
-      // ----------------------------------------------------------------------
 
     } catch (error) {
       console.error("Error en el registro", error);
@@ -119,8 +118,8 @@ export const Register = () => {
                           <div
                             onClick={() => toggleMobility(opt.id)}
                             className={`p-3 border rounded-4 text-center shadow-sm h-100 d-flex flex-column align-items-center justify-content-center transition-all ${isSelected
-                                ? 'bg-success border-success text-white'
-                                : 'bg-white border-light-subtle text-secondary'
+                              ? 'bg-success border-success text-white'
+                              : 'bg-white border-light-subtle text-secondary'
                               }`}
                             style={{ cursor: 'pointer', transition: '0.4s' }}
                           >
