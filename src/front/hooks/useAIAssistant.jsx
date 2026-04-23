@@ -4,9 +4,9 @@ import { fetchMapData } from '../services/mapgpt.api';
 
 const useAIAssistant = () => {
     const { store, dispatch } = useGlobalReducer();
+    const { isListening, isProcessing } = store;
     // const [isListening, setIsListening] = useState(false);
-    const { isListening } = store;
-    const [isProcessing, setIsProcessing] = useState(false);
+    // const [isProcessing, setIsProcessing] = useState(false);
     const recognitionRef = useRef(null);
     const inputRef = useRef(null)
 
@@ -39,7 +39,8 @@ const useAIAssistant = () => {
         async (text) => {
             if (!text || text.trim().length < 3) return;
 
-            setIsProcessing(true);
+            // setIsProcessing(true);
+            dispatch({ type: 'SET_PROCESSING', payload: true })
             try {
                 const result = await fetchMapData(text);
 
@@ -63,7 +64,8 @@ const useAIAssistant = () => {
                 console.error('Error en processQuery:', error);
                 throw error;
             } finally {
-                setIsProcessing(false);
+                // setIsProcessing(false);
+                dispatch({ type: 'SET_PROCESSING', payload: false })
             }
         },
         [updateMapState, dispatch],
