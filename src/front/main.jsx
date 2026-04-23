@@ -24,7 +24,7 @@ const Main = () => {
                 <ThemeProvider>
                     <StoreProvider>
                         {/* Set up routing for the application */}
-                        <RouterProvider router={router}></RouterProvider>
+                        <RouterProvider router={router} />
                     </StoreProvider>
                 </ThemeProvider>
             </HotkeysProvider>
