@@ -2,7 +2,7 @@ import ScrollToTop from '../components/ScrollToTop';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { ToastContainer } from 'react-toastify';
-import { AuthProvider } from '../components/context/AuthProvider';
+import { AuthProvider } from '../context/AuthProvider';
 import { useGlobalHotkeys } from '../hooks/useGlobalHotkeys';
 import { Outlet } from 'react-router-dom';
 
