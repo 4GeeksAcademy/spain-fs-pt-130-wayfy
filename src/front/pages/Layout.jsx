@@ -2,12 +2,23 @@ import ScrollToTop from '../components/ScrollToTop';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { ToastContainer } from 'react-toastify';
+import { AuthProvider } from '../components/context/AuthProvider';
 import { useGlobalHotkeys } from '../hooks/useGlobalHotkeys';
 import { Outlet } from 'react-router-dom';
 
 export const Layout = () => {
     useGlobalHotkeys()
     return (
+        <AuthProvider>
+            <ScrollToTop>
+                <div className="d-flex flex-column min-vh-100">
+                    <Navbar />
+                    <MainComponent />
+                    <Footer />
+                    <ToastContainer />
+                </div>
+            </ScrollToTop>
+        </AuthProvider>
         <ScrollToTop>
             <div className="d-flex flex-column min-vh-100">
                 <Navbar />
