@@ -13,21 +13,13 @@ export const Layout = () => {
             <ScrollToTop>
                 <div className="d-flex flex-column min-vh-100">
                     <Navbar />
-                    <MainComponent />
+                    <main className="d-flex flex-row flex-grow-1 position-relative overflow-hidden">
+                        <Outlet />
+                    </main>
                     <Footer />
                     <ToastContainer />
                 </div>
             </ScrollToTop>
         </AuthProvider>
-        <ScrollToTop>
-            <div className="d-flex flex-column min-vh-100">
-                <Navbar />
-                <main className="d-flex flex-row flex-grow-1 position-relative overflow-hidden">
-                    <Outlet />
-                </main>
-                <Footer />
-                <ToastContainer />
-            </div>
-        </ScrollToTop>
     );
 };

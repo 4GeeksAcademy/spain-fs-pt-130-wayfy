@@ -15,14 +15,13 @@ CORS(api)
 
 @api.route('/mapgpt', methods=['POST'])
 def map_gpt():
+    api_key = os.getenv('GROQ_API_KEY')
+    
     data = request.get_json()
     user_prompt = data.get('prompt')
 
     if not user_prompt:
         return jsonify({'error': 'Prompt vacío'}), 400
-
-    # --- INICIALIZACIÓN SEGURA (DENTRO DE LA FUNCIÓN) ---
-    api_key = os.getenv('GROQ_API_KEY')
     if not api_key:
         return jsonify({'error': 'Error de configuración en servidor'}), 500
 
@@ -57,7 +56,7 @@ def handle_signup():
 
     new_user = User(
         email=body["email"],
-        password=hashed_password('utf-8'),
+        password=hashed_password.decode('utf-8'),
         full_name=body.get("full_name"),
         mobility_phase=body.get("mobility_phase"),
         is_active=True
