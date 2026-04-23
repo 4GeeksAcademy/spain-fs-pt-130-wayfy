@@ -16,7 +16,7 @@ export const SettingsDropdown = () => {
             <button
                 id='btnSettings'
                 type='button'
-                className="btn btn-secondary btn-circle"
+                className="btn btn-secondary btn-settings"
                 data-bs-toggle='dropdown'
                 data-bs-auto-close="outside"
                 aria-expanded='false'

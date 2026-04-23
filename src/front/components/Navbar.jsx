@@ -72,36 +72,11 @@ export const Navbar = () => {
 					/>
 				</Link>
 
-				<div className="d-flex align-items-center border-0 ms-auto order-lg-last gap-2">
-					{/* <div className="position-relative">
-						<Link to='/login' className="btn btn-outline-primary">
-							Iniciar sesión
-						</Link>
-
-						{showShortcut && (
-							<span className="badge badge-shortcut bg-dark">
-								{GO_LOGIN.combo}
-							</span>
-						)}
-					</div>
-					<div className="position-relative">
-						<Link to='/register' className="btn btn-success">
-							Regístrate
-						</Link>
-
-						{showShortcut && (
-							<span className="badge badge-shortcut bg-dark">
-								{GO_REGISTER.combo}
-							</span>
-						)}
-					</div> */}
-					{/* <LoginDropdown /> */}
-					{/* <div className="d-flex flex-column"> */}
-					{/* <ThemeSelector />
-					<ShortcutToggle /> */}
-					{/* </div> */}
+				<div className="d-flex align-items-center border-0 ms-auto order-lg-last gap-3">
 					<LoginDropdown />
-					<SettingsDropdown />
+					<div className="d-flex align-self-end">
+						<SettingsDropdown />
+					</div>
 					<button
 						type="button"
 						className="navbar-toggler border-0 order-lg-last ms-2"
