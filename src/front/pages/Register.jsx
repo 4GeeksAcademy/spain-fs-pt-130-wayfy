@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../components/context/UserContext';
+import { UserContext } from '../context/UserContext';
 
 export const Register = () => {
-  // Obtenemos la función 'login' de nuestro contexto global
+  // Obtenemos la función login de nuestro contexto global
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -14,6 +14,7 @@ export const Register = () => {
 
   const [step, setStep] = useState(1);
   const [selectedMobility, setSelectedMobility] = useState([]);
+  const [token, setToken] = useState(null);
 
   const mobilityOptions = [
     { id: 'silla', label: 'Usuario de silla de ruedas', icon: 'fa-solid fa-wheelchair-move' },
@@ -53,7 +54,10 @@ export const Register = () => {
       if (response.ok) {
         const data = await response.json();
 
-        login(data.token);
+        login({
+          token: data.token,
+          full_name: data.full_name,
+        });
 
         alert("¡Registro exitoso! Bienvenido.");
 
