@@ -3,10 +3,6 @@ import useAIAssistant from '../../hooks/useAIAssistant';
 import { HOTKEYS } from '../../hotkeys/config'
 import useGlobalReducer from '../../hooks/useGlobalReducer'
 
-// import { AITextAsistant } from './AITextAsistant';
-// import { AIVozAssistant } from './AIVozAssistant';
-// import './css/AIAssistant.css';
-
 const MIN_LENGTH_QUERY = 3;
 
 export const AIAssistant = () => {
@@ -106,11 +102,6 @@ export const AIAssistant = () => {
                     </form>
                 </div>
             </div>
-
-            {/* <div className="position-absolute bg-transparent rounded-2 buttons d-flex gap-2 z-1">
-                <AITextAsistant />
-                <AIVozAssistant />
-            </div> */}
         </>
     );
 };
