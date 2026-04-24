@@ -30,6 +30,7 @@ export const initialStore = () => {
         theme: savedTheme || 'light',
         showShortcut: savedShortcut !== null ? savedShortcut === 'true' : false,
         isListening: false,
+        isProcessing: false,
     };
 };
 
@@ -93,6 +94,10 @@ export default function storeReducer(store, action = {}) {
 
         case 'SET_LISTENING':
             return { ...store, isListening: action.payload };
+
+        case 'SET_PROCESSING':
+            return { ...store, isProcessing: action.payload };
+
         default:
             return store;
     }

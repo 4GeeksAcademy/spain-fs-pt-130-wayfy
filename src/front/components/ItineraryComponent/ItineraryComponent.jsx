@@ -26,7 +26,7 @@ export const ItineraryComponent = () => {
 
 
     useEffect(() => {
-        fetch(import.meta.env.VITE_BACKEND_URL + "/events")
+        fetch(import.meta.env.VITE_BACKEND_URL + "/api/events")
             .then(res => res.json())
             .then(data => {
                 const formatted = data.map(ev => ({
@@ -79,7 +79,7 @@ export const ItineraryComponent = () => {
             return;
         }
 
-        fetch(import.meta.env.VITE_BACKEND_URL + "/events", {
+        fetch(import.meta.env.VITE_BACKEND_URL + "/api/events", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -114,7 +114,7 @@ export const ItineraryComponent = () => {
     };
 
     const handleDelete = (id) => {
-        fetch(import.meta.env.VITE_BACKEND_URL + "/events/" + id, {
+        fetch(import.meta.env.VITE_BACKEND_URL + "/api/events/" + id, {
             method: "DELETE"
         })
             .then(() => {
@@ -127,7 +127,7 @@ export const ItineraryComponent = () => {
 
         if (!newTitle) return;
 
-        fetch(import.meta.env.VITE_BACKEND_URL + "/events/" + eventToEdit.id, {
+        fetch(import.meta.env.VITE_BACKEND_URL + "/api/events/" + eventToEdit.id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"

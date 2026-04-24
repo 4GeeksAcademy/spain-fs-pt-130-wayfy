@@ -15,19 +15,19 @@ CORS(api)
 
 
 
+
 @api.route('/mapgpt', methods=['POST'])
 def map_gpt():
-    api_key = os.getenv('GROQ_API_KEY')
-    
     data = request.get_json()
     user_prompt = data.get('prompt')
-
+    client = Groq(api_key=os.getenv('GROQ_API_KEY'))
+    
     if not user_prompt or not user_prompt.strip():
-        return jsonify({'error': 'Prompt vacío'}), 400
-
+        return jsonify({'error': 'Prompt vacío'}), 400 
+    
     try:
         completion = client.chat.completions.create(
-            messages=[
+            messages = [
                 {
                     'role': 'system',
                     "content": MAPGPT_SYSTEM_PROMPT
@@ -40,24 +40,9 @@ def map_gpt():
             model='llama-3.1-8b-instant',
             response_format={'type': 'json_object'}
         )
-
+        
         ai_response = json.loads(completion.choices[0].message.content)
-
-    if not user_prompt:
-        return jsonify({'error': 'Prompt vacío'}), 400
-    if not api_key:
-        return jsonify({'error': 'Error de configuración en servidor'}), 500
-
-    client = Groq(api_key=api_key)
-
-    try:
-        completion = client.chat.completions.create(
-            messages=[{'role': 'system', "content": MAPGPT_SYSTEM_PROMPT},
-                      {'role': 'user', 'content': user_prompt}],
-            model='llama-3.1-8b-instant',
-            response_format={'type': 'json_object'}
-        )
-        ai_response = json.loads(completion.choices[0].message.content)
+        
         return jsonify(ai_response), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -74,18 +59,6 @@ def handle_hello():
 
 # Este es el Endpoint de registro
 
-
-@api.route('/signup', methods=['POST'])
-def handle_signup():
-
-    body = request.get_json()
-
-    if body is None:
-        return jsonify({"msg": "No se envió información en el cuerpo"}), 400
-    if "email" not in body or "password" not in body:
-        return jsonify({"msg": "Email y password son obligatorios"}), 400
-
-    # Verificación por si el usuario ya existe para evitar errores de duplicado
 
 @api.route('/signup', methods=['POST'])
 def handle_signup():
