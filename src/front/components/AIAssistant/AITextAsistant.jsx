@@ -2,10 +2,16 @@ import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import useAIAssistant from '../../hooks/useAIAssistant';
 import useTooltip from '../../hooks/useTooltip';
+import useGlobalReducer from '../../hooks/useGlobalReducer';
+import { HOTKEYS } from '../../hotkeys/config'
 
 const MIN_LENGTH_QUERY = 5;
 
 export const AITextAsistant = () => {
+    const { store, dispatch } = useGlobalReducer();
+    const { showWriterModal, showShortcut } = store;
+    const { GO_WRITER } = HOTKEYS
+
     const [query, setQuery] = useState('');
     const { processQuery, isProcessing } = useAIAssistant();
 
@@ -16,6 +22,21 @@ export const AITextAsistant = () => {
         trigger: 'hover',
     });
 
+    // Sincronizar modal con el store global
+    useEffect(() => {
+        const modalElement = document.getElementById('aiAssistantModal');
+        if (!modalElement) return;
+
+        const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+
+        if (showWriterModal) {
+            modal.show();
+        } else {
+            modal.hide();
+        }
+    }, [showWriterModal]);
+
+    // Focus automático cuando el modal se abre
     useEffect(() => {
         const modalElement = document.getElementById('aiAssistantModal');
 
@@ -26,8 +47,8 @@ export const AITextAsistant = () => {
         modalElement.addEventListener('shown.bs.modal', handleFocus);
 
         return () =>
-            modalElement.removeEventListener('show.bs.modal', handleFocus);
-    });
+            modalElement.removeEventListener('shown.bs.modal', handleFocus);
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,32 +57,36 @@ export const AITextAsistant = () => {
         await processQuery(query);
         setQuery('');
 
-        const modalElement = document.getElementById('aiAssistantModal');
-        const modal = bootstrap.Modal.getInstance(modalElement);
-        if (modal) modal.hide();
+        dispatch({ type: 'CLOSE_WRITER_MODAL' });
     };
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault()
-            handleSubmit(e)
+            e.preventDefault();
+            handleSubmit(e);
         }
-    }
+    };
 
     return (
         <>
             {/* Botón para abrir el modal */}
-            <button
-                type="button"
-                ref={tooltipRef}
-                className="btn btn-text btn-primary border-3 border-white rounded-circle d-flex align-items-center justify-content-center border-bottom"
-                data-bs-toggle="modal"
-                data-bs-target="#aiAssistantModal"
-            >
-                <i className="fa-solid fa-keyboard fa-xl"></i>
-            </button>
+            <div className="position-relative">
+                <button
+                    type="button"
+                    ref={tooltipRef}
+                    className="btn btn-text btn-primary border-3 border-white rounded-circle d-flex align-items-center justify-content-center border-bottom"
+                    onClick={() => dispatch({ type: 'OPEN_WRITER_MODAL' })}
+                >
+                    <i className="fa-solid fa-keyboard fa-xl"></i>
+                </button>
+                {showShortcut && (
+                    <span className="badge position-absolute top-50 translate-middle-y bg-dark" style={{ left: '-80px' }}>
+                        {GO_WRITER.combo}
+                    </span>
+                )}
+            </div>
 
-            {/* Estructura del Modal */}
+            {/* Modal */}
             {createPortal(
                 <div
                     id="aiAssistantModal"
@@ -75,54 +100,47 @@ export const AITextAsistant = () => {
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content border-0 shadow">
                             <div className="modal-header text-primary">
-                                <h5
-                                    className="modal-title"
-                                    id="aiAssistantModalLabel"
-                                >
-                                    <i className="fa-solid fa-robot me-2"></i>{' '}
+                                <h5 className="modal-title" id="aiAssistantModalLabel">
+                                    <i className="fa-solid fa-robot me-2"></i>
                                     Su asistente virtual de viaje
                                 </h5>
                                 <button
                                     type="button"
                                     className="btn-close btn-close-secondary"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
+                                    onClick={() => dispatch({ type: 'CLOSE_WRITER_MODAL' })}
                                     disabled={isProcessing}
                                 ></button>
                             </div>
+
                             <div className="modal-body">
                                 <form onSubmit={handleSubmit}>
                                     <div className="mb-3">
-                                        <label
-                                            htmlFor="aiQuery"
-                                            className="form-label"
-                                        >
-                                            Escribe lo que estas buscando
+                                        <label htmlFor="aiQuery" className="form-label">
+                                            Escribe lo que estás buscando
                                         </label>
+
                                         <textarea
                                             id="aiQuery"
-                                            type="text"
                                             ref={textareaRef}
                                             className="form-control form-control-lg"
                                             placeholder="Ej: Hoteles accesibles en Madrid cerca de Gran Vía..."
                                             rows="3"
                                             value={query}
-                                            onChange={(e) =>
-                                                setQuery(e.target.value)
-                                            }
+                                            onChange={(e) => setQuery(e.target.value)}
                                             onKeyDown={handleKeyDown}
                                             disabled={isProcessing}
                                             autoFocus
                                         />
                                     </div>
+
                                     <div className="d-grid">
                                         <button
                                             type="submit"
-                                            className={`btn ${query.length < MIN_LENGTH_QUERY ? 'btn-secondary' : 'btn-success'}`}
-                                            disabled={
-                                                isProcessing ||
-                                                query.length < MIN_LENGTH_QUERY
-                                            }
+                                            className={`btn ${query.length < MIN_LENGTH_QUERY
+                                                ? 'btn-secondary'
+                                                : 'btn-success'
+                                                }`}
+                                            disabled={isProcessing || query.length < MIN_LENGTH_QUERY}
                                         >
                                             {isProcessing ? (
                                                 <>
@@ -132,7 +150,7 @@ export const AITextAsistant = () => {
                                             ) : (
                                                 <>
                                                     <i className="fa-solid fa-wand-magic-sparkles me-2"></i>
-                                                    'Consultar'
+                                                    Consultar
                                                 </>
                                             )}
                                         </button>
@@ -142,7 +160,7 @@ export const AITextAsistant = () => {
                         </div>
                     </div>
                 </div>,
-                document.body,
+                document.body
             )}
         </>
     );

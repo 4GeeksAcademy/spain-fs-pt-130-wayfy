@@ -12,6 +12,7 @@ import { AIAssistant } from '../AIAssistant/AIAssistant';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './css/AccessibilityMap.css';
+import { AIAssistantBoth } from '../AIAssistant/AIAssistantBoth';
 
 export const AccessibilityMap = () => {
     const { state, actions, mapRef } = useAccessibilityMap();
@@ -125,6 +126,7 @@ export const AccessibilityMap = () => {
                 ))}
             </Map>
             <AIAssistant />
+            {/* <AIAssistantBoth /> */}
         </div>
     );
 };
