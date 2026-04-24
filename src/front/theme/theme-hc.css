@@ -64,7 +64,6 @@
     --bs-link-hover-color: #fcd34d;
     --bs-border-color: var(--wayfy-accent);
     --bs-focus-ring-color: rgba(250, 204, 21, 0.6);
-
     --search-border: var(--wayfy-accent);
 }
 
@@ -190,6 +189,13 @@
     border-color: var(--wayfy-accent) !important;
 }
 
+.high-contrast .form-switch .form-check-input:checked {
+    background-color: var(--wayfy-green) !important;
+}
+
+.high-contrast .form-check-label {
+    color: var(--bs-form-label-color) !important;
+}
 /* ============================================================
    TEXTAREA EN MODO ALTO CONTRASTE
    ============================================================ */
@@ -241,4 +247,9 @@
     --cluster-mid: #facc15;
     --cluster-high: #facc15;
     --cluster-stroke: #000000; /* borde negro */
+}
+
+.high-contrast .settings-dropdown {
+    background: var(--wayfy-surface);
+    border-color: var(--wayfy-green);
 }

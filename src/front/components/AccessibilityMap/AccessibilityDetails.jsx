@@ -240,7 +240,7 @@ export const AccessibilityDetails = ({ feature, onClose }) => {
                             )}
                             {infoTags.website && (
                                 <div className="small">
-                                    <strong>Web:</strong>
+                                    <strong>Web: </strong>
                                     <a
                                         href={infoTags.website.startsWith('http') ? infoTags.website : `https://${infoTags.website}`}
                                         target='_blank'

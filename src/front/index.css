@@ -69,12 +69,11 @@
     );
     --bs-border-color: var(--wayfy-gray);
 
-    /* ============================================================
+    --bs-form-label-color: var(--wayfy)
+        /* ============================================================
      MODO NORMAL (LIGHT)
      ============================================================ */
-
-    /* Fondos */
-    --wayfy-bg: #ffffff;
+        /* Fondos */ --wayfy-bg: #ffffff;
     --wayfy-bg-alt: #f8fafc;
     --wayfy-surface: #ffffff;
     --wayfy-surface-alt: #f1f5f9;
@@ -333,8 +332,8 @@ html {
 }
 
 body.modal-open {
-    overflow: hidden !important;
-    padding-right: 0 !important;
+  overflow: hidden !important;
+  padding-right: 0 !important;
 }
 
 h1,
@@ -371,6 +370,16 @@ input,
     font-size: 1.2rem;
 }
 
+.btn-settings {
+    width: 25px;
+    height: 25px;
+    display: grid;
+    border-radius: 50%;
+    place-items: center;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
 /* LOGIN */
 .login-dropdown-width {
     min-width: 320px;
@@ -387,33 +396,44 @@ input,
 
 /* SIDEBAR */
 .sidebar {
-    transition: width 0.3s ease-in-out;
-    height: calc(100vh - 140px);
+  transition: width 0.3s ease-in-out;
+  height: calc(100vh - 140px);
 }
 
 .sidebar-show {
-    width: 400px;
+  width: 400px;
 }
 
 .sidebar-hidden {
-    width: 0;
+  width: 0;
 }
 
 .sidebar-content {
-    width: 400px;
-    height: 100%;
+  width: 400px;
+  height: 100%;
 }
 
 .sidebar-content-show {
-    visibility: visible;
+  visibility: visible;
 }
 
 .siebar-content-hidden {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .sidebar-btn-left {
-    left: -25px;
+  left: -25px;
+}
+
+.text-gray {
+  color: var(--wayfy-gray-active) !important;
+}
+
+.badge-shortcut {
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /* ============================================================
@@ -425,48 +445,24 @@ input,
     color: var(--wayfy-text) !important;
 }
 
-/* ============================================================
-   SWITCH MODERNO PARA THEME SELECTOR
-   ============================================================ */
-
-.theme-switch-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.form-switch .form-check-input:checked {
+    background-color: var(--wayfy-green) !important;
 }
 
-.theme-switch {
-    width: 60px;
-    height: 35px;
-    background: transparent;
-    border: 2px solid var(--wayfy-green);
-    border-radius: 50px;
-    padding: 0;
-    cursor: pointer;
-    position: relative;
-    transition:
-        background 0.25s ease,
-        border-color 0.25s ease;
+.form-switch .form-check-input {
+    background-color: var(--wayfy-white) !important;
 }
 
-.theme-switch-slider {
-    width: 26px;
-    height: 26px;
-    background: var(--wayfy-primary);
-    color: var(--wayfy-blue);
-    border-radius: 50%;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    display: grid;
-    place-items: center;
-    font-size: 0.9rem;
-    transition: all 0.25s ease;
+.form-check-input {
+    background-color: var(--wayfy-white);
 }
 
-/* Hover */
-.theme-switch:hover {
-    border-color: var(--wayfy-green-hover);
+.form-check-label {
+    color: var(--bs-form-label-color) !important;
+}
+
+.settings-dropdown {
+    background: var(--wayfy-white);
 }
 
 /* ============================================================

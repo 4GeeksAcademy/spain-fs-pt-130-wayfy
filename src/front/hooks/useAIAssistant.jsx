@@ -4,9 +4,11 @@ import { fetchMapData } from '../services/mapgpt.api';
 
 const useAIAssistant = () => {
     const { store, dispatch } = useGlobalReducer();
-    const [isListening, setIsListening] = useState(false);
-    const [isProcessing, setIsProcessing] = useState(false);
+    const { isListening, isProcessing } = store;
+    // const [isListening, setIsListening] = useState(false);
+    // const [isProcessing, setIsProcessing] = useState(false);
     const recognitionRef = useRef(null);
+    const inputRef = useRef(null)
 
     const updateMapState = useCallback(
         (feature, filters, categories) => {
@@ -37,7 +39,8 @@ const useAIAssistant = () => {
         async (text) => {
             if (!text || text.trim().length < 3) return;
 
-            setIsProcessing(true);
+            // setIsProcessing(true);
+            dispatch({ type: 'SET_PROCESSING', payload: true })
             try {
                 const result = await fetchMapData(text);
 
@@ -61,7 +64,8 @@ const useAIAssistant = () => {
                 console.error('Error en processQuery:', error);
                 throw error;
             } finally {
-                setIsProcessing(false);
+                // setIsProcessing(false);
+                dispatch({ type: 'SET_PROCESSING', payload: false })
             }
         },
         [updateMapState, dispatch],
@@ -78,15 +82,18 @@ const useAIAssistant = () => {
 
         if (isListening) {
             recognitionRef.current?.stop();
-            setIsListening(false);
+            // setIsListening(false);
+            dispatch({ type: 'SET_LISTENING', payload: false })
         } else {
+            // setIsListening(true)
+            dispatch({ type: 'SET_LISTENING', payload: true })
             const recognition = new SpeechRecognition();
             recognition.lang = 'es-ES';
             recognition.continuous = false;
 
-            recognition.onstart = () => setIsListening(true);
-            recognition.onend = () => setIsListening(false);
-            recognition.onerror = () => setIsListening(false);
+            recognition.onstart = () => dispatch({ type: 'SET_LISTENING', payload: true });
+            recognition.onend = () => dispatch({ type: 'SET_LISTENING', payload: false });
+            recognition.onerror = () => dispatch({ type: 'SET_LISTENING', payload: false });
 
             recognition.onresult = async (e) => {
                 const transcript = e.results[0][0].transcript;
@@ -97,6 +104,10 @@ const useAIAssistant = () => {
             recognition.start();
         }
     }, [isListening, processQuery]);
+
+    const focusInput = () => {
+        if (inputRef.current) inputRef.current.focus();
+    }
 
     useEffect(() => {
         return () => {
@@ -109,6 +120,8 @@ const useAIAssistant = () => {
         isProcessing,
         toggleListening,
         processQuery,
+        inputRef,
+        focusInput
     };
 };
 
