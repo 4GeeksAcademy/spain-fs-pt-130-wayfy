@@ -116,7 +116,7 @@ export const AITextAsistant = () => {
                                 <form onSubmit={handleSubmit}>
                                     <div className="mb-3">
                                         <label htmlFor="aiQuery" className="form-label">
-                                            Escribe lo que estás buscando
+                                            Pregunta a
                                         </label>
 
                                         <textarea

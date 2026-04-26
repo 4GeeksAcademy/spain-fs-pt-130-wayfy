@@ -38,16 +38,16 @@ export const useGlobalHotkeys = () => {
             callback: () => toggleListening(),
             options: { meta: HOTKEYS.GO_VOICE }
         },
-        // {
-        //     hotkey: HOTKEYS.GO_WRITER.combo,
-        //     callback: () => dispatch({ type: 'OPEN_WRITER_MODAL' }),
-        //     options: { meta: HOTKEYS.GO_WRITER }
-        // },
         {
             hotkey: HOTKEYS.GO_WRITER.combo,
-            callback: () => window.dispatchEvent(new Event('focus-ai-input')),
+            callback: () => dispatch({ type: 'OPEN_WRITER_MODAL' }),
             options: { meta: HOTKEYS.GO_WRITER }
         },
+        // {
+        //     hotkey: HOTKEYS.GO_WRITER.combo,
+        //     callback: () => window.dispatchEvent(new Event('focus-ai-input')),
+        //     options: { meta: HOTKEYS.GO_WRITER }
+        // },
         {
             hotkey: HOTKEYS.GO_HOME.combo,
             callback: () => navigate('/'),

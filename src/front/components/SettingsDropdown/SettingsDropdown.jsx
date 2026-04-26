@@ -12,28 +12,32 @@ export const SettingsDropdown = () => {
     const { theme } = useTheme()
 
     return (
-        <div className="dropdown">
-            <button
-                id='btnSettings'
-                type='button'
-                className="btn btn-secondary btn-settings"
-                data-bs-toggle='dropdown'
-                data-bs-auto-close="outside"
-                aria-expanded='false'
-            >
-                <i className="fa-solid fa-gear"></i>
-            </button>
-
-            {showShortcut && (
-                <span className="badge badge-shortcut bg-dark">
-                    {GO_CONFIG.combo}
-                </span>
-            )}
-
-            <div className="dropdown-menu dropdown-menu-end p-3 settings-dropdown mt-2 shadow" style={{ width: '250px' }}>
-                <ThemeSelector />
-                <ShortcutToggle />
-            </div>
+        <div className="d-flex flex-column gap-1">
+            <ThemeSelector />
+            <ShortcutToggle />
         </div>
+        // <div className="dropdown">
+        //     <button
+        //         id='btnSettings'
+        //         type='button'
+        //         className="btn btn-secondary btn-settings"
+        //         data-bs-toggle='dropdown'
+        //         data-bs-auto-close="outside"
+        //         aria-expanded='false'
+        //     >
+        //         <i className="fa-solid fa-gear"></i>
+        //     </button>
+
+        //     {showShortcut && (
+        //         <span className="badge badge-shortcut bg-dark">
+        //             {GO_CONFIG.combo}
+        //         </span>
+        //     )}
+
+        //     <div className="dropdown-menu dropdown-menu-end p-3 settings-dropdown mt-2 shadow" style={{ width: '250px' }}>
+        //         <ThemeSelector />
+        //         <ShortcutToggle />
+        //     </div>
+        // </div>
     )
 }
