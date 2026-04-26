@@ -29,6 +29,7 @@ export const initialStore = () => {
         selectedFeature: null,
         theme: savedTheme || 'light',
         showShortcut: savedShortcut !== null ? savedShortcut === 'true' : false,
+        showWriterModal: false,
         isListening: false,
         isProcessing: false,
     };
@@ -97,6 +98,18 @@ export default function storeReducer(store, action = {}) {
 
         case 'SET_PROCESSING':
             return { ...store, isProcessing: action.payload };
+
+        case 'OPEN_WRITER_MODAL':
+            return {
+                ...store,
+                showWriterModal: true,
+            };
+
+        case 'CLOSE_WRITER_MODAL':
+            return {
+                ...store,
+                showWriterModal: false,
+            };
 
         default:
             return store;

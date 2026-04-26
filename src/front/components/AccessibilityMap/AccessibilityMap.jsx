@@ -125,8 +125,8 @@ export const AccessibilityMap = () => {
                     </Marker>
                 ))}
             </Map>
-            <AIAssistant />
-            {/* <AIAssistantBoth /> */}
+            {/* <AIAssistant /> */}
+            <AIAssistantBoth />
         </div>
     );
 };
