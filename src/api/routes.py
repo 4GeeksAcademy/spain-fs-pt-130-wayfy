@@ -14,20 +14,18 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
-
-
 @api.route('/mapgpt', methods=['POST'])
 def map_gpt():
     data = request.get_json()
     user_prompt = data.get('prompt')
     client = Groq(api_key=os.getenv('GROQ_API_KEY'))
-    
+
     if not user_prompt or not user_prompt.strip():
-        return jsonify({'error': 'Prompt vacío'}), 400 
-    
+        return jsonify({'error': 'Prompt vacío'}), 400
+
     try:
         completion = client.chat.completions.create(
-            messages = [
+            messages=[
                 {
                     'role': 'system',
                     "content": MAPGPT_SYSTEM_PROMPT
@@ -40,9 +38,9 @@ def map_gpt():
             model='llama-3.1-8b-instant',
             response_format={'type': 'json_object'}
         )
-        
+
         ai_response = json.loads(completion.choices[0].message.content)
-        
+
         return jsonify(ai_response), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -115,7 +113,8 @@ def create_event():
     new_event = Event(
         title=body["title"],
         start=body["start"],
-        end=body["end"]
+        end=body["end"],
+        category=body.get("category", "otros")
     )
 
     db.session.add(new_event)
@@ -135,6 +134,7 @@ def update_event(id):
     event.title = body.get("title", event.title)
     event.start = body.get("start", event.start)
     event.end = body.get("end", event.end)
+    event.category = body.get("category", event.category)
 
     db.session.commit()
 

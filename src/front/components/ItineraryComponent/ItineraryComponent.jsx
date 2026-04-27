@@ -1,305 +1,183 @@
-import "./css/ItineraryComponent.css";
-import { useState, useEffect } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
-import "moment/locale/es";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { Calendar, Views } from "react-big-calendar";
+import { localizer } from "./CalendarLocalizer";
+import { ItineraryModal } from "./ItineraryModal";
+import { CategorySelector } from "./CategorySelector";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import useGlobalReducer from "../../hooks/useGlobalReducer";
-import { createPortal } from "react-dom";
-import { FilterCategories } from "../FilterPanel/FilterCategories";
 
-moment.locale("es");
-const localizer = momentLocalizer(moment);
+const CATEGORY_COLORS = {
+    gastronomia: "#ff6b6b", alojamiento: "#4dabf7", transporte: "#845ef7",
+    salud: "#ff922b", cultura_turismo: "#20c997", recreacion: "#51cf66",
+    deporte: "#339af0", gobierno: "#adb5bd", baños: "#15aabf",
+    dinero: "#fcc419", tiendas: "#e64980", otros: "#868e96"
+};
 
+const CATEGORY_ICONS = {
+    alojamiento: "fa-bed", gastronomia: "fa-utensils", transporte: "fa-bus",
+    salud: "fa-house-medical", cultura_turismo: "fa-landmark-flag",
+    recreacion: "fa-champagne-glasses", deporte: "fa-volleyball",
+    gobierno: "fa-building-columns", baños: "fa-restroom",
+    dinero: "fa-money-bill-transfer", tiendas: "fa-bag-shopping", otros: "fa-ellipsis"
+};
 
+function parseLocalDate(str) {
+    if (!str) return new Date();
+    const cleanStr = str.replace('T', ' ').split('.')[0];
+    const [datePart, timePart] = cleanStr.split(" ");
+    const [y, m, d] = datePart.split("-");
+    const [hh, mm, ss] = timePart.split(":");
+    return new Date(Number(y), Number(m) - 1, Number(d), Number(hh) || 0, Number(mm) || 0, Number(ss) || 0);
+}
+
+function formatLocal(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    const hh = String(date.getHours()).padStart(2, "0");
+    const mm = String(date.getMinutes()).padStart(2, "0");
+    return `${y}-${m}-${d} ${hh}:${mm}:00`;
+}
+
+const roundToNext15 = (date) => {
+    const ms = 1000 * 60 * 15;
+    return new Date(Math.ceil(date.getTime() / ms) * ms);
+};
 
 export const ItineraryComponent = () => {
-
-    const { store } = useGlobalReducer();
-
     const [events, setEvents] = useState([]);
-    const [text, setText] = useState("");
-    const [startTime, setStartTime] = useState("");
-    const [endTime, setEndTime] = useState("");
-    const [selectedDate, setSelectedDate] = useState("");
 
+    const [activeFilters, setActiveFilters] = useState(Object.keys(CATEGORY_COLORS));
 
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showViewModal, setShowViewModal] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
 
-    useEffect(() => {
-        fetch(import.meta.env.VITE_BACKEND_URL + "/api/events")
-            .then(res => res.json())
-            .then(data => {
-                const formatted = data.map(ev => ({
-                    ...ev,
-                    start: new Date(ev.start),
-                    end: new Date(ev.end)
-                }));
-                setEvents(formatted);
-            })
-            .catch(err => console.log(err));
+    const [inputs, setInputs] = useState({
+        title: "", date: "", startTime: "", endTime: "", category: "otros"
+    });
+
+    const { defaultDate, scrollToTime } = useMemo(() => ({
+        defaultDate: new Date(),
+        scrollToTime: new Date()
+    }), []);
+
+    const loadEvents = useCallback(async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/events`);
+            const data = await res.json();
+            const formatted = data.map(e => ({
+                ...e,
+                start: parseLocalDate(e.start),
+                end: parseLocalDate(e.end),
+            }));
+            setEvents(formatted);
+        } catch (error) {
+            console.error("Error al cargar eventos:", error);
+        }
     }, []);
 
+    useEffect(() => { loadEvents(); }, [loadEvents]);
 
-    const filteredPlaces = store.places.filter(place =>
-        place.name.toLowerCase().includes(text.toLowerCase())
-    );
+    const availableCategories = useMemo(() => {
+        const cats = events.map(e => e.category);
+        return [...new Set(cats)];
+    }, [events]);
 
-    const handleAdd = (e) => {
+    const filteredEvents = useMemo(() => {
+        if (activeFilters.length === 0) return [];
+        return events.filter(e => activeFilters.includes(e.category));
+    }, [events, activeFilters]);
+
+    const handleSelectEvent = (event) => {
+        setSelectedEvent(event);
+        setShowViewModal(true);
+    };
+
+    const handleStartEdit = () => {
+        setIsEditing(true);
+        setInputs({
+            title: selectedEvent.title,
+            date: selectedEvent.start.toLocaleDateString("en-CA"),
+            startTime: selectedEvent.start.toTimeString().slice(0, 5),
+            endTime: selectedEvent.end.toTimeString().slice(0, 5),
+            category: selectedEvent.category || "otros"
+        });
+        setShowViewModal(false);
+        setShowEditModal(true);
+    };
+
+    const handleDelete = async () => {
+        if (!window.confirm(`¿Eliminar "${selectedEvent.title}"?`)) return;
+        await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/events/${selectedEvent.id}`, { method: "DELETE" });
+        setEvents(prev => prev.filter(e => e.id !== selectedEvent.id));
+        setShowViewModal(false);
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const [y, m, d] = inputs.date.split("-");
+        const startObj = new Date(Number(y), Number(m) - 1, Number(d), ...inputs.startTime.split(":"));
+        const endObj = new Date(Number(y), Number(m) - 1, Number(d), ...inputs.endTime.split(":"));
 
-        if (!text || !startTime || !endTime) return;
+        const payload = { ...inputs, start: formatLocal(startObj), end: formatLocal(endObj) };
 
-        const [startH, startM] = startTime.split(":");
-        const [endH, endM] = endTime.split(":");
+        const url = isEditing
+            ? `${import.meta.env.VITE_BACKEND_URL}/api/events/${selectedEvent.id}`
+            : `${import.meta.env.VITE_BACKEND_URL}/api/events`;
 
-        const date = new Date(selectedDate);
+        await fetch(url, {
+            method: isEditing ? "PUT" : "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
 
-        const start = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            startH,
-            startM
-        );
-
-        const end = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            endH,
-            endM
-        );
-
-        const overlap = events.some(event =>
-            (start < event.end) && (end > event.start)
-        );
-
-        if (overlap) {
-            alert("Ese horario ya está ocupado");
-            return;
-        }
-
-        fetch(import.meta.env.VITE_BACKEND_URL + "/api/events", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                title: text,
-                start: start.toISOString(),
-                end: end.toISOString()
-            })
-        })
-            .then(res => {
-                console.log("STATUS:", res.status);
-                return res.json();
-            })
-            .then(newEvent => {
-                console.log("DATA:", newEvent);
-
-                setEvents(prev => [
-                    ...prev,
-                    {
-                        ...newEvent,
-                        start: new Date(newEvent.start),
-                        end: new Date(newEvent.end)
-                    }
-                ]);
-            })
-            .catch(err => console.log(err));
-
-        setText("");
-        setStartTime("");
-        setEndTime("");
+        loadEvents();
+        setShowEditModal(false);
     };
-
-    const handleDelete = (id) => {
-        fetch(import.meta.env.VITE_BACKEND_URL + "/api/events/" + id, {
-            method: "DELETE"
-        })
-            .then(() => {
-                setEvents(prev => prev.filter(event => event.id !== id));
-            });
-    };
-
-    const handleUpdate = (eventToEdit) => {
-        const newTitle = prompt("Nuevo título:", eventToEdit.title);
-
-        if (!newTitle) return;
-
-        fetch(import.meta.env.VITE_BACKEND_URL + "/api/events/" + eventToEdit.id, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                title: newTitle
-            })
-        })
-            .then(res => res.json())
-            .then(updatedEvent => {
-                setEvents(prev =>
-                    prev.map(ev =>
-                        ev.id === updatedEvent.id
-                            ? {
-                                ...updatedEvent,
-                                start: new Date(updatedEvent.start),
-                                end: new Date(updatedEvent.end)
-                            }
-                            : ev
-                    )
-                );
-            })
-            .catch(err => console.log(err));
-    };
-
-
-    const EventComponent = ({ event }) => {
-        return (
-            <div className="position-relative w-100 h-100">
-                <span className="small">{event.title}</span>
-
-                <span
-                    className="position-absolute top-0 end-0 text-danger small"
-                    style={{ cursor: "pointer" }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(event.id);
-                    }}
-                >
-                    ✖
-                </span>
-
-                <span
-                    className="position-absolute bottom-0 start-0 text-primary small"
-                    style={{ cursor: "pointer" }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleUpdate(event);
-                    }}
-                >
-                    ✏️
-                </span>
-            </div>
-        );
-    };
-
 
     return (
-        <div className="container mt-4">
-            <div className="d-flex gap-2">
-                <div className="col-1">
-                    <FilterCategories typeView="list" />
-                </div>
+        <div className="container p-3 rounded-4" style={{ height: "calc(100vh - 160px)", overflow: "hidden" }}>
+            <div className="row h-100 g-3">
 
-                <div className="col-11">
-                    <div className="text-center mb-3">
+                <aside className="col-12 col-md-3 col-lg-2 h-100">
+                    <div className="bg-white p-3 rounded shadow-sm h-100 border overflow-auto">
+                        <CategorySelector
+                            value={activeFilters}
+                            onChange={setActiveFilters}
+                            availableCategories={availableCategories}
+                            isMultiple={true}
+                        />
                         <button
-                            className="btn btn-success btn-circle rounded-circle position-fixed bottom-0 end-0 m-4"
-                            data-bs-toggle="modal"
-                            data-bs-target="#itineraryModal"
+                            className="btn btn-light btn-sm text-decoration-none text-muted p-0 mt-2"
+                            style={{ fontSize: '0.8rem' }}
+                            onClick={() => setActiveFilters(activeFilters.length === Object.keys(CATEGORY_COLORS).length ? [] : Object.keys(CATEGORY_COLORS))}
                         >
-                            <i className="fa-solid fa-plus"></i>
+                            {activeFilters.length === Object.keys(CATEGORY_COLORS).length ? "Deseleccionar todas" : "Seleccionar todas"}
                         </button>
                     </div>
+                </aside>
 
-                    {createPortal(
-                        <div className="modal fade" id="itineraryModal" tabIndex="-1">
-                            <div className="modal-dialog modal-dialog-centered">
-                                <div className="modal-content">
-
-                                    <div className="modal-header">
-                                        <h5 className="modal-title">Agregar actividad</h5>
-                                        <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <div className="modal-body">
-
-                                        <form onSubmit={handleAdd}>
-
-
-                                            <div className="mb-3 position-relative">
-
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    placeholder="Actividad"
-                                                    value={text}
-                                                    onChange={(e) => setText(e.target.value)}
-                                                />
-
-                                                {text && (
-                                                    <ul className="list-group position-absolute w-100 shadow">
-                                                        {filteredPlaces.map(place => (
-                                                            <li
-                                                                key={place.id}
-                                                                className="list-group-item list-group-item-action"
-                                                                onClick={() => setText(place.name)}
-                                                            >
-                                                                📍 {place.name}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                )}
-                                            </div>
-
-                                            <input
-                                                type="date"
-                                                className="form-control mb-3"
-                                                value={selectedDate}
-                                                onChange={(e) => setSelectedDate(e.target.value)}
-                                            />
-
-
-
-                                            <div className="row mb-3">
-                                                <div className="col">
-                                                    <input
-                                                        type="time"
-                                                        className="form-control"
-                                                        value={startTime}
-                                                        onChange={(e) => setStartTime(e.target.value)}
-                                                    />
-                                                </div>
-
-                                                <div className="col">
-                                                    <input
-                                                        type="time"
-                                                        className="form-control"
-                                                        value={endTime}
-                                                        onChange={(e) => setEndTime(e.target.value)}
-                                                    />
-                                                </div>
-                                            </div>
-
-
-                                            <div className="d-grid">
-                                                <button type="submit" className="btn btn-success">
-                                                    Agregar actividad
-                                                </button>
-                                            </div>
-
-                                        </form>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>,
-                        document.body
-                    )}
-
-
-                    <div>
+                <main className="col-12 col-md-9 col-lg-10 h-100">
+                    <div className="bg-white p-2 rounded shadow-sm h-100 border" style={{ position: "relative" }}>
                         <Calendar
                             localizer={localizer}
-                            events={events}
-                            startAccessor="start"
-                            endAccessor="end"
-                            defaultDate={new Date()}
-                            defaultView="week"
-                            views={["day", "week"]}
-                            step={30}
-                            timeslots={2}
+                            culture="es"
+                            events={filteredEvents}
+                            defaultView={Views.DAY}
+                            views={[Views.WEEK, Views.DAY]}
+                            defaultDate={defaultDate}
+                            scrollToTime={scrollToTime}
+                            min={new Date(0, 0, 0, 6, 0, 0)}
+                            onSelectEvent={handleSelectEvent}
+                            eventPropGetter={(event) => ({
+                                style: {
+                                    backgroundColor: CATEGORY_COLORS[event.category] || "#868e96",
+                                    border: "none",
+                                    borderRadius: "4px"
+                                }
+                            })}
+                            style={{ height: "100%" }}
                             messages={{
                                 today: "Hoy",
                                 previous: "Anterior",
@@ -307,15 +185,99 @@ export const ItineraryComponent = () => {
                                 week: "Semana",
                                 day: "Día"
                             }}
-                            components={{ event: EventComponent }}
-
-
                         />
                     </div>
-                </div>
+                </main>
             </div>
 
+            <button
+                className="btn btn-success btn-circle shadow-lg position-fixed d-flex align-items-center justify-content-center transition-all"
+                style={{ bottom: "80px", right: "30px" }}
+                onClick={() => {
+                    setIsEditing(false);
+                    const start = roundToNext15(new Date());
+                    const end = new Date(start.getTime() + 60 * 60 * 1000);
+                    setInputs({
+                        title: "", date: start.toLocaleDateString("en-CA"),
+                        startTime: start.toTimeString().slice(0, 5),
+                        endTime: end.toTimeString().slice(0, 5), category: "otros"
+                    });
+                    setShowEditModal(true);
+                }}
+            >
+                <i className="fa-solid fa-plus fs-4"></i>
+            </button>
 
+            {showViewModal && selectedEvent && (
+                <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1060 }}>
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content shadow-lg border-0">
+                            <div className="modal-header text-white" style={{ backgroundColor: CATEGORY_COLORS[selectedEvent.category] || "#868e96" }}>
+                                <div className="d-flex align-items-center gap-2">
+                                    <i className={`fa-solid ${CATEGORY_ICONS[selectedEvent.category] || "fa-calendar-day"} fs-4`}></i>
+                                    <h5 className="modal-title m-0 text-capitalize">{selectedEvent.title}</h5>
+                                </div>
+                                <button className="btn-close btn-close-white" onClick={() => setShowViewModal(false)}></button>
+                            </div>
+                            <div className="modal-body p-4 text-dark">
+                                <div className="d-flex flex-column gap-3">
+                                    <div className="d-flex align-items-center gap-3">
+                                        <i className={`fa-solid ${CATEGORY_ICONS[selectedEvent.category]} text-secondary fs-5`} style={{ width: '25px' }}></i>
+                                        <div>
+                                            <small className="d-block text-muted fw-bold">CATEGORÍA</small>
+                                            <span className="text-capitalize">{selectedEvent.category.replace('_', ' ')}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="d-flex align-items-center gap-3">
+                                        <i className="fa-solid fa-calendar-day text-secondary fs-5" style={{ width: '25px' }}></i>
+                                        <div>
+                                            <small className="d-block text-muted fw-bold">FECHA</small>
+                                            <span className="text-capitalize">
+                                                {selectedEvent.start.toLocaleDateString('es-ES', {
+                                                    weekday: 'long',
+                                                    day: 'numeric',
+                                                    month: 'long',
+                                                    year: 'numeric'
+                                                })}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="d-flex align-items-center gap-3">
+                                        <i className="fa-solid fa-clock text-secondary fs-5" style={{ width: '25px' }}></i>
+                                        <div>
+                                            <small className="d-block text-muted fw-bold">HORARIO</small>
+                                            <span>
+                                                {selectedEvent.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
+                                                {selectedEvent.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer bg-light border-0">
+                                <button className="btn btn-danger border-0 me-auto" onClick={handleDelete}>
+                                    <i className="fa-solid fa-trash me-2"></i>Eliminar
+                                </button>
+                                <button className="btn btn-outline-secondary" onClick={() => setShowViewModal(false)}>Cerrar</button>
+                                <button className="btn btn-success px-4" onClick={handleStartEdit}>
+                                    <i className="fa-solid fa-pen me-2"></i>Editar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <ItineraryModal
+                show={showEditModal}
+                onClose={() => setShowEditModal(false)}
+                onSubmit={handleSubmit}
+                inputs={inputs}
+                setInputs={setInputs}
+                isEditing={isEditing}
+            />
         </div>
     );
 };
