@@ -3,6 +3,8 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
+# Agruegue CORS para que no hubiese errores cuando hagan login.
+from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
@@ -18,6 +20,8 @@ ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../dist/')
 app = Flask(__name__)
+# Aqui tuve que agregar esto por que sino no se podia hacer el login desde el frontend, daba error de CORS.
+CORS(app)
 app.url_map.strict_slashes = False
 
 # --- CONFIGURACIÓN DE SEGURIDAD PARA JWT ---

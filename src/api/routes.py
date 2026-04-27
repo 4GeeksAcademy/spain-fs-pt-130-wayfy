@@ -55,8 +55,6 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-# Este es el Endpoint de registro
-
 
 @api.route('/signup', methods=['POST'])
 def handle_signup():
@@ -81,11 +79,15 @@ def handle_signup():
     )
 
     try:
-        db.session.add(new_user)  # Preparamos la inserción
-        db.session.commit()  # Guardamos en la base de datos definitivamente
-        return jsonify({"msg": "Usuario creado con éxito"}), 201
+        db.session.add(new_user)
+        db.session.commit()
 
-        # --- AQUÍ AHORA FUNCIONARÁ PORQUE JWT ESTÁ CONFIGURADO EN APP.PY ---
+        # Aqui corregí
+        # Antes tenía un 'return' aquí mismo y el código se cortaba.
+        # Vi que si hacía eso, nunca llegaba a la parte de generar el token
+        # ni a devolver los datos del usuario. Eliminé ese return para que
+        # la función siga su curso natural.
+
         access_token = create_access_token(identity=str(new_user.id))
 
         return jsonify({
@@ -152,3 +154,30 @@ def delete_event(id):
     db.session.commit()
 
     return jsonify({"msg": "Eliminado"}), 200
+
+# Agregue este endpoint para que el frontend pueda iniciar sesión.
+
+
+@api.route('/login', methods=['POST'])
+def handle_login():
+    body = request.get_json()
+
+    # Verificamos que lleguen los datos
+    if not body or "email" not in body or "password" not in body:
+        return jsonify({"msg": "Email y contraseña requeridos"}), 400
+
+    # Buscamos al usuario por su email
+    user = User.query.filter_by(email=body["email"]).first()
+
+    # Comprobamos si existe y si la contraseña coincide usando bcrypt.checkpw
+    if user is None or not bcrypt.checkpw(body["password"].encode('utf-8'), user.password.encode('utf-8')):
+        return jsonify({"msg": "Credenciales incorrectas"}), 401
+
+    # Si todo es correcto, creamos el token
+    access_token = create_access_token(identity=str(user.id))
+
+    # Devolvemos el token y los datos serializados del usuario
+    return jsonify({
+        "token": access_token,
+        "user": user.serialize()
+    }), 200

@@ -12,8 +12,6 @@ export const LoginDropdown = () => {
     // Obtenemos el usuario y logout del contexto
     const { user, logout } = useContext(UserContext);
 
-    console.log("Valor de 'user' en el contexto", user);
-
     return (
         <div className="dropdown">
             <button
@@ -38,8 +36,8 @@ export const LoginDropdown = () => {
                 {user ? (
                     // --- SI EL USUARIO ESTÁ LOGUEADO ---
                     <div className="d-flex flex-column gap-2 text-center">
-                        <h6 className="mb-0 text-muted">Bienvenido,</h6>
-                        <span className="fw-bold fs-5 text-primary mb-2">{user.full_name}</span>
+                        <span className="fw-bold text-primary mb-2">{user.full_name}</span>
+                        <Link to='/itinerary' className='btn btn-success'>Ver Itinerarios</Link>
                         <button onClick={logout} className="btn btn-outline-danger w-100">
                             Cerrar Sesión
                         </button>
