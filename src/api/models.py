@@ -30,15 +30,18 @@ class User(db.Model):
 
 
 class Event(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120), nullable=False)
-    start = db.Column(db.String(50), nullable=False)
-    end = db.Column(db.String(50), nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(String(120), nullable=False)
+    start: Mapped[str] = mapped_column(String(50), nullable=False)
+    end: Mapped[str] = mapped_column(String(50), nullable=False)
+    category: Mapped[str] = mapped_column(
+        String(50), nullable=False, default="otros")
 
     def serialize(self):
         return {
             "id": self.id,
             "title": self.title,
             "start": self.start,
-            "end": self.end
+            "end": self.end,
+            "category": self.category
         }
