@@ -1,111 +1,78 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
-import { toast } from 'react-toastify';
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { UserContext } from "../context/UserContext";
 
 export const Login = () => {
-    // Decidí agrupar los campos en un solo objeto 'inputs', tal como hice en el register.
+    const { login } = useContext(UserContext)
     const [inputs, setInputs] = useState({
-        email: "",
-        password: ""
-    });
+        email: '',
+        password: ''
+    })
+    const navigate = useNavigate()
 
-    const { login } = useContext(UserContext);
-    const navigate = useNavigate();
-
-    // Esta función centraliza el cambio de todos los inputs.
-    // La hice así porque reduce la cantidad de código y hace que el mantenimiento sea más simple.
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setInputs((prev) => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleLogin = async (e) => {
-        e.preventDefault();
+    const handleSumit = async (e) => {
+        e.preventDefault()
 
         try {
-
-            // Usar la variable de entorno es mejor porque así mi código es más seguro y flexible.
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(inputs)
-            });
+            })
 
-            const data = await response.json();
+            const data = await response.json()
 
             if (!response.ok) {
-                // Cambié el alert por toast porque me parece que interrumpe menos la navegación
-                // y se ve mucho más profesional en la interfaz.
-                toast.error(data.msg || "Error al iniciar sesión");
+                toast.error(data.msg, { position: 'top-center' })
                 return;
             }
 
-            // Aquí guardo la sesión si todo salió bien
             login({
                 token: data.token,
                 full_name: data.user.full_name
-            });
+            })
 
-            toast.success("Bienvenido de nuevo");
-            navigate("/Itinerary");
+            toast.success('Inicio de sesión exitoso', { position: 'top-center' })
+            navigate('/itinerary')
+
+        } catch (error) {
+            console.error("Error en login:", error)
+            toast.error('Error de conexión:', { position: 'top-center' })
         }
-        catch (error) {
-            console.error("Error al iniciar sesión:", error);
-            toast.error("Error de conexión con el servidor");
-        }
-    };
+    }
+
+    const handleChange = (e) => {
+        const { name, value } = e.target
+
+        setInputs({
+            ...inputs,
+            [name]: value
+        })
+    }
 
     return (
-        <div className="container d-flex justify-content-center mt-3 h-80">
-            <form className="p-4 border rounded bg-light" style={{ width: "300px" }} onSubmit={handleLogin}>
+        <div className="container d-flex justify-content-center my-5 h-50">
+            <div className="card col-12 col-md-6 col-lg-5 p-4">
+                <h2 className="fw-bold text-primary m-0">Iniciar sesión</h2>
 
-                <div className="fw-bold text-primary mb-3">
-                    Iniciar Sesión
-                </div>
+                <form onSubmit={handleSumit} className='d-flex flex-column gap-1 mt-4'>
+                    <div className="mb-3">
+                        <label className="form-label fw-semibold">Correo Electrónico</label>
+                        <input name='email' type="email" className="form-control" value={inputs.email} onChange={handleChange} placeholder="nombre@ejemplo.com" />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label fw-semibold">Contraseña</label>
+                        <input name='password' type="password" className="form-control" value={inputs.password} onChange={handleChange} placeholder="******" />
+                    </div>
+                    <button type="submit" className="btn btn-success w-100 fw-bold shadow-sm">Iniciar sesión</button>
+                    <div className="text-center mt-4 border-top pt-3">
+                        <span className="text-muted small">¿No tienes cuenta?</span>
+                        <Link to="/register" className="ms-2 text-primary fw-bold text-decoration-none small">Regístrate</Link>
+                    </div>
 
-                <div className="mb-3 fw-bold">
-                    <label className="form-label">Email</label>
-                    <input
-                        name="email"
-                        type="email"
-                        className="form-control"
-                        value={inputs.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="mb-3 fw-bold">
-                    <label className="form-label">Contraseña</label>
-                    <input
-                        name="password"
-                        type="password"
-                        className="form-control"
-                        value={inputs.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <button type="submit" className="btn btn-success w-100">
-                    Iniciar Sesión
-                </button>
-
-                <div className="text-center m-3">
-                    <p>
-                        ¿No tienes cuenta?{" "}
-                        {/* Cambie el <a> por <Link> de react-router-dom. 
-                            Lo hice porque así la navegación no recarga toda la página y la app se siente más fluida. */}
-                        <Link to="/register" className="text-primary text-decoration-none">
-                            Regístrate
-                        </Link>
-                    </p>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     );
 };
